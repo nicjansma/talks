@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Using Phing for Fun and Profit</title>
+
+        <meta name="description" content="Using Phing for Fun and Profit">
+        <meta name="author" content="Nic Jansma">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>Using Phing for Fun and Profit</h1>
+
+                    <h3>Phing: A PHP build system</h3>
+
+                    <p>
+                        <small><a href="http://nicj.net">Nic Jansma</a></small>
+                    </p>
+
+                    <p>
+                        <small><a href="http://nicj.net">nicj.net</a></small>
+                    </p>
+
+                    <p>
+                        <small><a href="http://twitter.com/nicj">@NicJ</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Phing</h2>
+                    <p>
+                        <a href="http://www.phing.info">Phing</a> is a cross-platform PHP build tool</a>, similar to
+                        <a href="http://ant.apache.org/">Apache Ant</a>.
+                    </p>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>What is a build tool?</h2>
+
+                        <p>A build tool helps you automate repetitive tasks.</p>
+                    </section>
+
+                    <section>
+                        <h2>A Build Tool Helps You...</h2>
+
+                        <ul>
+                            <li>Build resources (CSS, JavaScript, templates, etc)</li>
+                            <li>Validate code (lint, sniff, etc)</li>
+                            <li>Run unit tests</li>
+                            <li>Build documentation</li>
+                            <li>Create packages</li>
+                            <li>Deploy code</li>
+                            <li>Execute system commands</li>
+                            <li>... and anything else you do repetitively ...</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Why Use a Build Tool?</h2>
+
+                        <p class="fragment">Otherwise you will f*** up.</p>
+
+                        <p class="fragment">You should automate <b>everything</b> you can.</p>
+
+                        <p class="fragment">Automating your processes will save you time.</p>
+
+                        <p class="fragment">Automating your processes will save you from your future self.</p>
+
+                        <p class="fragment">Maybe not today, maybe not tomorrow, but at some point you will make
+                            a mistake if it's not automated.</p>
+                    </section>
+
+                    <section>
+                        <h2>Why Use Phing?</h2>
+
+                        <p>It's written in PHP, so if the rest of your project is PHP, you can run Phing.</p>
+
+                        <p>Besides PHP, no other external dependencies are needed (such as Ruby or Java).</p>
+
+                        <p>Great community support, with hundreds of different tasks.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Installation - Github</h2>
+
+                        <p><a href="https://github.com/phingofficial/phing">github.com/phingofficial/phing</a></p>
+
+                        <pre><code>
+$> git clone https://github.com/phingofficial/phing.git
+$> php phing\bin\phing
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Installation - PHAR Package</h2>
+
+                        <p><a href="http://www.phing.info/trac/wiki/Users/Download">www.phing.info/trac/wiki/Users/Download</a></p>
+
+                        <pre><code>
+$> wget http://www.phing.info/get/phing-latest.phar -O phing.phar
+$> php phing.phar
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Installation - PEAR</h2>
+
+                        <pre><code>
+$> pear channel-discover pear.phing.info
+$> pear install phing/phing
+$> phing
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Installation - Composer</h2>
+
+                        <p>composer.json:</p>
+                        <pre><code>
+{
+    "require": {
+        "phing/phing": "2.6.1"
+    }
+}
+                        </code></pre>
+
+                        <pre><code>
+$> php composer.phar install
+Loading composer repositories with package information
+Installing dependencies (including require-dev)
+  - Installing phing/phing (2.6.1)
+    Downloading: 100%
+
+Writing lock file
+Generating autoload files
+$> php vendor\phing\phing\bin\phing
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Phing Overview</h2>
+
+                        <p>Phing is driven by XML files that define your projects, build targets, and individual tasks.</p>
+
+                        <p>The XML format is very similar to <a href="http://ant.apache.org/">Apache Ant</a>.</p>
+                    </section>
+
+                    <section>
+                        <h2>Phing - Projects</h2>
+
+                        <p>A project is the root element of your XML.</p>
+
+                        <p>The <code>&lt;project&gt;</code> defines of all of your build targets and the tasks that will execute for the targets.</p>
+
+                        <p>Only the <code>default</code> attribut is required, which specifies the default target to run.</p>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="build">
+    <!-- targets and tasks -->
+    <!-- ... -->
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Phing - Targets</h2>
+
+                        <p>A <code>&lt;target&gt;</code> is a logical set of actions you want to take.</p>
+
+                        <p>A <code>&lt;target&gt;</code> can have tasks.</p>
+                        
+                        <p>A <code>&lt;target&gt;</code> can also have a list of other targets it depends on.</p>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="build">
+    &lt;target name="build" depends="clean,lint,minify" /&gt;
+
+    &lt;target name="clean"&gt;
+        &lt;echo msg="I'm cleaning your build" /&gt;
+    &lt;/target&gt;
+    &lt;!-- ... --&gt;
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Phing - Tasks</h2>
+
+                        <p>A task will take an action.</p>
+
+                        <p>Tasks can be a <a href="http://www.phing.info/docs/stable/hlhtml/index.html#app.coretasks">core task</a>
+                            that Phing ships with,
+                            or an external <a href="http://www.phing.info/docs/stable/hlhtml/index.html#ch.extending">plug-in</a>
+                            that you write.</a>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="build">
+    <target name="clean">
+        &lt;echo msg="I'm cleaning your build" /&gt;
+
+        &lt;delete dir="build" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Phing - Core Tasks</h2>
+
+                        <p><a href="http://www.phing.info/docs/stable/hlhtml/index.html#app.coretasks">123 built-in tasks</a>.</p>
+
+                        <p>Some of the most useful:</p>
+
+                        <ul>
+                            <li>File operations: <code>append</code>, <code>copy</code>, <code>delete</code>, <code>mkdir</code></li>
+                            <li>Conditional logic: <code>condition</code>, <code>foreach</code>, <code>if</code>, <code>fail</code></li>
+                            <li>Input / output: <code>echo</code>, <code>input</code></li>
+                            <li>System: <code>exec</code>, <code>tstamp</code>, <code>taskdef</code></li>
+                            <li>Source control: <code>git*</code>, <code>svn*</code>, <code>cvs*</code></li>
+                            <li>Network: <code>ftpdeploy</code>, <code>httpget</code>, <code>mail</code>, <code>s3put</code>, <code>scp</code>, <code>ssh</code></li>
+                            <li>External Libraries: <code>phpcodesniffer</code>, <code>phpunit</code>, <code>phpdocumentor</code>, <code>jslint</code>, <code>phpmd</code></li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h2>Phing - Properties</h2>
+
+                        <p>A property is a variable.</p>
+
+                        <p>Properties can come from built-in properties (Phing environment variables),
+                            a <code>build.properties</code> file, or created at runtime in your XML file via the <code>&lt;property&gt;</code> element.</p>
+
+                        <p>Use properties via the <code>${propertyname}</code> syntax.</p>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="clean">
+    &lt;property name="builddir" value="./build" /&gt;
+
+    <target name="clean">
+        &lt;echo msg="I'm cleaning ${builddir}" /&gt;
+
+        &lt;delete dir="${builddir}" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Phing - Built-in Properties</h2>
+
+                        <p>There are many <a href="http://www.phing.info/docs/stable/hlhtml/index.html#app.factsheet">built-in</a> properties:</p>
+
+                        <p><code>application.startdir, env.*, host.arch, host.domain, host.fstype, host.name, host.os, host.os.release,
+                        host.os.version, line.separator, os.name, phing.file, phing.dir, phing.home, phing.version, phing.project.name,
+                        php.classpath, php.version, project.basedir, user.home</code></p>
+
+                    </section>
+
+                    <section>
+                        <h2>Phing - .properties Files</h2>
+
+                        <p>Simple <code>key=value</code> format</p>
+
+                        <pre><code>
+# This is a comment in the .properties file
+key=value
+
+builddir=build
+
+myapp.name=foo
+myapp.url=http://foo.com
+                        </code></pre>
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="clean">
+    &lt;property file="./build.properties" /&gt;
+
+    <target name="clean">
+        &lt;echo msg="I'm cleaning ${builddir} for ${myapp.name}" /&gt;
+
+        &lt;delete dir="${builddir}" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Phing - <code>&lt;property&gt;</code></h2>
+
+                        <p>Define new properties in your XML.</p>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="build">
+    &lt;property name="builddir" value="./build" /&gt;
+    &lt;property name="cssdir" value="${build}/css" /&gt;
+    &lt;property name="jsdir" value="${build}/js" /&gt;
+
+    <target name="clean">
+        &lt;delete dir="${cssdir}" /&gt;
+        &lt;delete dir="${jsdir}" /&gt;
+    </target>
+</project>
+                        </code></pre>
+
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Examples</h2>
+                    </section>
+
+                    <section>
+                        <h2>Simple</h2>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="echo">
+    <target name="echo">
+        &lt;echo msg="Hello" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                        <pre><code>
+>$ phing echo
+Buildfile: .\build.xml
+
+my-project > echo:
+
+     [echo] Hello
+
+BUILD FINISHED
+
+Total time: 0.1780 seconds
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Two Tasks</h2>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="first">
+    &lt;target name="first" depends="second" /&gt;
+
+    <target name="second">
+        &lt;fail message="You messed up" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                        <pre><code>
+>$ phing first
+Buildfile: .\build.xml
+
+my-project > second:
+
+Execution of target "second" failed for the following reason:
+    .\build.xml:16:22: You messed up
+
+BUILD FAILED
+.\build.xml:16:22: You messed up
+Total time: 0.1800 seconds
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Shell Commands</h2>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="deploy">
+    &lt;property name="deploy.hostname" value="foo.com" /&gt;
+
+    <target name="deploy">
+        &lt;exec
+            command="rsynz -avz ./ ${deploy.hostname}/"
+            dir="${project.basedir}"
+            checkreturn="true" /&gt;
+    </target>
+</project>
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>External PHP</h2>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="my-project" default="externaltask">
+    <target name="externaltask">
+        &lt;taskdef
+            name="myprojecttask"
+            classpath="${project.basedir}"
+            classname="MyTask" /&gt; &lt;!-- ./MyTask.php --&gt;
+
+        &lt;myprojecttask message='hi' /&gt;
+    </target>
+</project>
+                        </code></pre>
+                        <pre><code>
+&lt;?php
+require_once 'phing/Task.php';
+
+class MyTask extends Task {
+    protected $message;
+
+    // set from the task's attribute in the XML
+    public function setMessage($message) {
+        $this->message = $message;
+    }
+
+    // executed when task is called
+    public function main() {
+        echo $this->message;
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>External PHP - Output</h2>
+                        <pre><code>
+$>phing externaltask
+Buildfile: .\build.xml
+ [property] Loading .\build.properties
+
+my-project > externaltask:
+
+hi
+BUILD FINISHED
+
+Total time: 0.2930 seconds
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Continuous Integration / Build Server</h2>
+
+                        <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<project name="big-project" default="build">
+    <!-- main targets -->
+    &lt;target name="build" depends="clean,checkout,lint,
+        sniff,phpmd,test,doc,package" /&gt;
+
+    &lt;target name="deploy" depends="build,pre-deploy,rsync,release" /&gt;
+
+    <target name="clean">
+        <!-- clean the build -->
+    </target>
+
+    <target name="checkout">
+        <!-- checkout / pull latest from source control -->
+    </target>
+
+    &lt;target name="lint" depends="phplint,jslint,csslint" /&gt;
+
+    <target name="phplint">
+        <!-- php lint all *.php files -->
+    </target>
+
+    <target name="jslint">
+        <!-- jslint / jshint -->
+    </target>
+
+    <target name="csslint">
+        <!-- csslint -->
+    </target>
+
+    <target name="sniff">
+        <!-- PHP_CodeSniffer -->
+    </target>
+
+    <target name="phpmd">
+        <!-- PHPMD -->
+    </target>
+
+    <target name="test">
+        <!-- phpUnit -->
+    </target>
+
+    <target name="doc">
+        <!-- phpDocumentor -->
+    </target>
+
+    <target name="package">
+        <!-- save all build artifacts -->
+    </target>
+
+    <target name="pre-deploy">
+        <!-- any internal pre-deploy tasks -->
+    </target>
+
+    <target name="rsync">
+        <!-- rsync or ssh+rsync -->
+    </target>
+
+    <target name="release">
+        <!-- release new code on servers -->
+    </target>
+</project>
+                        </code></pre>
+                    </section>
+                    
+                </section>
+
+                <section>
+                    <h2>Downsitdes</h2>
+
+                    <ul>
+                        <li>Learning curve if you're not familiar with Ant.</li>
+                        <li>Asynchronous operation, so large builds/deploys may be slow.</li>
+                        <li>Not everything is available on all OSs.</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Conclusion</h2>
+
+                        <ol>
+                            <li>Use Phing</li>
+                            <li>???</li>
+                            <li>Profit!</li>
+                        </ol>
+                    </section>
+
+
+                    <section>
+                        <h2>Conclusion</h2>
+
+                        <p>Phing is a great way to automate repetitive tasks.</p>
+
+                        <p>Phing can be as simple or complex (and powerful) as you make it.</p>
+                        
+                        <p>Phing can save time and reduce human error.</p>
+
+                        <p>More Info:</p>
+
+                        <ul>
+                            <li><a href="http://www.phing.info/">phing.info</a></li>
+                            <li><a href="https://wiki.jenkins-ci.org/display/JENKINS/Phing+Plugin">Jenkins integration</a></li>
+                            <li><a href="http://www.jetbrains.com/phpstorm/webhelp/using-phing.html">Jetbrains PhpStorm integration</a></li>
+                            <li><a href="https://code.google.com/a/eclipselabs.org/p/phingle/">Eclipse integration</a></li>
+                        </ul>
+
+                        <p style='margin-top: 20px'><small>Thanks - Nic Jansma - <a href="http://nicj.net">nicj.net</a> - <a href="https://twitter.com/NicJ">@NicJ</a></small></p>
+                    </section>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>

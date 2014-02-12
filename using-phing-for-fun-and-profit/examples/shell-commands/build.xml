@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="my-project" default="deploy">
+    <property name="deploy.hostname" value="foo.com" />
+    
+    <target name="deploy">
+        <exec
+            command="rsynz -avz ./ ${deploy.hostname}/"
+            dir="${project.basedir}"
+            checkreturn="true" />
+    </target>
+</project>

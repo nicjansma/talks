@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="my-project" default="first">
+    <target name="first" depends="second" />
+    
+    <target name="second">
+        <fail message="You messed up" />
+    </target>
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="my-project" default="clean">
+    <property file="./build.properties" />
+
+    <target name="clean">
+        <echo msg="I'm cleaning ${builddir} for ${myapp.name}" />
+        
+        <delete dir="${builddir}" />
+    </target>
+</project>

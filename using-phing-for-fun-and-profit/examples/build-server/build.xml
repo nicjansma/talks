@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="big-project" default="build">
+    <!-- 
+        Example build file for a project that has 'build' and 'deploy' tasks.
+        
+        Most of the tasks below are built-in or supported by community projects.
+    -->
+    <target name="build" depends="clean,checkout,lint,sniff,phpmd,test,doc,package" />
+
+    <target name="deploy" depends="build,pre-deploy,rsync,release" />
+
+    <target name="clean">
+        <!-- clean the build -->
+    </target>
+
+    <target name="checkout">
+        <!-- checkout / pull latest from source control -->
+    </target>
+
+    <target name="lint" depends="phplint,jslint,csslint" />
+    
+    <target name="phplint">
+        <!-- php lint all *.php files -->
+    </target>
+    
+    <target name="jslint">
+        <!-- jslint / jshint -->
+    </target>
+    
+    <target name="csslint">
+        <!-- csslint -->
+    </target>
+
+    <target name="sniff">
+        <!-- PHP_CodeSniffer -->
+    </target>
+
+    <target name="phpmd">
+        <!-- PHPMD -->
+    </target>
+
+    <target name="test">
+        <!-- phpUnit -->
+    </target>
+    
+    <target name="doc">
+        <!-- phpDocumentor -->
+    </target>
+    
+    <target name="package">
+        <!-- save all build artifacts -->
+    </target>
+    
+    <target name="pre-deploy">
+        <!-- any internal pre-deploy tasks -->
+    </target>
+    
+    <target name="rsync">
+        <!-- rsync or ssh+rsync -->
+    </target>
+    
+    <target name="release">
+        <!-- release new code on servers -->
+    </target>
+</project>

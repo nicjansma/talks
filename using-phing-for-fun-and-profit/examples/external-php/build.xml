@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="my-project" default="externaltask">
+    <target name="externaltask">
+        <taskdef 
+            name="myprojecttask"
+            classpath="${project.basedir}"
+            classname="mytask" /> <!-- ./mytask.php -->
+            
+        <myprojecttask message='hi' />
+    </target>
+</project>
