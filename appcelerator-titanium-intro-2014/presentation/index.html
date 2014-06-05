@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Appcelerator Titanium Intro</title>
+
+        <meta name="description" content="Appcelerator Titanium Intro">
+        <meta name="author" content="Nic Jansma">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <img src="images/titanium_sdk_blue.png" border="0" />
+                
+                    <h1>Appcelerator Titanium</h1>
+
+                    <h3>An Introduction</h3>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://nicj.net">Nic Jansma</a> |</small>
+                        <small><a href="http://nicj.net">nicj.net</a> |</small>
+                        <small><a href="http://twitter.com/nicj">@NicJ</a></small>
+                    </p>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Titanium</h2>
+                        
+                        <ul>
+                            <li>Titanium is a <b>cross-platform</b> development environment where you can build 
+                                <b>iOS</b>, <b>Android</b>, <b>BlackBerry</b> and <b>Hybrid/HTML5</b> apps</li>
+                            
+                            <li>Titanium apps are written in <b>JavaScript</b></li>
+                            
+                            <li>Your JavaScript interfaces with <b>native controls</b> through an abstraction layer (you're not building a webpage)</li>
+                            
+                            <li>Titanium features an Eclipse-based IDE called <a href="http://www.appcelerator.com/titanium/titanium-studio/"><b>Titanium Studio</b></a></li>
+                            
+                            <li>Titanium has a MVC framework called <a href="http://www.appcelerator.com/platform/alloy/"><b>Alloy</b></a>, 
+                                and Appcelerator offers <a href="http://www.appcelerator.com/cloud/"><b>Cloud Services</b></a> to help bootstrap your app</li>
+                            
+                            <li>Titanium is <a href="http://www.appcelerator.com/plans-pricing/"><b>free</b></a> and <b>open-source</b></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>iOS and Android Development</h2>
+                        
+                        <ul>
+                        
+                            <li>With <b>Android</b>, you write native apps in <b>Java</b></li>
+                            
+                            <li>With <b>iOS</b>, you write native apps in <b>Objective-C</b></li>
+                        
+                            <li>With <b>Titanium</b>, you write cross-platform apps in <b>JavaScript</b>, that run on Android, iOS and other platforms</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>How it Works</h2>
+                        
+                        <ul>
+                            <li>You write code in JavaScript</li>
+                            
+                            <li>Your JavaScript code is minified and optimized during the build process, but still
+                                <b>evaluated as JavaScript at runtime</b> on the platform</li>
+                                
+                            <li>At runtime, your application has 3 major components:
+                            <ul>
+                                <li>JavaScript source code</li>
+                                
+                                <li>Titanium API implementation in the native OS</li>
+                                
+                                <li>JavaScript interpreter: V8 (Android) or JavaScriptCore (iOS)</li>
+                            </ul>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>How it Works</h2>
+                        
+                        <ul>
+                            <li>The JavaScript interpreter runs your JavaScript code in an environment with proxies for the native objects (windows, controls, etc)</li>
+                            
+                            <li><code>Ti.UI.createTextField()</code> 
+                                creates a <code>UITextView</code> on iOS and a <code>TextView</code> on Android</p>
+                                
+                            <li>You are <b>not</b> creating a webpage with HTML and CSS (which is how PhoneGap works): you build UI through code or the Alloy MVC framework</li>
+                        </ul>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Getting Started</h2>
+                    </section>
+                    
+                    <section>
+                        <h2>Create a Free Developer Account</h2>
+                        
+                        <p><a href="https://my.appcelerator.com/auth/signup">https://my.appcelerator.com/auth/signup</a></p>
+                        
+                        <p>The Developer account is free.  You can build, test and deploy to the app stores with the free account.</p>
+                        
+                        <p>There is an Enterprise plan that provides a SLA, analytics, more cloud, support, training and more.</p>
+                    </section>
+                    
+                    <section>
+                        <h2>Titanium Studio</h2>
+                        
+                        <p>Download Titanium Studio for free here:</p>
+                        
+                        <p><a href="http://www.appcelerator.com/titanium/download-titanium/">http://www.appcelerator.com/titanium/download-titanium/</a></p>
+                        
+                        <img src="images/download_titanium_studio.png" height="50%" width="50%"/>
+                        
+                        <p>Works on Mac, Windows and Linux</p>
+                    </section>
+                    
+                    <section>
+                        <h2>Titanium Studio</h2>
+                        
+                        <p>(based on Eclipse)</p>
+                        
+                        <img src="images/titanium_studio.png" />
+                    </section>
+                    
+                    <section>
+                        <h2>Code Samples</h2>
+                        
+                        <p>Get the "Kitchen Sink" sample from <i>Dashboard | Develop</i>, which has code demos for how to use all of the controls:</p>
+                        
+                        <img src="images/titanium_studio_code_samples.png" height="50%" width="50%" />
+                        
+                        <p>Also on <a href="https://github.com/appcelerator/KitchenSink">github.com/appcelerator/KitchenSink</a></p>
+                    </section>
+                    
+                    <section>
+                        <h2>Kitchen Sink</h2>
+                        
+                        <p>Code samples for how to access all of the platform's native controls through the Titanium APIs (<code>Ti.*</code>)</p>
+                        
+                        <img src="images/kitchen_sink.png" />
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Creating a new Project</h2>
+                        
+                        <p><i>File | New | Mobile App Project</i></p>
+                        
+                        <p><b>Alloy</b> will use their MVC framwork</p>
+                        
+                        <p><b>Classic</b> lets you build your own UI</p>
+                        
+                        <img src="images/new_project.png" height="50%" width="50%" />
+                    </section>
+                    
+                    <section>
+                        <h2>Project Structure (Classic Project)</h2>
+                        
+                        <img src="images/project_structure.png" style="float:right">
+                        
+                        <ul style="float:left; width: 50%">
+                            <li><code>i18n/</code>: Internationalization</li>
+                            
+                            <li><code>modules/</code>: Native modules</li>
+                            
+                            <li><code>platform/</code>: iOS/Android specific</li>
+                            
+                            <li>
+                                <code>Resources</code>: Core project code
+                                <ul>
+                                    <li><code>app.js</code>: Startup file</li>
+                                
+                                    <li><code>android/</code> and <code>iphone/</code>: Platform images</li>
+                                    
+                                    <li><code>lib/</code>, <code>ui/</code>, <code>whatever/</code>: Your code</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>App Startup</h2>
+                        
+<pre><code data-trim class="javascript">
+var win = Ti.UI.createWindow({
+    title: 'Hello, World!',
+    layout: 'vertical',
+    backgroundColor: 'white'
+});
+
+var helloLabel = Ti.UI.createLabel({
+    text: 'Hello World',
+    color: 'black',
+    font: { fontSize: '20sp' },
+    height: '40dp',
+    width: '250dp'
+});
+win.add(helloLabel);
+
+var helloButton = Ti.UI.createButton({
+    title: 'Click me!',
+    font: { fontSize: '20sp' },
+    top: '20dp',
+    height: '40dp',
+    width: '250dp'
+});
+
+helloButton.addEventListener('click', function() {
+    alert('you clicked me!');
+});
+win.add(helloButton);
+
+win.open();
+</code></pre>
+                        
+                    </section>
+                    
+                    <section>
+                        <h2>Demo</h2>
+                        
+                        <img src="images/app_startup.png" />
+                    </section>
+                    
+                    <section>
+                        <h2>Demo</h2>
+                        
+                        <img src="images/app_startup_clicked.png" />
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Alloy</h2>
+                        
+                        <ul>
+                            <li>Alloy is an open-source <b>model-video-controller</b> (MVC) framework for Titanium</li>
+                            
+                            <li>Alloy provides a simple model for <b>separating</b> your user interface, business logic and data models</li>
+                            
+                            <li>Alloy uses <b>XML and CSS</b> to create and style your views</li>
+                            
+                            <li>Alloy is fully integrated into <b>Titanium Studio</b></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Getting Started</h2>
+                        
+                        <p>First, install Alloy via Node.js's NPM:</p>
+                        
+<pre><code data-trim>
+sudo npm install -g alloy
+</code></pre>
+
+                       <img src="images/new_project.png" height="50%" width="50%" />
+                    </section>
+                    <section>
+                        <h2>Code</h2>
+                        <p><code>app/views/index.html</code>:</p>
+<pre><code data-trim class="xml">
+&lt;Alloy&gt;
+    &lt;Window class="container"&gt;
+        &lt;Label id="label"&gt;Hello World&lt;/Label&gt;
+        &lt;Button id="button" onClick="doClick"&gt;Click me!&lt;/Button&gt;
+    &lt;/Window&gt;
+&lt;/Alloy&gt;
+</code></pre>
+                        <p><code>app/controllers/index.js</code>:</p>
+<pre><code data-trim class="javascript">
+function doClick(e) {
+    alert('you clicked me!');
+}
+
+$.index.open();
+</code></pre>
+
+                        <p><code>app/styles/index.tss</code>:</p>
+<pre><code data-trim class="">
+".container": {
+    backgroundColor:"white"
+},
+"#label": {
+    top: 20,
+    width: Ti.UI.SIZE,
+    height: Ti.UI.SIZE,
+    color: "#000"
+} 
+</code></pre>                    
+                    </section>
+                    
+                    <section>
+                        <h2>Demo</h2>
+                        
+                        <img src="images/app_startup_alloy.png" />
+                    </section>
+                </section>
+                
+                <section>
+                    <h2>Titanium Mobile APIs</h2>
+                    
+                    <ul>
+                        <li>AJAX / web services</li>
+                        <li>In-App Purchases</li>
+                        <li>Geolocation</li>
+                        <li>Camera</li>
+                        <li>Calendar, Contact</li>
+                        <li>Media / Photo Gallery</li>
+                        <li>Gestures</li>
+                        <li>Accelerometer</li>
+                        <li>Maps</li>
+                        <li>Analytics</li>
+                        <li>Social Sharing (Facebook, Yahoo, etc)</li>
+                        <li>Extensible with your own native iOS/Android packages</li>
+                    </ul>
+                </section>
+                    
+                <section>
+                    <section>
+                        <h2>Pros</h2>
+                        
+                        <ul>
+                            <li>One codebase for two+ platforms</li>
+                            
+                            <li>You'll (theoretically) spend less time than if you write two native apps</li>
+                            
+                            <li>Maintenance on one codebase should be easier in the long run</li>
+                            
+                            <li>Native interface controls: your app looks native, not like web controls</li>
+                            
+                            <li>Might be able to reuse your JavaScript in other parts of your project</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Pros</h2>
+
+                        <ul>
+                            <li>JavaScript is great for rapid prototyping, and works really well with Titanium</li>
+                            
+                            <li>Titanium is open-source: <a href="https://github.com/appcelerator/titanium_mobile">github.com/appcelerator/titanium_mobile</a></li>
+
+                            <li>The platform is starting to mature and stabilize</li>
+                            
+                            <li>SDK and API documentation, tutorials and samples have improved dramatically over the last year</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Cons</h2>
+                        
+                        <ul>
+                            <li>Need to learn a new platform / SDK / quirks</li>
+
+                            <li>Knowing the ins & outs of native iOS / Android will help</li>
+
+                            <li>You'll still have lots of <code>if(iOS){}</code> and <code>if(android){}</code></li>
+
+                            <li>Performance isn't 100% of a native app (but better than running in a web control)</li>
+
+                            <li>Q&A support forum is a mess (use StackOverflow instead)</li>
+                        </ul>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Unofficial LEGO Minifigure Catalog</h2>
+                        
+                        <img src="images/mfc-1.png" style="float: right" />
+                        
+                        <ul style="float:left; width: 50%">
+                            <li>Took ~1 month to develop</li>
+
+                            <li><a href="http://minifigure.org/application">minifigure.org/application</a></li>
+
+                            <li>Releasing content updates via In-App Purchases</li>
+
+                            <li>Got featured in iTunes Catalogs category for a week</li>
+
+                            <li>Looking back, Titanium was the right choice for our product's needs</li>
+                        </ul>
+
+                    </section>
+                    
+                    <section>
+                        <h2>Lessons Learned</h2>
+                        
+                        <ul>
+                        
+                            <li>I probably spent as much time learning Titanium and building my first app as I would have 
+                                spent learning native iOS (I had already written native Android apps)
+                                <ul>
+                                    <li>Now I can build apps in Titanium quickly</li>
+                                    <li>2nd, 3rd and 4th Titanium apps have been a lot faster</li>
+                                </ul>
+                            </li>
+
+                            <li>It takes time to ramp-up on good JavaScript patterns: CommonJS modules, Crockford-isms, etc</li>
+
+                            <li>iOS simulator is a lot faster to test on. For Android, use Intel x86 images!</li>
+
+                            <li>For community support, you'll need to use a combination of the Appcelerator API Docs, Q&A site, videos and StackOverflow</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Lessons Learned</h2>
+                        
+                        <ul>
+                            <li>You won't double your sales just by releasing on both platforms</li>
+                        </ul>
+                        
+                        <img src="images/mfc-sales.png" />
+                        
+                    </section>
+                
+                </section>
+                
+                <section>
+                    <h2>Links</h2>
+
+                    <ul>
+                        <li>Appcelerator: <a href="http://www.appcelerator.com/">appcelerator.com</a></li>
+                        <li>Alloy MVC: <a href="http://www.appcelerator.com/platform/alloy/">appcelerator.com/platform/alloy/</a></li>
+                        <li>Titanium Studio: <a href="http://www.appcelerator.com/titanium/titanium-studio/">appcelerator.com/titanium/titanium-studio/</a></li>
+                        <li>Code samples: <a href="http://docs.appcelerator.com/titanium/3.0/#!/guide/Titanium_Samples">docs.appcelerator.com/titanium/3.0/#!/guide/Titanium_Samples</a></li>
+                        <li>Videos: <a href="http://vimeo.com/appcelerator">vimeo.com/appcelerator</a>
+                    </ul>
+
+                    <p style='margin-top: 20px'><small>Thanks - Nic Jansma - <a href="http://nicj.net">nicj.net</a> - <a href="https://twitter.com/NicJ">@NicJ</a></small></p>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
