@@ -18,9 +18,15 @@
         <!-- For syntax highlighting -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
 
-        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
         <script>
-            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
         </script>
 
         <!--[if lt IE 9]>
@@ -145,7 +151,7 @@
                         
                         <p>(based on Eclipse)</p>
                         
-                        <img src="images/titanium_studio.png" />
+                        <img src="images/titanium_studio.png" height="50%" width="50%" />
                     </section>
                     
                     <section>
@@ -163,7 +169,7 @@
                         
                         <p>Code samples for how to access all of the platform's native controls through the Titanium APIs (<code>Ti.*</code>)</p>
                         
-                        <img src="images/kitchen_sink.png" />
+                        <img src="images/kitchen_sink.png" height="50%" />
                     </section>
                 </section>
 
@@ -173,7 +179,7 @@
                         
                         <p><i>File | New | Mobile App Project</i></p>
                         
-                        <p><b>Alloy</b> will use their MVC framwork</p>
+                        <p><b>Alloy</b> will use their MVC framework</p>
                         
                         <p><b>Classic</b> lets you build your own UI</p>
                         
@@ -245,13 +251,13 @@ win.open();
                     <section>
                         <h2>Demo</h2>
                         
-                        <img src="images/app_startup.png" />
+                        <img src="images/app_startup.png" height="50%" />
                     </section>
                     
                     <section>
                         <h2>Demo</h2>
                         
-                        <img src="images/app_startup_clicked.png" />
+                        <img src="images/app_startup_clicked.png" height="50%" />
                     </section>
                 </section>
                 
@@ -318,7 +324,7 @@ $.index.open();
                     <section>
                         <h2>Demo</h2>
                         
-                        <img src="images/app_startup_alloy.png" />
+                        <img src="images/app_startup_alloy.png" height="50%" />
                     </section>
                 </section>
                 
@@ -392,9 +398,13 @@ $.index.open();
                     <section>
                         <h2>Unofficial LEGO Minifigure Catalog</h2>
                         
-                        <img src="images/mfc-1.png" style="float: right" />
+                        <img src="images/mfc-1.png" height="50%" />
+                    </section>
                         
-                        <ul style="float:left; width: 50%">
+                    <section>
+                        <h2>Unofficial LEGO Minifigure Catalog</h2>
+                        
+                        <ul>
                             <li>Took ~1 month to develop</li>
 
                             <li><a href="http://minifigure.org/application">minifigure.org/application</a></li>
