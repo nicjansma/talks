@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Sails.js</title>
+
+        <meta name="description" content="Sails.js">
+        <meta name="author" content="Nic Jansma">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <img src="images/sails-logo.png" border="0" />
+                
+                    <h1>Sails.js</h1>
+
+                    <h3>An Introduction</h3>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://nicj.net">Nic Jansma</a> |</small>
+                        <small><a href="http://nicj.net">nicj.net</a> |</small>
+                        <small><a href="http://twitter.com/nicj">@NicJ</a></small>
+                    </p>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Sails.js is:</h2>
+                        
+                        <ul>
+                            <li>A MVC backend web framework for Node.js</li>
+                            
+                            <li>Built on top of Express</li>
+                            
+                            <li>Inspired by Ruby on Rails / Symfony / Zend</li>
+                            
+                            <li>Convention over configuration</li>
+                            
+                            <li>Ideal for chat, realtime dashboards and multiplayer games</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Sails.js core features</h2>
+                        
+                        <ul>
+                            <li>100% JavaScript</li>
+                        
+                            <li>Works with any database (includes custom ORM)</li>
+                            
+                            <li>Auto-generated REST APIs</li>
+                            
+                            <li>Easy WebSocket support and integration with REST</li>
+                            
+                            <li>Reusable security policies</li>
+                            
+                            <li>Front-end agnostic</li>
+                            
+                            <li>Flexible asset pipeline (builds)</li>
+                        </ul>
+                    </section>
+                   
+                </section>
+                    
+                <section>
+                    <section>
+                        <h2>Getting Started</h2>
+                        
+<pre><code data-trim class="javascript">
+npm install -g sails
+sails new [project path]
+cd [project path]
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>Running Your New Web App</h2>
+                        
+<pre><code data-trim class="javascript">
+sails lift
+</code></pre>
+                    </section>
+                    
+                    <section>
+<pre><code data-trim class="javascript">
+info: Starting app...
+
+info:
+info:
+info:    Sails              <|
+info:    v0.10.2             |\
+info:                       /|.\
+info:                      / || \
+info:                    ,'  |'  \
+info:                 .-'.-==|/_--'
+info:                 `--'-------'
+info:    __---___--___---___--___---___--___
+info:  ____---___--___---___--___---___--___-__
+info:
+info: Server lifted in `example1`
+info: To see your app, visit http://localhost:1337
+info: To shut down Sails, press &lt;CTRL&gt; + C at any time.
+
+debug: --------------------------------------------------------
+debug: :: Thu Aug 07 2014 06:43:55 GMT-0400 (Eastern Daylight Time)
+
+debug: Environment : development
+debug: Port        : 1337
+debug: --------------------------------------------------------
+</code></pre>
+                    </section>
+                    
+                     <section>
+                        <h2>http://localhost:1337</h2>
+                        <img src="images/first-launch.png" />
+                     </section>
+                    
+                    <section>
+                        <h2>Generate Model and REST API</h2>
+                        
+                        <p>Let's create a new <code>beer</code> model and REST API</p>
+                        
+<pre><code data-trim class="javascript">
+sails generate api beer
+</code></pre>
+                        <p>This creates skeleton files: <code>api\controllers\BeerController.js</code> and 
+                            <code>api\model\Beer.js</code></p>
+                    </section>
+                
+                    <section>
+                        <h2>Try it out</h2>
+                        
+                        <p><a href="http://localhost:1337/beer">http://localhost:1337/beer</a></p>
+                        
+<pre><code data-trim class="javascript">
+[]
+</code></pre>
+                        <p><a href="http://localhost:1337/beer/create?name=Centennial IPA&brewery=Founders">http://localhost:1337/beer/create?name=Centennial IPA&brewery=Founders&have=10</a></p>
+                        
+<pre><code data-trim class="javascript">
+{
+    "name": "All Day IPA",
+    "brewery": "Founders",
+    "createdAt": "2014-08-07T13:11:10.536Z",
+    "updatedAt": "2014-08-07T13:38:21.517Z",
+    "id": 1,
+    "have": 10
+},
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Try it out</h2>
+
+                        <p><a href="http://localhost:1337/beer">http://localhost:1337/beer</a></p>
+                        
+<pre><code data-trim class="javascript">
+[
+    {
+        "name": "All Day IPA",
+        "brewery": "Founders",
+        "createdAt": "2014-08-07T13:11:10.536Z",
+        "updatedAt": "2014-08-07T13:38:21.517Z",
+        "id": 1,
+        "have": 10
+    }
+]
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>What just happened</h2>
+                        
+                        <ul>
+                            <li>Sails created a Model (<code>Beer.js</code>) and Controller (<code>BeerController.js</code>)</li>
+                            
+                            <li>Sails <i>blueprints</i> automatically generate new routes for the model (eg <code>POST /beer</code> and <code>/beer/create</code>).</li>
+                            
+                            <li>Sails uses whatever storage layer you want for persistence</li>
+                        </ul>
+                    </section>
+                    
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Anatomy of a Sails.js App</h2>
+                        
+                        <ul>
+                            <li><code>api/controller/</code> - controllers</li>
+                            <li><code>api/models/</code> - models</li>
+                            <li><code>api/policies/</code> - authentication / authorization</li>
+                            <li><code>api/responses/</code> - <code>res.xyz()</code> handlers</li>
+                            <li><code>api/services/</code> - services</li>
+                            <li><code>assets/</code> - static assets</li>
+                            <li><code>config/</code> - app config</li>
+                            <li><code>tasks/</code> - grunt / cli tasks</li>
+                            <li><code>views/</code> - views</li>
+                        </ul>
+                        
+                    </section>
+                    
+                    <section>
+                        <h2>Models</h2>
+                        
+                        <p><a href="http://sailsjs.org/#!documentation/models">http://sailsjs.org/#!documentation/models</a></p>
+                        
+                        <p><code>api/models/*</code></p>
+                        
+                        <p>Uses <a href="https://github.com/balderdashy/waterline">Waterline ORM</a> (inspired by Active Record, Hibernate and Mongoose)<p>
+                    
+<pre><code data-trim class="javascript">
+module.exports = {
+  attributes: {
+    name: {
+      type: 'string',
+      required: true
+    },
+    brewery: {
+      type: 'string',
+      required: true
+    },
+    have: {
+      type: 'integer'
+    }
+  }
+};
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>Controllers</h2>
+                        
+                        <p><a href="http://links.sailsjs.org/docs/controllers">http://links.sailsjs.org/docs/controllers</a></p>
+                        
+                        <p><code>api/controllers/*</code></p>
+                        
+                        <p>With Blueprints (<code>config/blueprints.js</code>), you automatically get CRUD REST and "shortcut" controllers</p>
+                    
+                    </section>
+                    
+                    <section>
+                        <h2>Blueprint Controllers</h2>
+                        
+                        <table>
+                            <tr><th></th><th>REST</th><th>Shortcut</th></tr>
+                            <tr><td>Query</td><td>GET /api/:model</td></tr>
+                            <tr><td>Fetch</td><td>GET /api/:model/:id</td></tr>
+                            <tr><td>Create</td><td>POST /api/:model</td><td>GET /api/:model/create</td></tr>
+                            <tr><td>Update</td><td>PUT /api/:model/:id</td><td>GET /api/:model/update/:id</td></tr>
+                            <tr><td>Delete</td><td>DELETE /api/:model/:id</td><td>GET /api/:model/destroy/:id</td></tr>
+                        </table>
+
+                    </section>
+                    
+                    <section>
+                        <h2>Blueprint Routes</h2>
+                        
+                        <p>By default, Sails creates three types of <i>blueprint</i> routes:</p>
+                        
+                        <ul>
+                            <li><b>RESTful routes</b> for <code>/:model</code> (HTTP <code>GET</code>, <code>DELETE</code>, etc)</li>
+                            
+                            <li><b>Shortcut routes</b> to easily test your model via HTTP <code>GET</code> requests, 
+                                such as <code>/:model/delete/:id</code> (should be turned off in production)</li>
+                                
+                            <li><b>Action routes</b> for any additional actions in your controllers</li>
+                        </ul>
+                            
+                        <p>Authentication and access control are handled via policies</p>
+                    
+                    </section>
+                    
+                    <section>
+                        <h2>Blueprint Actions</h2>
+                        
+                        <p>By default, Sails creates actions on your controllers for ORM functionality:</p>
+                        
+                        <ul>
+                            <li>find</li>
+                            <li>findOne</li>
+                            <li>create</li>
+                            <li>update</li>
+                            <li>destroy</li>
+                            <li>populate</li>
+                            <li>add</li>
+                            <li>remove</li>
+                        </ul>
+                    
+                    </section>
+                    
+                    <section>
+                        <h2>Custom Actions and Routes</h2>
+<pre><code data-trim class="javascript">
+// config/routes.js
+module.exports.routes = {
+  '/': {
+    view: 'homepage'
+  },
+  'post /beer/:id/drink': 'BeerController.drink'
+}
+</code></pre>
+<pre><code data-trim class="javascript">
+// BeerController.js
+module.exports = {
+  drink: function (req, res) {
+    if (!req.params.id) { return res.badRequest('ID not supplied'); }
+
+    Beer.findOne({ id: req.params.id }, function(err, model) {
+      if (err || !model) {
+        return res.badRequest('Beer not found');
+      }
+
+      model.have--;
+
+      model.save(function(err) {
+        return res.ok(model);
+      });
+    });
+  }
+};
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>Views</h2>
+                        
+                        <p><a href="http://sailsjs.org/#!documentation/views">http://sailsjs.org/#!documentation/views</a></p>
+                        
+                        <p><code>api/views/*</code></p>
+                        
+                        <p>Uses EJS by default but can switch to Jade, etc</p>
+<pre><code data-trim class="javascript">
+show: function(req, res) {
+  Beer.find({}, function (err, beers) {
+    res.view('show-beers', { title: 'Beers', beers: beers });
+  });
+}
+</code></pre>
+                    </section>                    
+                    
+                    <section>
+                        <h2>Socket.IO integration</h2>
+                        
+                        <p>Sails automatically translates incoming socket.io messages into Express requests</p>
+                        
+                        <p>Also gives you Pub/Sub via <code>res.broadcast()</code> and <code>req.join()</code></p>
+                        
+<pre><code data-trim class="javascript">
+var socket = io.connect('http://localhost:1337');
+socket.request('/beer', {}, function(beers) { console.log(neers); });
+</code></pre>
+
+                        <img src="images/socket-io.png" />
+                    </section>
+                    
+                </section>
+                
+                <section>
+                    <h2>Links</h2>
+
+                    <ul>
+                        <li>Sails.js: <a href="http://sailsjs.org/">sailsjs.org</a></li>
+                        <li>Sails cCsts: <a href="http://irlnathan.github.io/sailscasts/">irlnathan.github.io/sailscasts/</a>
+
+                        <li>Presentation: <a href="http://www.slideshare.net/nicjansma">slideshare.net/nicjansma</a></li>
+                        <li>Code: <a href="https://github.com/nicjansma/talks/">github.com/nicjansma/talks/</a></li>
+                    </ul>
+
+                    <p style='margin-top: 20px'><small>Thanks - Nic Jansma - <a href="http://nicj.net">nicj.net</a> - <a href="https://twitter.com/NicJ">@NicJ</a></small></p>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
