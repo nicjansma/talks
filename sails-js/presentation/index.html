@@ -74,7 +74,7 @@
                         <ul>
                             <li>100% JavaScript</li>
                         
-                            <li>Works with any database (includes custom ORM)</li>
+                            <li>Database agnostic (includes custom ORM)</li>
                             
                             <li>Auto-generated REST APIs</li>
                             
@@ -202,7 +202,7 @@ sails generate api beer
                         <ul>
                             <li>Sails created a Model (<code>Beer.js</code>) and Controller (<code>BeerController.js</code>)</li>
                             
-                            <li>Sails <i>blueprints</i> automatically generate new routes for the model (eg <code>POST /beer</code> and <code>/beer/create</code>).</li>
+                            <li>Sails <i>blueprints</i> automatically configure new routes for the model (eg <code>POST /beer</code> and <code>/beer/create</code>).</li>
                             
                             <li>Sails uses whatever storage layer you want for persistence</li>
                         </ul>
@@ -231,11 +231,13 @@ sails generate api beer
                     <section>
                         <h2>Models</h2>
                         
-                        <p><a href="http://sailsjs.org/#!documentation/models">http://sailsjs.org/#!documentation/models</a></p>
+                        <ul>
+                            <li><a href="http://sailsjs.org/#!documentation/models">http://sailsjs.org/#!documentation/models</a></li>
                         
-                        <p><code>api/models/*</code></p>
+                            <li><code>api/models/*</code></li>
                         
-                        <p>Uses <a href="https://github.com/balderdashy/waterline">Waterline ORM</a> (inspired by Active Record, Hibernate and Mongoose)<p>
+                            <li>Uses <a href="https://github.com/balderdashy/waterline">Waterline ORM</a> (best parts of Active Record, Hibernate and Mongoose)</li>
+                        </ul>
                     
 <pre><code data-trim class="javascript">
 module.exports = {
@@ -249,7 +251,8 @@ module.exports = {
       required: true
     },
     have: {
-      type: 'integer'
+      type: 'integer',
+      defaultTo: 1
     }
   }
 };
@@ -259,26 +262,14 @@ module.exports = {
                     <section>
                         <h2>Controllers</h2>
                         
-                        <p><a href="http://links.sailsjs.org/docs/controllers">http://links.sailsjs.org/docs/controllers</a></p>
-                        
-                        <p><code>api/controllers/*</code></p>
-                        
-                        <p>With Blueprints (<code>config/blueprints.js</code>), you automatically get CRUD REST and "shortcut" controllers</p>
+                        <ul>
+                            <li><a href="http://links.sailsjs.org/docs/controllers">http://links.sailsjs.org/docs/controllers</a></li>
+                            
+                            <li><code>api/controllers/*</code></li>
+                            
+                            <li>With Blueprints (<code>config/blueprints.js</code>), you automatically get CRUD REST and "shortcut" routes</li>
+                        </ul>
                     
-                    </section>
-                    
-                    <section>
-                        <h2>Blueprint Controllers</h2>
-                        
-                        <table>
-                            <tr><th></th><th>REST</th><th>Shortcut</th></tr>
-                            <tr><td>Query</td><td>GET /api/:model</td></tr>
-                            <tr><td>Fetch</td><td>GET /api/:model/:id</td></tr>
-                            <tr><td>Create</td><td>POST /api/:model</td><td>GET /api/:model/create</td></tr>
-                            <tr><td>Update</td><td>PUT /api/:model/:id</td><td>GET /api/:model/update/:id</td></tr>
-                            <tr><td>Delete</td><td>DELETE /api/:model/:id</td><td>GET /api/:model/destroy/:id</td></tr>
-                        </table>
-
                     </section>
                     
                     <section>
@@ -299,6 +290,20 @@ module.exports = {
                     
                     </section>
                     
+                    <section>
+                        <h2>Blueprint Routes</h2>
+                        
+                        <table>
+                            <tr><th></th><th>REST</th><th>Shortcut</th></tr>
+                            <tr><td>Query</td><td>GET /api/:model</td></tr>
+                            <tr><td>Fetch</td><td>GET /api/:model/:id</td></tr>
+                            <tr><td>Create</td><td>POST /api/:model</td><td>GET /api/:model/create</td></tr>
+                            <tr><td>Update</td><td>PUT /api/:model/:id</td><td>GET /api/:model/update/:id</td></tr>
+                            <tr><td>Delete</td><td>DELETE /api/:model/:id</td><td>GET /api/:model/destroy/:id</td></tr>
+                        </table>
+
+                    </section>
+
                     <section>
                         <h2>Blueprint Actions</h2>
                         
@@ -353,17 +358,31 @@ module.exports = {
                     <section>
                         <h2>Views</h2>
                         
-                        <p><a href="http://sailsjs.org/#!documentation/views">http://sailsjs.org/#!documentation/views</a></p>
+                        <ul>
+                            <li><a href="http://sailsjs.org/#!documentation/views">http://sailsjs.org/#!documentation/views</a></li>
+                            
+                            <li><code>api/views/*</code></li>
+                            
+                            <li>Uses EJS by default but can switch to Jade, etc</li>
+                        </ul>
                         
-                        <p><code>api/views/*</code></p>
-                        
-                        <p>Uses EJS by default but can switch to Jade, etc</p>
 <pre><code data-trim class="javascript">
-show: function(req, res) {
-  Beer.find({}, function (err, beers) {
-    res.view('show-beers', { title: 'Beers', beers: beers });
-  });
-}
+// BeerController.js
+module.exports = {
+  show: function(req, res) {
+    Beer.find({}, function (err, beers) {
+      res.view('show-beers', { title: 'Beers', beers: beers });
+    });
+  }
+};
+</code></pre>
+<pre><code data-trim class="html">
+// show-beers.ejs
+&lt;ul&gt;
+&lt;% for(var i=0; i&lt;beers.length; i++) {%&gt;
+   &lt;li&gt;&lt;%= beers[i].name %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;
 </code></pre>
                     </section>                    
                     
