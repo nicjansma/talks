@@ -14,3 +14,5 @@ All content is licensed under the MIT license.
 * [The Happy Path: Migration Strategies for Node.js](the-happy-path-migration-strategies-for-nodejs/index.html) ([GLSEC 2014](http://glsec.softwaregr.org/) - 2014-05-05) ([PDF](https://github.com/nicjansma/talks/blob/master/the-happy-path-migration-strategies-for-nodejs/the-happy-path-migration-strategies-for-nodejs.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/the-happy-path-migration-strategies-for-nodejs))
 
 * [Appcelerator Titanium Intro (2014)](appcelerator-titanium-intro-2014/) ([GrDevNight](http://grdevnight.org/) - 2014-06-05) ([PDF](https://github.com/nicjansma/talks/blob/master/appcelerator-titanium-intro-2014/appcelerator-titanium-intro-2014.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/appcelerator-titanium-intro-2014))
+
+* [Sails.js Intro](sails-js/) ([GrNodeDev](http://www.meetup.com/GRNodeDev/) - 2014-08-07) ([PDF](https://github.com/nicjansma/talks/blob/master/sails-js/sails-js.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/sails-js-intro))
