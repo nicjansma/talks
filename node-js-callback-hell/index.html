@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Node.js Callback Hell</title>
+
+        <meta name="description" content="Node.js Callback Hell">
+        <meta name="author" content="Nic Jansma">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <img src="images/grnodedev.png" />
+                    <img src="images/ost.jpg" />
+
+                    <h3>Flow and Async</h3>
+                    <p>September 4, 2014</p>
+                    
+                    <ul>
+                        <li>Intro / Plain Old Callbacks - Nic Jansma</li>
+                        <li>Async.js - Leo Dion</li>
+                        <li>Promises - Jason Sich</li>
+                        <li>Generators - Brian Scaturro</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h1>Special Thanks</h1>
+                    
+                    <p>Special thanks to OST for hosting us!</p>
+                    
+                    <img src="images/ost.jpg" />
+                    
+                    <p>Talk to Tamara (tiakiri@ostusa.com), Courtney (cteunis@ostusa.com), or Beth (bvanslyke@ostusa.com)
+                        about job opportunities</p>
+                </section>
+            
+                <section>
+                    <h1>Node.js</h1>
+
+                    <h2>Plain Old Callbacks</h2>
+                </section>
+
+                <section data-background="images/hell.jpg">
+                    <h2 style="color:white">Node.js is great, until...</h2>
+                    
+                    <p style="font-size: 500%; color: white">Callback Hell</p>
+                </section>
+
+                <section>
+                    <h2>The Problem</h2>
+
+                    <p>Node.js's asynchronous nature requires a callback-driven flow, where the results
+                    of function calls are often passed into a callback function:</p>
+<pre><code data-trim class="javascript">
+myFunc(parameters, function(err, results) {
+    ...
+});
+</code></pre>
+                    
+                    <p>This gives Node.js tremendous response time and the ability to scale, but it can
+                    cause some headaches when working with nested callbacks</p>
+                </section>
+
+                <section>
+                    <h2>Example</h2>
+
+                    <p>Say you want to:</p>
+                    
+                    <ol>
+                        <li>Read all of the files in a directory</li>
+                        <li>Calculate the checksum of each file</li>
+                        <li>Write the checksum as [file].checksum</li>
+                    </ol>
+                </section>
+                
+                <section>
+                    <p>Starts out simple...</p>
+                    
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    ...
+});
+</code></pre>
+                </section>
+
+                <section>
+                    <p>Iterate over all the files</p>
+                
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    files.forEach(function(file, index) {
+        ...
+    });
+});
+</code></pre>
+                </section>
+                
+                <section>
+                    <p>Read the file</p>
+                    
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    files.forEach(function(file, index) {
+        fs.readFile(path.join(dir, file), function(err2, data) {
+            ...
+        });
+    });
+});
+</code></pre>
+                </section>
+
+                <section>
+                    <p>Calculate the CRC and write it out</p>
+                
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    files.forEach(function(file, index) {
+        fs.readFile(path.join(dir, file), function(err2, data) {
+            var checkSum = crc.crc32(data);
+            fs.writeFile(file + '.checksum', checkSum, function(err3) {
+                console.write(path.join(dir, file), ':', checkSum);
+            });
+        });
+    });
+});
+</code></pre>
+                </section>
+                
+                <section>
+                    <p>To infinity, and beyond...</p>
+                
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    files.forEach(function(file, index) {
+        fs.readFile(path.join(dir, file), function(err2, data) {
+            var checkSum = crc.crc32(data);
+            fs.writeFile(file + '.checksum', checkSum, function(err3) {
+                console.write(path.join(dir, file), ':', checkSum);
+                //
+                // let's keep going?
+                // ===========================================>
+                //
+            });
+        });
+    });
+});
+</code></pre>
+                </section>
+
+                                    <section>
+                    <p>Wait, we didn't check for errors!?!</p>
+                    
+<pre><code data-trim class="javascript">
+fs.readdir(dir, function(err, files) {
+    if (err) {
+        return 'Oh no!';
+    }
+    files.forEach(function(file, index) {
+        var filePath = path.join(dir, file);
+        fs.readFile(filePath, function(err2, data) {
+            if (err2) {
+                return "Can't read the file!";
+            }
+            var checkSum = crc.crc32(data);
+            fs.writeFile(filePath + '.checksum', checkSum, function(err3) {
+                if (err3) {
+                    return "Can't write the file!";
+                }
+                console.write(filePath, ':', checkSum);
+            });
+        });
+    });
+    
+    // um. did everything succeed?
+});
+</code></pre>
+                </section>
+                
+                <section>
+                    <h1>Challenges</h1>
+                    
+                    <ul>
+                        <li>Constantly nesting pushes everything far to the right</li>
+                        
+                        <li>Code becomes hard to read</li>
+                        
+                        <li>Scoping might become a problem since nested callbacks will inherit scope from all parents.</li>
+                        
+                        <li>Dealing with callback <code>err</code></li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h1>Some Solutions:</h1>
+                    
+                    <ul>
+                        <li>[give up]</li>
+                        
+                        <li>Async.js</li>
+                        
+                        <li>Promises</li>
+                        
+                        <li>Generators</li>
+                    </ul>
+                </section>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
