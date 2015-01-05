@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Make it Fast: Using Modern Brower APIs to Monitor and Improve the Performance of your Web Applications</title>
+
+        <meta name="description" content="Make it Fast: Using Modern Brower APIs to Monitor and Improve the Performance of your Web Applications">
+        <meta name="author" content="Nic Jansma">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>Make it Fast</h1>
+
+                    <p>Using Modern Brower APIs to Monitor and Improve the Performance of your Web Applications</p>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://nicj.net">nic jansma</a> |</small>
+                        <small><a href="http://nicj.net">nicj.net</a> |</small>
+                        <small><a href="http://twitter.com/nicj">@nicj</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <div style="float: right; text-align: center">
+                        <img src="images/nic.jpg" height="300" width="300" />
+                    </div>
+
+                    <h2>Who Am I?</h2>
+
+                    <p>Nic Jansma</p>
+                    <p><a href="mailto:nic@nicj.net">nic@nicj.net</a></p>
+                    <p><a href="https://twitter.com/nicj/">@nicj</a></p>
+                    <p><a href="http://nicj.net">http://nicj.net</a></p>
+                    <p><img src="images/soasta.png" /></p>
+
+                    <ul>
+                        <li>Senior Software Engineer @ SOASTA (current)</li>
+                        <li>Senior Software Engineer @ Microsoft (2005-2011)</li>
+                        <li>Founding member of W3C WebPerf Working Group</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>State of Performance Measurement</h2>
+
+                        <p>How do we measure performance?</p>
+                    </section>
+
+                    <section>
+                        <h3>Server</h3>
+                        <ul>
+                            <li>HTTP logs (apache, nginx, haproxy)</li>
+                            <li>Server monitoring (top, iostat, vmstat, cacti, mrtg, nagios, new relic)</li>
+                            <li>Profiling (timestamps, xdebug, xhprof)</li>
+                            <li>Load testing (ab, jmeter, soasta, blazemeter, loadrunner)
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>Developer</h3>
+                        <ul>
+                            <li>Browser developer tools (ie, chrome, ff, opera, safari)</li>
+                            <li>Network monitoring (fiddler, wireshark, tcpdump)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3>But...</h3>
+                        <p>Measuring performance from the server and developer perspective is not the full story</p>
+
+                        <p style="margin-top: 100px">The only thing that really matters is what your end-user sees</p>
+
+                        <p style="margin-top: 100px">Measuring real-world performance of your end-users is tough</p>
+                    </section>
+
+                    <section>
+                        <h3>User</h3>
+                        <p><small>(circa 2010)</small></p>
+                        <ul>
+                            <li><code>var elapsedTime = Date.now() - startTime;</code></li>
+                            <li>Boomerang (<a href="https://github.com/lognormal/boomerang">https://github.com/lognormal/boomerang</a>)</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>W3C WebPerf Working Group</h2>
+
+                        <p><a href="http://www.w3.org/2010/webperf/">http://www.w3.org/2010/webperf/</a></p>
+
+                        <p>Founded 2010 to give developers the ability to assess and understand performance characteristics of their web apps</p>
+
+                        <blockquote style="margin-top: 50px;">The mission of the Web Performance Working Group is to provide methods to measure aspects of application performance of user agent features and APIs</blockquote>
+
+                        <p style="margin-top: 50px;">Microsoft, Google, Mozilla, Opera, Facebook, Netflix, etc</p>
+                    </section>
+
+                    <section>
+                        <h2>Working Group Goals</h2>
+
+                        <ul>
+                        <li>Expose information that was not previously available</li>
+
+                        <li>Give developers the tools they need to make their applications more efficient</li>
+
+                        <li>Little to no overhead</li>
+
+                        <li>Easy to understand APIs</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Published Specs</h2>
+
+                        <ul>
+                            <li><strong>Navigation Timing</strong> (NT): Page load timings</li>
+                            <li><strong>Resource Timing</strong> (RT): Resource load timings</li>
+                            <li><strong>User Timing</strong> (UT): Custom site events and measurements</li>
+                            <li><strong>Performance Timeline</strong>: Access NT/RT/UT and future timings from one API</li>
+                            <li><strong>High Resolution Time</strong>: Better <code>Date.now()</code></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Published Specs (pt 2)</h2>
+
+                        <ul>
+                            <li><strong>Page Visibility</strong>: Visibility state of document</li>
+                            <li><strong>Timing control for script-based animations</strong>: <code>requestAnimationFrame()</code></li>
+                            <li><strong>Efficient Script Yielding</strong>: More efficient than <code>setTimeout(...,0)</code>: <code>setImmediate()</code></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Upcoming Specs</h2>
+                        <ul>
+                            <li>Beacon: Async send data (even after page is closed)</li>
+                            <li>Resource Hints: <code>rel="preconnect" rel="preload"</code></li>
+                            <li>Resource Priorities: <code>lazyload</code></li>
+                            <li>Frame Timing: Animation timings</li>
+                            <li>Navigation Error Logging: For failed navigations</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Participate!</h2>
+
+                        <p style="margin-top: 50px;"><a href="http://www.w3.org/2010/webperf/">http://www.w3.org/2010/webperf/</a></p>
+
+                        <p style="margin-top: 50px;"><a href="mailto:public-web-perf@w3.org">public-web-perf@w3.org</a></p>
+
+                        <p style="margin-top: 50px;"><a href="https://github.com/w3c/web-performance">https://github.com/w3c/web-performance</a></p>
+                    </section>
+
+                    <!-- reason I mention this is to encourage you -- if you're interested in any of these
+                    things, feel free to participate on the email group or Github issues -->
+                </section>
+
+                <section>
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <p><a href="http://www.w3.org/TR/navigation-timing/">http://www.w3.org/TR/navigation-timing/</a></p>
+
+                        <p style='margin-top: 50px'><strong>Goal: </strong> Expose accurate performance metrics describing your visitor's page load
+                            experience</p>
+
+                        <p style='margin-top: 50px'><strong>Current status</strong>: Recommendation</p>
+
+                        <p style='margin-top: 50px'><strong>Upcoming</strong>: NavigationTiming2</p>
+
+                    </section>
+
+                    <section>
+                        <h2>How it was done before</h2>
+
+                        <p><small>(it wasn't accurately)</small></p>
+
+<pre><code data-trim class="javascript">
+&lt;html&gt;&lt;head&gt;&lt;script&gt;
+var start = new Date().getTime();
+function onLoad {
+    var pageLoadTime = (new Date().getTime()) - start;
+}
+body.addEventListener(“load”, onLoad, false);
+&lt;/script&gt;...&lt;/html&gt;
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>What's wrong with this?</h2>
+
+                        <ul>
+                            <li>It only measures the time from when the HTML gets parsed to when the last
+                                sub-resource is downloaded</li>
+
+                            <li>It misses the initial DNS lookup, TCP connection and HTTP request wait time</li>
+
+                            <li><code>(new Date().getTime())</code> is not reliable</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Interlude</h2>
+
+                        <p><code>DOMHighResTimeStamp</code></p>
+
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th><code>Date().getTime()</code></th>
+                                <th><code>performance.now()</code></th>
+                            </tr>
+                            <tr>
+                                <td>Resolution</td>
+                                <td>millisecond</td>
+                                <td>sub-millisecond</td>
+                            </tr>
+                            <tr>
+                                <td>Start</td>
+                                <td>Unix epoch</td>
+                                <td><code>navigationStart</code></td>
+                            </tr>
+                            <tr>
+                                <td>Monotonically Non-decreasing</td>
+                                <td>No</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Affected by user's clock</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>Example</td>
+                                <td><code>1420147524606</code></td>
+                                <td><code>3392.275999998674</code></td>
+                            </tr>
+                        </table>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <p><code>window.performance.timing</code></p>
+
+<pre><code data-trim class="javascript">
+interface PerformanceTiming {
+    readonly attribute unsigned long long navigationStart;
+    readonly attribute unsigned long long unloadEventStart;
+    readonly attribute unsigned long long unloadEventEnd;
+    readonly attribute unsigned long long redirectStart;
+    readonly attribute unsigned long long redirectEnd;
+    readonly attribute unsigned long long fetchStart;
+    readonly attribute unsigned long long domainLookupStart;
+    readonly attribute unsigned long long domainLookupEnd;
+    readonly attribute unsigned long long connectStart;
+    readonly attribute unsigned long long connectEnd;
+    readonly attribute unsigned long long secureConnectionStart;
+    readonly attribute unsigned long long requestStart;
+    readonly attribute unsigned long long responseStart;
+    readonly attribute unsigned long long responseEnd;
+    readonly attribute unsigned long long domLoading;
+    readonly attribute unsigned long long domInteractive;
+    readonly attribute unsigned long long domContentLoadedEventStart;
+    readonly attribute unsigned long long domContentLoadedEventEnd;
+    readonly attribute unsigned long long domComplete;
+    readonly attribute unsigned long long loadEventStart;
+    readonly attribute unsigned long long loadEventEnd;
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <img src="images/navigation-timing.png" />
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <p><code>window.performance.navigation</code></p>
+
+<pre><code data-trim class="javascript">
+interface PerformanceNavigation {
+    const unsigned short TYPE_NAVIGATE = 0;
+    const unsigned short TYPE_RELOAD = 1;
+    const unsigned short TYPE_BACK_FORWARD = 2;
+    const unsigned short TYPE_RESERVED = 255;
+    readonly attribute unsigned short type;
+    readonly attribute unsigned short redirectCount;
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>How to Use</h2>
+
+<pre><code data-trim class="javascript">
+function onLoad() {
+    if ('performance' in window && 'timing' in window.performance) {
+        setTimeout(function() {
+            var t = window.performance.timing;
+            var ntData = {
+                redirect: t.redirectEnd - t.redirectStart,
+                dns: t.domainLookupEnd - t.domainLookupStart,
+                connect: t.connectEnd - t.connectStart,
+                ssl: t.secureConnectionStart ? (t.connectEnd - secureConnectionStart) : 0,
+                request: t.responseStart - t.requestStart,
+                response: t.responseEnd - t.responseStart,
+                dom: t.loadEventStart - t.responseEnd,
+                total: t.loadEventEnd - t.navigationStart
+            };
+        }, 0);
+    }
+}
+</code></pre>
+
+                    </section>
+
+                    <section>
+                        <h2>Then what?</h2>
+
+                        <p>DIY / Open Source options:</p>
+
+                        <ul>
+                            <li>Send this data to your backend for logging</li>
+
+                            <!-- sample a percent -->
+
+                            <li>Show any page's timings via a bookmarklet: <a href="http://kaaes.github.io/timing/">http://kaaes.github.io/timing/</a></li>
+
+                            <li>Boomerang (<a href="https://github.com/lognormal/boomerang">https://github.com/lognormal/boomerang</a>)</li>
+                            <li>Boomcatch (<a href="http://cruft.io/posts/introducing-boomcatch/">http://cruft.io/posts/introducing-boomcatch/</a>)</li>
+                            <li>SiteSpeed.io (<a href="http://www.sitespeed.io/">http://www.sitespeed.io/</a>)</li>
+                            <li>Piwiki (<a href="https://github.com/piwik/piwik/">https://github.com/piwik/piwik/</a>)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Commercial</h2>
+
+                        <ul>
+                            <li>SOASTA mPulse</li>
+                            <li>Google Analytics (Site Speed)</li>
+                            <li>SpeedCurve</li>
+                            <li>New Relic</li>
+                            <li>NewStar</li>
+                            TODO: screenshots?
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <p><a href="http://caniuse.com/#feat=nav-timing">http://caniuse.com/#feat=nav-timing</a></p>
+
+                        <img src="images/navigation-timing-caniuse.png" />
+                    </section>
+
+                    <section>
+                        <h2>Tips</h2>
+
+                        <ul>
+                            <li>Use <code>fetchStart</code> instead of <code>navigationStart</code> unless you're interested in redirects, tab init time, etc</li>
+                            <li><strong>All</strong> redirects are grouped between <code>redirectStart</code> and <code>redirectEnd</code></li>
+                            <li><code>loadEventEnd</code> will be 0 until <i>after</i> the body's <code>load</code> event has finished (so you can't measure it in the <code>load</code> event)</li>
+                            <li>We don't have an accurate way to measure the "request time", as "<code>requestEnd</code>" is invisible to us (the server sees it)</li>
+                            <li><code>secureConnectionStart</code> isn't available in IE</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Tips (pt 2)</h2>
+
+                        <ul>
+                            <li>iOS still doesn't have support</li>
+                            <li>Home page scenarios: Timestamps up through <code>responseEnd</code> event may be 0 duration because some browsers speculatively pre-fetch home pages (and don't report the correct timings)</li>
+                            <li>If possbile, do any beaconing of the data as soon as possible.  Browser <code>onbeforeunload</code> isn't 100% reliable for sending data</li>
+                            <li>Single-Page Apps: You'll need a different solution for "navigations" (Boomerang + plugin coming soon)</li>
+                            <li>TODO more? SO?</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming2</h2>
+
+                        <p><a href="http://www.w3.org/TR/navigation-timing-2/">http://www.w3.org/TR/navigation-timing-2/</a></p>
+
+                        <p><strong>DRAFT</strong></p>
+
+                        <p>Builds on NavigationTiming:</p>
+
+                        <ul>
+                            <li>Support for Performance Timeline</li>
+                            <li>Support for High Resolution Time</li>
+                            <li>timing information for link negotiation</li>
+                            <li>timing information for prerender</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <p><a href="http://www.w3.org/TR/resource-timing/">http://www.w3.org/TR/resource-timing/</a></p>
+
+                        <p style='margin-top: 50px'><strong>Goal: </strong> Expose sub-resource performance metrics</p>
+
+                            <p style='margin-top: 50px'><strong>Current status</strong>: Working Draft</p>
+
+                    </section>
+
+                    <section>
+                        <h2>How it was done before</h2>
+
+                        <p><small>(it wasn't accurately)</small></p>
+
+<pre><code data-trim class="javascript">
+var start = new Date().getTime();
+var image1 = new Image();
+var resourceTiming = function() {
+    var now = new Date().getTime();
+    var latency = now - start;
+    alert("End to end resource fetch: " + latency);
+};
+
+image1.onload = resourceTiming;
+image1.src = 'http://www.w3.org/Icons/w3c_main.png';
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>What's wrong with this?</h2>
+
+                        <ul>
+                            <li>It measures end-to-end download time plus rendering time</li>
+
+                            <li>Not practical if you want to measure every resource on the page (IMG, SCRIPT, LINK rel="css", etc)</li>
+
+                            <li><code>(new Date().getTime())</code> is not reliable</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <p><code>window.performance.getEntries()</code></p>
+
+<pre><code data-trim class="javascript">
+interface PerformanceEntry {
+    readonly attribute DOMString name;
+    readonly attribute DOMString entryType;
+    readonly attribute DOMHighResTimeStamp startTime;
+    readonly attribute DOMHighResTimeStamp duration;
+};
+
+interface PerformanceResourceTiming : PerformanceEntry {
+    readonly attribute DOMString initiatorType;
+
+    readonly attribute DOMHighResTimeStamp redirectStart;
+    readonly attribute DOMHighResTimeStamp redirectEnd;
+    readonly attribute DOMHighResTimeStamp fetchStart;
+    readonly attribute DOMHighResTimeStamp domainLookupStart;
+    readonly attribute DOMHighResTimeStamp domainLookupEnd;
+    readonly attribute DOMHighResTimeStamp connectStart;
+    readonly attribute DOMHighResTimeStamp connectEnd;
+    readonly attribute DOMHighResTimeStamp secureConnectionStart;
+    readonly attribute DOMHighResTimeStamp requestStart;
+    readonly attribute DOMHighResTimeStamp responseStart;
+    readonly attribute DOMHighResTimeStamp responseEnd;
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Interlude: PerformanceTimineline</h2>
+
+                        <p><a href="http://www.w3.org/TR/performance-timeline/">http://www.w3.org/TR/performance-timeline/</a></p>
+
+                        <p style='margin-top: 50px'><strong>Goal: </strong> Unifying interface to access and retrieve performance metrics</p>
+
+                        <p style='margin-top: 50px'><strong>Current status</strong>: Recommendation</p>
+                    </section>
+
+                    <section>
+                        <h2>PerformanceTimineline</h2>
+
+                        <ul>
+                            <li><code>getEntries()</code>: Gets all entries in the timeline</li>
+                            <li><code>getEntriesByType()</code>: Gets all entries of the specified type (eg <code>resource</code>, <code>mark</code>, <code>measure</code>)</li>
+                            <li><code>getEntriesByName()</code>: Gets all entries with the specified name (eg URL or mark name)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <img src="images/resource-timing.png" />
+                    </section>
+
+                    <section>
+                        <h2>How to Use</h2>
+
+                        <p><code>window.performance.getEntriesByType("resource")</code></p>
+
+<pre><code data-trim class="javascript">
+{
+    connectEnd: 566.357000003336,
+    connectStart: 566.357000003336,
+    domainLookupEnd: 566.357000003336,
+    domainLookupStart: 566.357000003336,
+    duration: 4.275999992387369,
+    entryType: "resource",
+    fetchStart: 566.357000003336,
+    initiatorType: "img",
+    name: "https://www.foo.com/foo.png",
+    redirectEnd: 0,
+    redirectStart: 0,
+    requestStart: 568.4959999925923,
+    responseEnd: 570.6329999957234,
+    responseStart: 569.4220000004862,
+    secureConnectionStart: 0,
+    startTime: 566.357000003336
+}
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Buffer</h2>
+
+                        <ul>
+                            <li>There is a ResourceTiming buffer that stops filling after it's size limit is reached (default: 150 entries)</li>
+
+                            <li>Listen for the <code>onresourcetimingbufferfull</code> event</li>
+
+                            <li><code>setResourceTimingBufferSize</code> and <code>clearResourceTimings</code> can be used to modify it</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h2>Use Cases</h2>
+
+                        <ul>
+                            <li>Send all resource timings to your backend analytics</li>
+
+                            <li>Raise an analytics event if any resource takes over X seconds to download (and trend this data)</li>
+
+                            <li>Watch specific resources (eg third-party ads or analytics) and complain if they are slow</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Compressing</h2>
+
+                        <ul>
+                            <li>Each resource is ~ 500 bytes <code>JSON.stringify()</code>'d</li>
+
+                            <li><a href="http://httparchive.org">HTTP Archive</a> tells us there's 99 HTTP resources on average, per page,
+                                with an average URL length of 85 bytes</li>
+
+                            <li>That means you could expect around 45 KB of ResourceTiming data per page load</li>
+
+                            <li>Compress it: <a href="http://nicj.net/compressing-resourcetiming/">http://nicj.net/compressing-resourcetiming/</a></li>
+
+                            <li><a href="https://github.com/nicjansma/resourcetiming-compression.js">https://github.com/nicjansma/resourcetiming-compression.js</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Compressing</h2>
+
+                        <p>Converts:</p>
+
+<pre><code data-trim class="javascript">
+    {
+        "responseEnd":323.1100000002698,
+        "responseStart":300.5000000000000,
+        "requestStart":252.68599999981234,
+        "secureConnectionStart":0,
+        "connectEnd":0,
+        "connectStart":0,
+        "domainLookupEnd":0,
+        "domainLookupStart":0,
+        "fetchStart":252.68599999981234,
+        "redirectEnd":0,
+        "redirectStart":0,
+        "duration":71.42400000045745,
+        "startTime":252.68599999981234,
+        "entryType":"resource",
+        "initiatorType":"script",
+        "name":"http://foo.com/js/foo.js"
+    }
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Compressing</h2>
+
+                        <p>To:</p>
+
+<pre><code data-trim class="javascript">
+    {
+        "http://": {
+            "foo.com/": {
+                "js/foo.js": "370,1z,1c",
+                "css/foo.css": "48c,5k,14"
+            }
+        }
+    }
+</code></pre>
+
+                        <p>Overall, compresses ResourceTiming data down to 15% of its original size</p>
+
+                    </section>
+
+                    <section>
+                        <h2>Timing-Allow-Origin</h2>
+
+                        <p>By default, cross-origin resources expose timestamps for only the <code>fetchStart</code>
+                            and <code>responseEnd</code> attributes (due to privacy concerns)</p>
+
+                        <p>You can override this by setting the <code>Timing-Allow-Origin</code> HTTP header</p>
+
+                        <p><code>Timing-Allow-Origin = "Timing-Allow-Origin" ":" origin-list-or-null | "*"</code></p>
+
+                        <p><strong>Note</strong>: Third-party libraries (ads, analytics, etc) must set this on their
+                            servers.  Not all do.  
+                    </section>
+
+                    <section>
+                        <h2>DIY / Open Source</h2>
+
+                        <!-- TODO: Show screenshots of each of these -->
+                        <ul>
+                            <li>Compress + send this data to your backend for logging</li>
+
+                            <li>Show any page's resources via a bookmarklet: <a href="https://github.com/andydavies/waterfall">https://github.com/andydavies/waterfall/</a></li>
+                            <li>Heatmap bookmarklet / Chrome extension: <a href="https://github.com/zeman/perfmap">https://github.com/zeman/perfmap</a></li>
+                            <li>Another bookmarklet: <a href="https://github.com/nurun/performance-bookmarklet">https://github.com/nurun/performance-bookmarklet</a></li>
+
+                            <li>Boomerang supports ResourceTiming: <a href="https://github.com/lognormal/boomerang">https://github.com/lognormal/boomerang</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Commercial</h2>
+
+                        <ul>
+                            <li>SOASTA mPulse</li>
+                            TODO: screenshots
+                            TODO: Others?
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <p><a href="http://caniuse.com/#feat=resource-timing">http://caniuse.com/#feat=resource-timing</a></p>
+
+                        <img src="images/resource-timing-caniuse.png" />
+                    </section>
+
+                    <section>
+                        <h2>Tips</h2>
+
+                        <ul>
+                            <li>
+                        </ul>
+
+what it's missing
+transfer size
+byte size (priv concerns)
+
+doesn't contain root page
+
+buffer
+
+                        <ul>
+                            <li>Use <code>fetchStart</code> instead of <code>navigationStart</code> unless you're interested in redirects, tab init time, etc</li>
+                            <li><strong>All</strong> redirects are grouped between <code>redirectStart</code> and <code>redirectEnd</code></li>
+                            <li><code>loadEventEnd</code> will be 0 until <i>after</i> the body's <code>load</code> event has finished (so you can't measure it in the <code>load</code> event)</li>
+                            <li>We don't have an accurate way to measure the "request time", as "<code>requestEnd</code>" is invisible to us (the server sees it)</li>
+                            <li><code>secureConnectionStart</code> isn't available in IE</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Tips (pt 2)</h2>
+
+                        <ul>
+                            <li>iOS still doesn't have support</li>
+                            <li>Home page scenarios: Timestamps up through <code>responseEnd</code> event may be 0 duration because some browsers speculatively pre-fetch home pages (and don't report the correct timings)</li>
+                            <li>If possbile, do any beaconing of the data as soon as possible.  Browser <code>onbeforeunload</code> isn't 100% reliable for sending data</li>
+                            <li>Single-Page Apps: You'll need a different solution for "navigations" (Boomerang + plugin coming soon)</li>
+                            <li>TODO more? SO?</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming2</h2>
+
+                        <p><a href="http://www.w3.org/TR/navigation-timing-2/">http://www.w3.org/TR/navigation-timing-2/</a></p>
+
+                        <p><strong>DRAFT</strong></p>
+
+                        <p>Builds on NavigationTiming:</p>
+
+                        <ul>
+                            <li>Support for Performance Timeline</li>
+                            <li>Support for High Resolution Time</li>
+                            <li>timing information for link negotiation</li>
+                            <li>timing information for prerender</li>
+                        </ul>
+                    </section>
+
+                </section>
+<section>
+
+    http://stackoverflow.com/questions/14657849/can-i-use-the-browser-navigation-timing-api-for-ajax-events-in-single-page-apps
+    http://stackoverflow.com/questions/tagged/navigation-timing-api
+
+ResourceTiming
+    caniuse
+    Compressed RT
+    Intro
+        http://www.w3.org/TR/resource-timing/
+
+        Similar to NavigationTiming, but for all of the resources (images, scripts, css, media, etc) on your page
+
+        Get most of the data you can see in Net panel in Firebug/etc
+
+        Support:
+        IE10
+        Chrome 25+ (prefixed)
+
+    How it was done before:
+
+        (it wasn’t)
+
+        For dynamically inserted content, you could time how long it took from DOM insertion to the element’s onLoad event, but that’s not practical for all of your resources
+
+        You can get this information from Firebug, but that’s not the end-user’s performance
+
+    How to Use
+        DOM: See PerformanceTimeline
+        Each resource:
+        URL
+        Initiator type (SCRIPT/IMG/CSS/XHR)
+        Timings:
+        Redirect (301/302s)
+        DNS
+        TCP
+        Request
+        SSL
+        Response
+        Processing (DOM events)
+        Load
+
+    Gotchas
+        http://www.stevesouders.com/blog/2014/08/21/resource-timing-practical-tips/
+
+        Many attributes zero’d out if the resource is cross-domain (redirect, DNS, connect, TCP, SSL, request) UNLESS server sends Timing-Allow-Origin HTTP header
+
+            Timing-Allow-Origin: [* | yourserver.com]
+
+        This is to protect your privacy (attacker can’t load random URLs to see where you’ve been)
+
+        Your own CDNs should send this HTTP header if you want timing data.  3rd-party CDNs/scripts (eg. Google Analytics) should add this too.
+
+        Only first 150 resources will be captured unless setResourceTimingBufferSize() is called
+
+        Souder's gotchas
+
+Interlude: PerformanceTimeline (PT)
+    http://www.w3.org/TR/performance-timeline/
+
+    Interface to access all of the performance metrics that the browser exposes (eg. Navigation Timing, Resource Timing, User Timing, etc)
+
+    Support:
+    IE10
+    Chrome 25+ (prefixed)
+
+    Only way to access Resource Timing, User Timing, etc
+
+    Gives you a timeline view of performance metrics as they occur
+
+    Future interfaces (say, rendering events) can be added as long as they hook into the Performance Timeline interface
+
+    performance.getEntries()
+    All entries in one array
+        performance.getEntriesByType(type)
+        eg performance.getEntriesByType(“resource”)
+        performance.getEntriesByName(name)
+        eg performance.getEntriesByName(“http://myurl.com/foo.js”)
+
+        interface PerformanceEntry {
+           readonly attribute DOMString name;
+           readonly attribute DOMString entryType;
+           readonly attribute DOMHighResTimeStamp startTime;
+           readonly attribute DOMHighResTimeStamp duration;
+        };
+
+
+UserTiming
+    caniuse
+    SO post?
+    UserTiming.js
+
+    http://www.w3.org/TR/user-timing/
+
+    Custom site profiling and measurements
+
+    Support:
+    IE10
+    Chrome 25+ (prefixed)
+
+    How it was done before:
+
+    <script>
+    var myMeasurements = [];
+    var startMeasure = new Date().getTime();
+    ...
+    myMeasurements.push((new Date().getTime()) - start);
+    </script>
+
+    Problems: Date is imprecise, not monotonically non-decreasing, user clock changes
+
+    Mark a timestamp:
+    performance.mark(“foo_start”)
+    performance.mark(“foo_end”)
+
+    Log a measure (difference of two marks)
+    performance.measure(“foo”, “foo_start”, “foo_end”)
+
+    Get marks and measures
+    performance.getEntriesByType(“mark”)
+    [
+     {name: “foo_start”, entryType: “mark”, startTime: 1000000.203, duration: 0}
+     {name: “foo_end”, entryType: “mark”, startTime: 1000010.406, duration: 0}
+    ]
+
+    performance.getEntriesByType(“measure”)
+    [
+     {name: “foo_end”, entryType: “measure”, startTime: 1000000.203, duration: 10.203}
+    ]
+
+    Easy way to add profiling events to your application
+
+    Uses DOMHighResTimeStamp instead of Date.getTime() for higher precision
+
+    Can be used along-side NT and RT timings to get a better understanding of your app’s performance in the real-world
+
+Real World Usage
+    Boomerang
+    Google Analytics
+    http://www.sitespeed.io/
+    SOASTA
+        mPulse
+        Waterfalls
+    New Relic
+    https://github.com/andreas-marschke/boomerang-express
+</section>
+
+                <section>
+                    <section>
+                        <h2>Sails.js is:</h2>
+
+                        <ul>
+                            <li>A MVC backend web framework for Node.js</li>
+
+                            <li>Built on top of Express</li>
+
+                            <li>Inspired by Ruby on Rails / Symfony / Zend</li>
+
+                            <li>Convention over configuration</li>
+
+                            <li>Ideal for chat, realtime dashboards and multiplayer games</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Sails.js core features</h2>
+
+                        <ul>
+                            <li>100% JavaScript</li>
+
+                            <li>Database agnostic (includes custom ORM)</li>
+
+                            <li>Auto-generated REST APIs</li>
+
+                            <li>Easy WebSocket support and integration with REST</li>
+
+                            <li>Reusable security policies</li>
+
+                            <li>Front-end agnostic</li>
+
+                            <li>Flexible asset pipeline (builds)</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Getting Started</h2>
+
+<pre><code data-trim class="javascript">
+npm install -g sails
+sails new [project path]
+cd [project path]
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Running Your New Web App</h2>
+
+<pre><code data-trim class="javascript">
+sails lift
+</code></pre>
+                    </section>
+
+                    <section>
+<pre><code data-trim class="javascript">
+info: Starting app...
+
+info:
+info:
+info:    Sails              <|
+info:    v0.10.2             |\
+info:                       /|.\
+info:                      / || \
+info:                    ,'  |'  \
+info:                 .-'.-==|/_--'
+info:                 `--'-------'
+info:    __---___--___---___--___---___--___
+info:  ____---___--___---___--___---___--___-__
+info:
+info: Server lifted in `example1`
+info: To see your app, visit http://localhost:1337
+info: To shut down Sails, press &lt;CTRL&gt; + C at any time.
+
+debug: --------------------------------------------------------
+debug: :: Thu Aug 07 2014 06:43:55 GMT-0400 (Eastern Daylight Time)
+
+debug: Environment : development
+debug: Port        : 1337
+debug: --------------------------------------------------------
+</code></pre>
+                    </section>
+
+                     <section>
+                        <h2>http://localhost:1337</h2>
+                        <img src="images/first-launch.png" width="75%" height="75%"/>
+                     </section>
+
+                    <section>
+                        <h2>Generate Model and REST API</h2>
+
+                        <p>Let's create a new <code>beer</code> model and REST API</p>
+
+<pre><code data-trim class="javascript">
+sails generate api beer
+</code></pre>
+                        <p>This creates skeleton files: <code>api\controllers\BeerController.js</code> and
+                            <code>api\model\Beer.js</code></p>
+                    </section>
+
+                    <section>
+                        <h2>Try it out</h2>
+
+                        <p><a href="http://localhost:1337/beer">http://localhost:1337/beer</a></p>
+
+<pre><code data-trim class="javascript">
+[]
+</code></pre>
+                        <p><a href="http://localhost:1337/beer/create?name=Centennial IPA&brewery=Founders">http://localhost:1337/beer/create?name=Centennial IPA&brewery=Founders&have=10</a></p>
+
+<pre><code data-trim class="javascript">
+{
+    "name": "All Day IPA",
+    "brewery": "Founders",
+    "createdAt": "2014-08-07T13:11:10.536Z",
+    "updatedAt": "2014-08-07T13:38:21.517Z",
+    "id": 1,
+    "have": 10
+},
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Try it out</h2>
+
+                        <p><a href="http://localhost:1337/beer">http://localhost:1337/beer</a></p>
+
+<pre><code data-trim class="javascript">
+[
+    {
+        "name": "All Day IPA",
+        "brewery": "Founders",
+        "createdAt": "2014-08-07T13:11:10.536Z",
+        "updatedAt": "2014-08-07T13:38:21.517Z",
+        "id": 1,
+        "have": 10
+    }
+]
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>What just happened</h2>
+
+                        <ul>
+                            <li>Sails created a Model (<code>Beer.js</code>) and Controller (<code>BeerController.js</code>)</li>
+
+                            <li>Sails <i>blueprints</i> automatically configure new routes for the model (eg <code>POST /beer</code> and <code>/beer/create</code>).</li>
+
+                            <li>Sails uses whatever storage layer you want for persistence</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Anatomy of a Sails.js App</h2>
+
+                        <ul>
+                            <li><code>api/controller/</code> - controllers</li>
+                            <li><code>api/models/</code> - models</li>
+                            <li><code>api/policies/</code> - authentication / authorization</li>
+                            <li><code>api/responses/</code> - <code>res.xyz()</code> handlers</li>
+                            <li><code>api/services/</code> - services</li>
+                            <li><code>assets/</code> - static assets</li>
+                            <li><code>config/</code> - app config</li>
+                            <li><code>tasks/</code> - grunt / cli tasks</li>
+                            <li><code>views/</code> - views</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h2>Models</h2>
+
+                        <ul>
+                            <li><a href="http://sailsjs.org/#!documentation/models">http://sailsjs.org/#!documentation/models</a></li>
+
+                            <li><code>api/models/*</code></li>
+
+                            <li>Uses <a href="https://github.com/balderdashy/waterline">Waterline ORM</a> (best parts of Active Record, Hibernate and Mongoose)</li>
+                        </ul>
+
+<pre><code data-trim class="javascript">
+module.exports = {
+  attributes: {
+    name: {
+      type: 'string',
+      required: true
+    },
+    brewery: {
+      type: 'string',
+      required: true
+    },
+    have: {
+      type: 'integer',
+      defaultTo: 1
+    }
+  }
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Controllers</h2>
+
+                        <ul>
+                            <li><a href="http://links.sailsjs.org/docs/controllers">http://links.sailsjs.org/docs/controllers</a></li>
+
+                            <li><code>api/controllers/*</code></li>
+
+                            <li>With Blueprints (<code>config/blueprints.js</code>), you automatically get CRUD REST and "shortcut" routes</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h2>Blueprint Routes</h2>
+
+                        <p>By default, Sails creates three types of <i>blueprint</i> routes:</p>
+
+                        <ul>
+                            <li><b>RESTful routes</b> for <code>/:model</code> (HTTP <code>GET</code>, <code>DELETE</code>, etc)</li>
+
+                            <li><b>Shortcut routes</b> to easily test your model via HTTP <code>GET</code> requests,
+                                such as <code>/:model/delete/:id</code> (should be turned off in production)</li>
+
+                            <li><b>Action routes</b> for any additional actions in your controllers</li>
+                        </ul>
+
+                        <p>Authentication and access control are handled via policies</p>
+
+                    </section>
+
+                    <section>
+                        <h2>Blueprint Routes</h2>
+
+                        <table>
+                            <tr><th></th><th>REST</th><th>Shortcut</th></tr>
+                            <tr><td>Query</td><td>GET /api/:model</td></tr>
+                            <tr><td>Fetch</td><td>GET /api/:model/:id</td></tr>
+                            <tr><td>Create</td><td>POST /api/:model</td><td>GET /api/:model/create</td></tr>
+                            <tr><td>Update</td><td>PUT /api/:model/:id</td><td>GET /api/:model/update/:id</td></tr>
+                            <tr><td>Delete</td><td>DELETE /api/:model/:id</td><td>GET /api/:model/destroy/:id</td></tr>
+                        </table>
+
+                    </section>
+
+                    <section>
+                        <h2>Blueprint Actions</h2>
+
+                        <p>By default, Sails creates actions on your controllers for ORM functionality:</p>
+
+                        <ul>
+                            <li>find</li>
+                            <li>findOne</li>
+                            <li>create</li>
+                            <li>update</li>
+                            <li>destroy</li>
+                            <li>populate</li>
+                            <li>add</li>
+                            <li>remove</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h2>Custom Actions and Routes</h2>
+<pre><code data-trim class="javascript">
+// config/routes.js
+module.exports.routes = {
+  '/': {
+    view: 'homepage'
+  },
+  'post /beer/:id/drink': 'BeerController.drink'
+}
+</code></pre>
+<pre><code data-trim class="javascript">
+// BeerController.js
+module.exports = {
+  drink: function (req, res) {
+    if (!req.params.id) { return res.badRequest('ID not supplied'); }
+
+    Beer.findOne({ id: req.params.id }, function(err, model) {
+      if (err || !model) {
+        return res.badRequest('Beer not found');
+      }
+
+      model.have--;
+
+      model.save(function(err) {
+        return res.ok(model);
+      });
+    });
+  }
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Views</h2>
+
+                        <ul>
+                            <li><a href="http://sailsjs.org/#!documentation/views">http://sailsjs.org/#!documentation/views</a></li>
+
+                            <li><code>api/views/*</code></li>
+
+                            <li>Uses EJS by default but can switch to Jade, etc</li>
+                        </ul>
+
+<pre><code data-trim class="javascript">
+// BeerController.js
+module.exports = {
+  show: function(req, res) {
+    Beer.find({}, function (err, beers) {
+      res.view('show-beers', { title: 'Beers', beers: beers });
+    });
+  }
+};
+</code></pre>
+<pre><code data-trim class="html">
+// show-beers.ejs
+&lt;ul&gt;
+&lt;% for(var i=0; i&lt;beers.length; i++) {%&gt;
+   &lt;li&gt;&lt;%= beers[i].name %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Socket.IO integration</h2>
+
+                        <p>Sails automatically translates incoming socket.io messages into Express requests</p>
+
+                        <p>Also gives you Pub/Sub via <code>res.broadcast()</code> and <code>req.join()</code></p>
+
+<pre><code data-trim class="javascript">
+var socket = io.connect('http://localhost:1337');
+socket.request('/beer', {}, function(beers) { console.log(neers); });
+</code></pre>
+
+                        <img src="images/socket-io.png" />
+                    </section>
+
+                </section>
+
+                <section>
+                    <h2>Links</h2>
+
+                    <ul>
+                        <li>Sails.js: <a href="http://sailsjs.org/">sailsjs.org</a></li>
+                        <li>SailsCasts: <a href="http://irlnathan.github.io/sailscasts/">irlnathan.github.io/sailscasts/</a>
+
+                        <li>Presentation: <a href="http://www.slideshare.net/nicjansma">slideshare.net/nicjansma</a></li>
+                        <li>Code: <a href="https://github.com/nicjansma/talks/">github.com/nicjansma/talks/</a></li>
+                    </ul>
+
+                    <p style='margin-top: 20px'><small>Thanks - Nic Jansma - <a href="http://nicj.net">nicj.net</a> - <a href="https://twitter.com/NicJ">@NicJ</a></small></p>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>

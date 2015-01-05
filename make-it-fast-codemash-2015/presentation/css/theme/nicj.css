@@ -1,9 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 /**
  * NicJ theme for reveal.js.
  * Author: Nic Jansma
  */
-
 html * {
   color-profile: sRGB;
   rendering-intent: auto; }
@@ -16,33 +16,27 @@ body {
   background-color: white; }
 
 .reveal {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 36px;
   font-weight: normal;
   letter-spacing: -0.02em;
   color: #657b83; }
 
 ::selection {
-  color: white;
+  color: #fff;
   background: #d33682;
   text-shadow: none; }
 
 /*********************************************
  * HEADERS
  *********************************************/
-.reveal h1,
-.reveal h2,
-.reveal h3,
-.reveal h4,
-.reveal h5,
-.reveal h6 {
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
   margin: 0 0 20px 0;
   color: #586e75;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   line-height: 0.9em;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  word-wrap: normal;
   text-shadow: none; }
 
 .reveal h1 {
@@ -91,20 +85,16 @@ body {
 /*********************************************
  * NAVIGATION CONTROLS
  *********************************************/
-.reveal .controls div.navigate-left,
-.reveal .controls div.navigate-left.enabled {
+.reveal .controls div.navigate-left, .reveal .controls div.navigate-left.enabled {
   border-right-color: #268bd2; }
 
-.reveal .controls div.navigate-right,
-.reveal .controls div.navigate-right.enabled {
+.reveal .controls div.navigate-right, .reveal .controls div.navigate-right.enabled {
   border-left-color: #268bd2; }
 
-.reveal .controls div.navigate-up,
-.reveal .controls div.navigate-up.enabled {
+.reveal .controls div.navigate-up, .reveal .controls div.navigate-up.enabled {
   border-bottom-color: #268bd2; }
 
-.reveal .controls div.navigate-down,
-.reveal .controls div.navigate-down.enabled {
+.reveal .controls div.navigate-down, .reveal .controls div.navigate-down.enabled {
   border-top-color: #268bd2; }
 
 .reveal .controls div.navigate-left.enabled:hover {
@@ -139,25 +129,20 @@ body {
 .reveal .slide-number {
   color: #268bd2; }
 
-/*********************************************
- * LISTS
- *********************************************/
+reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  word-wrap: normal; }
+
+.reveal blockquote {
+  width: 90%;
+  padding: 10px; }
 .reveal li {
-    margin-top: 20px;
-}
-
-/*********************************************
- * IMAGES
- *********************************************/
+  margin-top: 20px; }
 .reveal section img {
-    border: none;
-    box-shadow: none;
-}
-
-/*********************************************
- * CODE
- *********************************************/
+  border: none;
+  box-shadow: none; }
 .reveal pre code {
-    max-height: 700px;
-}
-
+  max-height: 700px; }
+  .reveal pre code .javascript, .reveal pre code .xml, .reveal pre code .html {
+    opacity: 1; }
+.reveal table td, .reveal table th {
+  border-bottom: 1px solid #ccc; }
