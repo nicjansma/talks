@@ -212,7 +212,7 @@ http://stackoverflow.com/questions/tagged/navigation-timing-api
                     <section>
                         <h2>How it was done before</h2>
 
-                        <p><small>(it wasn't accurately)</small></p>
+                        <p><small>(this isn't accurate)</small></p>
 
 <pre><code data-trim class="javascript">
 &lt;html&gt;&lt;head&gt;&lt;script&gt;
@@ -376,6 +376,7 @@ function onLoad() {
 
                             <li>Boomerang: <a href="https://github.com/lognormal/boomerang">github.com/lognormal/boomerang</a></li>
                             <li>Boomcatch: <a href="http://cruft.io/posts/introducing-boomcatch/">cruft.io/posts/introducing-boomcatch</a></li>
+                            <li>BoomerangExpress: <a href="https://github.com/andreas-marschke/boomerang-express">github.com/andreas-marschke/boomerang-express</a></li>
                             <li>SiteSpeed.io: <a href="http://www.sitespeed.io/">www.sitespeed.io</a></li>
                             <li>Piwiki: <a href="https://github.com/piwik/piwik/">github.com/piwik/piwik</a></li>
                         </ul>
@@ -385,12 +386,11 @@ function onLoad() {
                         <h2>Commercial</h2>
 
                         <ul>
-                            <li>SOASTA mPulse</li>
-                            <li>Google Analytics (Site Speed)</li>
-                            <li>SpeedCurve</li>
-                            <li>New Relic</li>
-                            <li>NewStar</li>
-                            TODO: screenshots?
+                            <li>Google Analytics Site Speed: <a href="http://www.google.com/analytics/">google.com/analytics</a></li>
+                            <li>New Relic Browser: <a href="http://newrelic.com/browser-monitoring">newrelic.com/browser-monitoring</a></li>
+                            <li>NeuStar WPM: <a href="http://www.neustar.biz/">neustar.biz</a></li>
+                            <li>SOASTA mPulse: <a href="http://soasta.com">soasta.com</a></li>
+                            <li>SpeedCurve: <a href="http://speedcurve.com/">speedcurve.com</a></li>
                         </ul>
                     </section>
 
@@ -415,6 +415,12 @@ function onLoad() {
                     </section>
 
                     <section>
+                        <h2>Tips</h2>
+
+                        <img src="images/navigation-timing.png" />
+                    </section>
+
+                    <section>
                         <h2>Tips (pt 2)</h2>
 
                         <ul>
@@ -422,7 +428,6 @@ function onLoad() {
                             <li>Home page scenarios: Timestamps up through <code>responseEnd</code> event may be 0 duration because some browsers speculatively pre-fetch home pages (and don't report the correct timings)</li>
                             <li>If possbile, do any beaconing of the data as soon as possible.  Browser <code>onbeforeunload</code> isn't 100% reliable for sending data</li>
                             <li>Single-Page Apps: You'll need a different solution for "navigations" (Boomerang + plugin coming soon)</li>
-                            <li>TODO more? SO?</li>
                         </ul>
                     </section>
 
@@ -544,6 +549,8 @@ interface PerformanceResourceTiming : PerformanceEntry {
                     <section>
                         <h2>PerformanceTimeline</h2>
 
+                        <p><code>window.performance</code></p>
+
                         <ul>
                             <li><code>getEntries()</code>: Gets all entries in the timeline</li>
                             <li><code>getEntriesByType()</code>: Gets all entries of the specified type (eg <code>resource</code>, <code>mark</code>, <code>measure</code>)</li>
@@ -560,7 +567,7 @@ interface PerformanceResourceTiming : PerformanceEntry {
                     <section>
                         <h2>How to Use</h2>
 
-                        <p><code>window.performance.getEntriesByType("resource")</code></p>
+                        <p><code>window.performance.getEntriesByType("resource")[0]</code></p>
 
 <pre><code data-trim class="javascript">
 {
@@ -587,6 +594,8 @@ interface PerformanceResourceTiming : PerformanceEntry {
                     <section>
                         <h2><code>initiatorType</code></h2>
 
+                        <p><code>localName</code> of that element:</p>
+
                         <ul>
                             <li><code>img</code></li>
                             <li><code>link</code></li>
@@ -594,19 +603,6 @@ interface PerformanceResourceTiming : PerformanceEntry {
                             <li><code>css</code>: <code>url()</code>, <code>@import</code></li>
                             <li><code>xmlhttprequest</code></li>
                         </ul>
-                    </section>
-
-                    <section>
-                        <h2>Buffer</h2>
-
-                        <ul>
-                            <li>There is a ResourceTiming buffer that stops filling after it's size limit is reached (default: 150 entries)</li>
-
-                            <li>Listen for the <code>onresourcetimingbufferfull</code> event</li>
-
-                            <li><code>setResourceTimingBufferSize</code> and <code>clearResourceTimings</code> can be used to modify it</li>
-                        </ul>
-
                     </section>
 
                     <section>
@@ -622,6 +618,22 @@ interface PerformanceResourceTiming : PerformanceEntry {
                     </section>
 
                     <section>
+                        <h2>Buffer</h2>
+
+                        <ul>
+                            <li>There is a ResourceTiming buffer that stops filling after it's size limit is reached (default: 150 entries)</li>
+
+                            <li>Listen for the <code>onresourcetimingbufferfull</code> event</li>
+
+                            <li><code>setResourceTimingBufferSize(n)</code> and <code>clearResourceTimings()</code> can be used to modify it</li>
+
+                            <li>Don't just: <code>setResourceTimingBufferSize(99999999)</code> as this can lead to browser memory growing
+                                unbound</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
                         <h2>Compressing</h2>
 
                         <ul>
@@ -633,9 +645,6 @@ interface PerformanceResourceTiming : PerformanceEntry {
                             <li>That means you could expect around 45 KB of ResourceTiming data per page load</li>
 
                             <li>Compress it: <a href="http://nicj.net/compressing-resourcetiming/">nicj.net/compressing-resourcetiming</a></li>
-
-                            <li><a href="https://github.com/nicjansma/resourcetiming-compression.js">github.com/nicjansma/resourcetiming-compression.js</a></li>
-                        </ul>
                     </section>
 
                     <section>
@@ -644,24 +653,24 @@ interface PerformanceResourceTiming : PerformanceEntry {
                         <p>Converts:</p>
 
 <pre><code data-trim class="javascript">
-    {
-        "responseEnd":323.1100000002698,
-        "responseStart":300.5000000000000,
-        "requestStart":252.68599999981234,
-        "secureConnectionStart":0,
-        "connectEnd":0,
-        "connectStart":0,
-        "domainLookupEnd":0,
-        "domainLookupStart":0,
-        "fetchStart":252.68599999981234,
-        "redirectEnd":0,
-        "redirectStart":0,
-        "duration":71.42400000045745,
-        "startTime":252.68599999981234,
-        "entryType":"resource",
-        "initiatorType":"script",
-        "name":"http://foo.com/js/foo.js"
-    }
+{
+    "responseEnd":323.1100000002698,
+    "responseStart":300.5000000000000,
+    "requestStart":252.68599999981234,
+    "secureConnectionStart":0,
+    "connectEnd":0,
+    "connectStart":0,
+    "domainLookupEnd":0,
+    "domainLookupStart":0,
+    "fetchStart":252.68599999981234,
+    "redirectEnd":0,
+    "redirectStart":0,
+    "duration":71.42400000045745,
+    "startTime":252.68599999981234,
+    "entryType":"resource",
+    "initiatorType":"script",
+    "name":"http://foo.com/js/foo.js"
+}
 </code></pre>
                     </section>
 
@@ -671,14 +680,15 @@ interface PerformanceResourceTiming : PerformanceEntry {
                         <p>To:</p>
 
 <pre><code data-trim class="javascript">
-    {
-        "http://": {
-            "foo.com/": {
-                "js/foo.js": "370,1z,1c",
-                "css/foo.css": "48c,5k,14"
-            }
-        }
+{
+    "http://": {
+        "foo.com/": {
+            "js/foo.js": "370,1z,1c",
+            "css/foo.css": "48c,5k,14"
+        },
+        "moo.com/moo.gif": "312,34,56"
     }
+}
 </code></pre>
 
                         <p>Overall, compresses ResourceTiming data down to 15% of its original size</p>
@@ -696,31 +706,49 @@ interface PerformanceResourceTiming : PerformanceEntry {
 
                             <li>This is to protect your privacy (attacker can’t load random URLs to see where you’ve been)</li>
 
-                            <li>You can override this by setting the <code>Timing-Allow-Origin</code> HTTP header</li>
+                            <li>Override by setting <code>Timing-Allow-Origin</code> header</li>
 
                             <li><code>Timing-Allow-Origin = "Timing-Allow-Origin" ":" origin-list-or-null | "*"</code></li>
 
+                            <li>If you have a CDN, <strong>use this</strong></li>
+
                             <li><strong>Note</strong>: Third-party libraries (ads, analytics, etc) must set this on their
-                                servers.  Not all do.
+                                servers.  5% do according to HTTP Archive.  Google, Facbook, Disqus, mPulse, etc.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2>Blocked Time</h2>
+                        <h2>Blocking Time</h2>
 
                         <ul>
                             <li>Browsers will open a limited number of connections to each unique origin (protocol/server name/port)</li>
 
-                            <li>If there are more resources than the # of connections, the later resources will be "blocked", waiting
+                            <li>If there are more resources than the # of connections, the later resources will be "blocking", waiting
                                 for their turn to download</li>
 
-                            <li>This can be seen in the difference between <code>startTime</code> and either <code>redirectStart</code>
-                                (if specified) or <code>fetchStart</code></li>
+                            <li><code>duration</code> includes Blocking time!</li>
 
-                            <li><code>duration</code> includes Blocked time!</li>
-
-                            <li>Note these timestamps will only be available for same-origin or <code>Timing-Allow-Origin</code> resources</li>
+                            <li>So in general, don't use <code>duration</code>, but this is all you get with cross-origin resources.</li>
                         </ul>
+                    </section>
+
+                    <section>
+                        <h2>Blocking Time</h2>
+
+                        <p>Calculate:</p>
+<pre><code data-trim class="javascript">
+var waitTime = 0;
+if (res.connectEnd && res.connectEnd === res.fetchStart)
+{
+    waitTime = res.requestStart - res.connectEnd;
+}
+else if (res.domainLookupStart)
+{
+    waitTime = res.domainLookupStart - res.fetchStart;
+}
+</code></pre>
+
+
                     </section>
 
                     <section>
@@ -766,14 +794,11 @@ interface PerformanceResourceTiming : PerformanceEntry {
                             <li>For many sites, most of your content will not be same-origin, so ensure all of your
                                 CDNs and third-party libraries send <code>Timing-Allow-Origin</code></li>
 
-                            <li>Otherwise, you'll only get total <code>duration</code> for all of your resources.</li>
-
                             <li>What isn't included in ResourceTiming:
                                 <ul>
                                     <li>The root HTML page (get this from <code>window.performance.timing</code>)</li>
                                     <li>Transfer size or content size (privacy concerns)</li>
                                     <li>HTTP code (privacy concerns)</li>
-
                                 </ul>
                             </li>
                         </ul>
@@ -790,8 +815,6 @@ interface PerformanceResourceTiming : PerformanceEntry {
                             <li>The <code>duration</code> attribute includes Blocking time (when a resource is
                                 behind other resources on the same socket)</li>
 
-                            <li>Use <code>fetchStart</code> instead of <code>navigationStart</code> unless you're interested in redirects, blocking time, etc</li>
-
                             <li>Each <code>IFRAME</code> will have its own ResourceTiming data, and those resources
                                 won't be included in the parent FRAME/document.  So you'll need to traverse the
                                 document frames to get all resources.  See
@@ -806,7 +829,9 @@ interface PerformanceResourceTiming : PerformanceEntry {
                         <ul>
                             <li><code>secureConnectionStart</code> isn't available in IE</li>
 
-                            <li>No iOS support</li>
+                            <li>No Safari (iOS) or Opera support</li>
+
+                            <li><code>about:blank</code>, <code>javascript:</code> URLs will be seen in RT data</li>
                         </ul>
                     </section>
 
@@ -851,7 +876,7 @@ var latency = now - start;
                     <section>
                         <h2>UserTiming</h2>
 
-                        <p><code>window.performance:</code></p>
+                        <p><code>window.performance</code></p>
 
 <pre><code data-trim class="javascript">
 partial interface Performance {
@@ -868,24 +893,78 @@ partial interface Performance {
                     </section>
 
                     <section>
-                        <h2>How to Use</h2>
+                        <h2>How to Use - Mark</h2>
+
+<pre><code data-trim class="javascript">
+// mark
+performance.mark("start");
+performance.mark("end");
+
+performance.mark("another");
+performance.mark("another");
+performance.mark("another");
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>How to Use - Mark</h2>
+
+<pre><code data-trim class="javascript">
+// retrieve
+performance.getEntriesByType("mark");
+
+[
+    {
+        "duration":0,
+        "startTime":150384.48100000096,
+        "entryType":"mark",
+        "name":"start"},
+    {
+        "duration":0,
+        "startTime":150384.5250000013,
+        "entryType":"mark",
+        "name":"end"
+    },
+    ...
+]
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>How to Use - Measure</h2>
 
 <pre><code data-trim class="javascript">
 // measure
 performance.mark("start");
-performance.measure("latency", "start");
 
+performance.mark("start2");
+
+// measure from "now" to navigatioNStart
+performance.measure("time since navigationStart");
+
+// measure from "now" to the "start" mark
+performance.measure("time to do stuff", "start");
+
+// measure from "start2" to the "start" mark
+performance.measure("time from start to start2", "start", "start2");
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>How to Use - Measure</h2>
+
+<pre><code data-trim class="javascript">
 // retrieval - specific
-performance.getEntriesByName("start", "mark");
-performance.getEntriesByName("latency", "measure");
+performance.getEntriesByName("time from start to start2", "measure");
 
-// retrieval - all
-performance.getEntriesByType("mark");
-performance.getEntriesByType("measure");
-
-// clear
-performance.clearMarks();
-performance.clearMeasures();
+[
+    {
+        "duration":4809.890999997151,
+        "startTime":145287.66500000347,
+        "entryType":"measure",
+        "name":"time from start to start2"
+    }
+]
 </code></pre>
                     </section>
 
@@ -896,7 +975,7 @@ performance.clearMeasures();
                             <li>More efficient, as the native browser runtime can do math quicker and store things more performantly
                                 than your JavaScript runtime can</li>
 
-                            <li>Uses the <code>PerformanceTimeline</code>, so <code>mark</code>s and <code>measure</code>s
+                            <li>Uses the <code>PerformanceTimeline</code>, so <code>marks</code> and <code>measures</code>
                                 are in the PerformanceTimeline along with other events</li>
 
                             <li>Uses <code>DOMHighResTimestamp</code> instead of <code>Date</code> so sub-millisecond, monotonically non-decreasing,
@@ -947,7 +1026,6 @@ performance.clearMeasures();
                             <li>Compress + send this data to your backend for logging</li>
                             <li>Boomerang supports UserTiming: <a href="https://github.com/lognormal/boomerang">github.com/lognormal/boomerang</a></li>
                             <li>WebPageTest sends UserTiming to Google Analytics, Boomerang and SOASTA mPulse</li>
-                            <li>BoomerangExpress: <a href="https://github.com/andreas-marschke/boomerang-express">github.com/andreas-marschke/boomerang-express</a></li>
                         </ul>
                     </section>
 
@@ -965,9 +1043,7 @@ performance.clearMeasures();
                         <h2>Tips</h2
 
                         <ul>
-                            <li>Not the same as Google Analytic's "User Timing" API (<code>_trackTiming(...)</code>)</li>
-
-                            <li>TODO more?</li>
+                            <li>Not the same as Google Analytic's "User Timings" API (<code>_trackTiming(...)</code>)</li>
                         </ul>
                     </section>
                 </section>
