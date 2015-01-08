@@ -16,3 +16,5 @@ All content is licensed under the MIT license.
 * [Appcelerator Titanium Intro (2014)](appcelerator-titanium-intro-2014/) ([GrDevNight](http://grdevnight.org/) - 2014-06-05) ([PDF](https://github.com/nicjansma/talks/blob/master/appcelerator-titanium-intro-2014/appcelerator-titanium-intro-2014.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/appcelerator-titanium-intro-2014))
 
 * [Sails.js Intro](sails-js/) ([GrNodeDev](http://www.meetup.com/GRNodeDev/) - 2014-08-07) ([PDF](https://github.com/nicjansma/talks/blob/master/sails-js/sails-js.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/sailsjs-intro))
+
+* [Make It Fast - CodeMash 2015](make-it-fast-codemash-2015/) ([CodeMash](http://codemash.org) - 2015-01-08) ([PDF](https://github.com/nicjansma/talks/blob/master/make-it-fast-codemash-2015/make-it-fast-codemash-2015.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/make-itfastcodemash2015))
