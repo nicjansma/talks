@@ -1,10 +1,5 @@
 <!doctype html>
 <html lang="en">
-<!--
-TODO:
-http://stackoverflow.com/questions/14657849/can-i-use-the-browser-navigation-timing-api-for-ajax-events-in-single-page-apps
-http://stackoverflow.com/questions/tagged/navigation-timing-api
--->
     <head>
         <meta charset="utf-8">
 
@@ -365,7 +360,7 @@ function onLoad() {
                     <section>
                         <h2>Then what?</h2>
 
-                        <p>DIY / Open Source options:</p>
+                        <p>DIY / Open Source</p>
 
                         <ul>
                             <li>Send this data to your backend for logging</li>
@@ -378,8 +373,62 @@ function onLoad() {
                             <li>Boomcatch: <a href="http://cruft.io/posts/introducing-boomcatch/">cruft.io/posts/introducing-boomcatch</a></li>
                             <li>BoomerangExpress: <a href="https://github.com/andreas-marschke/boomerang-express">github.com/andreas-marschke/boomerang-express</a></li>
                             <li>SiteSpeed.io: <a href="http://www.sitespeed.io/">www.sitespeed.io</a></li>
-                            <li>Piwiki: <a href="https://github.com/piwik/piwik/">github.com/piwik/piwik</a></li>
+                            <li>Piwik: <a href="https://github.com/piwik/piwik/">github.com/piwik/piwik</a></li>
                         </ul>
+                    </section>
+
+                    <section>
+                        <h2>kaaes timing</h2>
+
+                        <p><a href="http://kaaes.github.io/timing/">kaaes.github.io/timing</a></p>
+
+                        <img src="images/kaaes-bookmarklet.png">
+                    </section>
+
+                    <section>
+                        <h2>Boomerang</h2>
+
+                        <p><a href="https://github.com/lognormal/boomerang">github.com/lognormal/boomerang</a></p>
+
+                        <img src="images/boomerang.png">
+                    </section>
+
+                    <section>
+                        <h2>Boomcatch</h2>
+
+                        <p>Collects beacons + maps (statsd) + forwards (extensible)</p>
+
+                        <p><a href="http://cruft.io/posts/introducing-boomcatch/">cruft.io/posts/introducing-boomcatch</a></p>
+
+                        <img src="images/boomcatch.png">
+                    </section>
+
+                    <section>
+                        <h2>BoomerangExpress</h2>
+
+                        <p>Collects beacons</p>
+
+                        <p><a href="https://github.com/andreas-marschke/boomerang-express">github.com/andreas-marschke/boomerang-express</a></p>
+
+                        <img src="images/boomerangexpress.png">
+                    </section>
+
+                    <section>
+                        <h2>SiteSpeed.io</h2>
+
+                        <p><a href="http://www.sitespeed.io/">www.sitespeed.io</a></p>
+
+                        <img src="images/sitespeedio.png">
+                    </section>
+
+                    <section>
+                        <h2>Piwik</h2>
+
+                        <p>"generation time" = <code>responseEnd - requestStart</code></p>
+
+                        <p><a href="https://github.com/piwik/piwik/">github.com/piwik/piwik</a></p>
+
+                        <img src="images/piwik.png">
                     </section>
 
                     <section>
@@ -395,6 +444,48 @@ function onLoad() {
                     </section>
 
                     <section>
+                        <h2>Google Analytics Site Speed</h2>
+
+                        <p><a href="http://www.google.com/analytics/">google.com/analytics</a></p>
+
+                        <img src="images/google-analytics.png">
+                    </section>
+
+                    <section>
+                        <h2>New Relic Browser</h2>
+
+                        <p><a href="http://newrelic.com/browser-monitoring">newrelic.com/browser-monitoring</a></p>
+
+                        <img src="images/new-relic.jpg">
+                    </section>
+
+                    <section>
+                        <h2>NeuStar WPM</h2>
+
+                        <p><a href="http://www.neustar.biz/">neustar.biz</a></p>
+
+                        <img src="images/neustar-wpm.jpg">
+                    </section>
+
+                    <section>
+                        <h2>SOASTA mPulse</h2>
+
+                        <p><a href="http://soasta.com">soasta.com</a></p>
+
+                        <img src="images/soasta-mpulse.png">
+                    </section>
+
+                    <section>
+                        <h2>SpeedCurve</h2>
+
+                        <p>Runs on top of WebPageTest</p>
+
+                        <p><a href="http://speedcurve.com/">speedcurve.com</a></p>
+
+                        <img src="images/speedcurve.png">
+                    </section>
+
+                    <section>
                         <h2>NavigationTiming</h2>
 
                         <p><a href="http://caniuse.com/#feat=nav-timing">caniuse.com/#feat=nav-timing</a></p>
@@ -407,7 +498,6 @@ function onLoad() {
 
                         <ul>
                             <li>Use <code>fetchStart</code> instead of <code>navigationStart</code> unless you're interested in redirects, tab init time, etc</li>
-                            <li><strong>All</strong> redirects are grouped between <code>redirectStart</code> and <code>redirectEnd</code></li>
                             <li><code>loadEventEnd</code> will be 0 until <i>after</i> the body's <code>load</code> event has finished (so you can't measure it in the <code>load</code> event)</li>
                             <li>We don't have an accurate way to measure the "request time", as "<code>requestEnd</code>" is invisible to us (the server sees it)</li>
                             <li><code>secureConnectionStart</code> isn't available in IE</li>
@@ -553,8 +643,8 @@ interface PerformanceResourceTiming : PerformanceEntry {
 
                         <ul>
                             <li><code>getEntries()</code>: Gets all entries in the timeline</li>
-                            <li><code>getEntriesByType()</code>: Gets all entries of the specified type (eg <code>resource</code>, <code>mark</code>, <code>measure</code>)</li>
-                            <li><code>getEntriesByName()</code>: Gets all entries with the specified name (eg URL or mark name)</li>
+                            <li><code>getEntriesByType(type)</code>: Gets all entries of the specified type (eg <code>resource</code>, <code>mark</code>, <code>measure</code>)</li>
+                            <li><code>getEntriesByName(name)</code>: Gets all entries with the specified name (eg URL or mark name)</li>
                         </ul>
                     </section>
 
@@ -621,7 +711,7 @@ interface PerformanceResourceTiming : PerformanceEntry {
                         <h2>Buffer</h2>
 
                         <ul>
-                            <li>There is a ResourceTiming buffer that stops filling after it's size limit is reached (default: 150 entries)</li>
+                            <li>There is a ResourceTiming buffer (per IFRAME) that stops filling after its size limit is reached (default: 150 entries)</li>
 
                             <li>Listen for the <code>onresourcetimingbufferfull</code> event</li>
 
@@ -713,7 +803,7 @@ interface PerformanceResourceTiming : PerformanceEntry {
                             <li>If you have a CDN, <strong>use this</strong></li>
 
                             <li><strong>Note</strong>: Third-party libraries (ads, analytics, etc) must set this on their
-                                servers.  5% do according to HTTP Archive.  Google, Facbook, Disqus, mPulse, etc.</li>
+                                servers.  5% do according to HTTP Archive.  Google, Facebook, Disqus, mPulse, etc.</li>
                         </ul>
                     </section>
 
@@ -754,15 +844,38 @@ else if (res.domainLookupStart)
                     <section>
                         <h2>DIY / Open Source</h2>
 
-                        <!-- TODO: Show screenshots of each of these -->
                         <ul>
                             <li>Compress + send this data to your backend for logging</li>
 
                             <li>Show any page's resources via a bookmarklet: <a href="https://github.com/andydavies/waterfall">github.com/andydavies/waterfall</a></li>
                             <li>Heatmap bookmarklet / Chrome extension: <a href="https://github.com/zeman/perfmap">github.com/zeman/perfmap</a></li>
-                            <li>Another bookmarklet: <br /><a href="https://github.com/nurun/performance-bookmarklet">github.com/nurun/performance-bookmarklet</a></li>
+                            <li>Nurun's Performance Bookmarklet: <a href="https://github.com/nurun/performance-bookmarklet">github.com/nurun/performance-bookmarklet</a></li>
                             <li>Boomerang supports ResourceTiming: <a href="https://github.com/lognormal/boomerang">github.com/lognormal/boomerang</a></li>
                         </ul>
+                    </section>
+
+                    <section>
+                        <h2>Andy Davies' Waterfall.js</h2>
+
+                        <p><a href="https://github.com/andydavies/waterfall">github.com/andydavies/waterfall</a></p>
+
+                        <img src="images/andydavies-waterfall.png">
+                    </section>
+
+                    <section>
+                        <h2>Mark Zeman's PerfMap</h2>
+
+                        <p><a href="https://github.com/zeman/perfmap">github.com/zeman/perfmap</a></p>
+
+                        <img src="images/zeeman-perfmap.png">
+                    </section>
+
+                    <section>
+                        <h2>Nurun's Performance Bookmarklet</h2>
+
+                        <p><a href="https://github.com/nurun/performance-bookmarklet">github.com/nurun/performance-bookmarklet</a></p>
+
+                        <img src="images/nurun.png" style="height: 500px; width: auto">
                     </section>
 
                     <section>
@@ -772,11 +885,31 @@ else if (res.domainLookupStart)
                             <li>SOASTA mPulse: <a href="http://soasta.com">soasta.com</a></li>
                             <li>New Relic Browser: <a href="http://newrelic.com">newrelic.com</a></li>
                             <li>App Dynamics Web EUEM: <a href="http://appdynamics.com/">appdynamics.com</a></li>
-                            <!-- TODO
-                                new-relic-browser-pro.png
-                                appdynamics-webeuem.png
-                            -->
                         </ul>
+                    </section>
+
+                    <section>
+                        <h2>SOASTA mPulse</h2>
+
+                        <p><a href="http://soasta.com">soasta.com</a></p>
+
+                        <img src="images/soasta-mpulse-resourcetiming.png">
+                    </section>
+
+                    <section>
+                        <h2>New Relic Browser</h2>
+
+                        <p><a href="http://newrelic.com/browser-monitoring">newrelic.com/browser-monitoring</a></p>
+
+                        <img src="images/new-relic-browser-pro.png">
+                    </section>
+
+                    <section>
+                        <h2>App Dynamics Web EUEM</h2>
+
+                        <p><a href="http://appdynamics.com/">appdynamics.com</a></p>
+
+                        <img src="images/appdynamics-webeuem.png">
                     </section>
 
                     <section>
@@ -799,6 +932,7 @@ else if (res.domainLookupStart)
                                     <li>The root HTML page (get this from <code>window.performance.timing</code>)</li>
                                     <li>Transfer size or content size (privacy concerns)</li>
                                     <li>HTTP code (privacy concerns)</li>
+                                    <li>Content that loaded with errors (eg 404s)</li>
                                 </ul>
                             </li>
                         </ul>
@@ -820,16 +954,6 @@ else if (res.domainLookupStart)
                                 document frames to get all resources.  See
                                 <a href="https://github.com/nicjansma/resourcetiming-compression.js">github.com/nicjansma/resourcetiming-compression.js</a>
                                 for an example</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>Tips (pt 3)</h2>
-
-                        <ul>
-                            <li><code>secureConnectionStart</code> isn't available in IE</li>
-
-                            <li>No Safari (iOS) or Opera support</li>
 
                             <li><code>about:blank</code>, <code>javascript:</code> URLs will be seen in RT data</li>
                         </ul>
@@ -857,7 +981,7 @@ else if (res.domainLookupStart)
 var start = new Date().getTime();
 // do stuff
 var now = new Date().getTime();
-var latency = now - start;
+var duration = now - start;
 </code></pre>
                     </section>
 
@@ -918,10 +1042,11 @@ performance.getEntriesByType("mark");
         "duration":0,
         "startTime":150384.48100000096,
         "entryType":"mark",
-        "name":"start"},
+        "name":"start"
+    },
     {
         "duration":0,
-        "startTime":150384.5250000013,
+        "startTime":150600.5250000013,
         "entryType":"mark",
         "name":"end"
     },
@@ -936,11 +1061,8 @@ performance.getEntriesByType("mark");
 <pre><code data-trim class="javascript">
 // measure
 performance.mark("start");
-
+// do work
 performance.mark("start2");
-
-// measure from "now" to navigatioNStart
-performance.measure("time since navigationStart");
 
 // measure from "now" to the "start" mark
 performance.measure("time to do stuff", "start");
@@ -972,14 +1094,15 @@ performance.getEntriesByName("time from start to start2", "measure");
                         <h2>Benefits</h2>
 
                         <ul>
-                            <li>More efficient, as the native browser runtime can do math quicker and store things more performantly
-                                than your JavaScript runtime can</li>
-
                             <li>Uses the <code>PerformanceTimeline</code>, so <code>marks</code> and <code>measures</code>
                                 are in the PerformanceTimeline along with other events</li>
 
                             <li>Uses <code>DOMHighResTimestamp</code> instead of <code>Date</code> so sub-millisecond, monotonically non-decreasing,
                                 etc</lli>
+
+                            <li>More efficient, as the native browser runtime can do math quicker and store things more performantly
+                                than your JavaScript runtime can</li>
+
                         </ul>
                     </section>
 
@@ -989,7 +1112,7 @@ performance.getEntriesByName("time from start to start2", "measure");
                         <ul>
                             <li>Easy way to add profiling events to your application</li>
 
-                            <li>Note important page- or scenario-specific events or durations in your Performance Timeline</li>
+                            <li>Note important scenario durations in your Performance Timeline</li>
 
                             <li>Measure important durations for analytics</li>
 
@@ -1021,10 +1144,9 @@ performance.getEntriesByName("time from start to start2", "measure");
                     <section>
                         <h2>DIY / Open Source</h2>
 
-                        <!-- TODO: Show screenshots of each of these -->
                         <ul>
                             <li>Compress + send this data to your backend for logging</li>
-                            <li>Boomerang supports UserTiming: <a href="https://github.com/lognormal/boomerang">github.com/lognormal/boomerang</a></li>
+
                             <li>WebPageTest sends UserTiming to Google Analytics, Boomerang and SOASTA mPulse</li>
                         </ul>
                     </section>
