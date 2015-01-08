@@ -280,6 +280,23 @@ body.addEventListener(“load”, onLoad, false);
                     <section>
                         <h2>NavigationTiming</h2>
 
+                        <p><code>window.performance.navigation</code></p>
+
+<pre><code data-trim class="javascript">
+interface PerformanceNavigation {
+    const unsigned short TYPE_NAVIGATE = 0;
+    const unsigned short TYPE_RELOAD = 1;
+    const unsigned short TYPE_BACK_FORWARD = 2;
+    const unsigned short TYPE_RESERVED = 255;
+    readonly attribute unsigned short type;
+    readonly attribute unsigned short redirectCount;
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>NavigationTiming</h2>
+
                         <p><code>window.performance.timing</code></p>
 
 <pre><code data-trim class="javascript">
@@ -313,23 +330,6 @@ interface PerformanceTiming {
                         <h2>NavigationTiming</h2>
 
                         <img src="images/navigation-timing.png" />
-                    </section>
-
-                    <section>
-                        <h2>NavigationTiming</h2>
-
-                        <p><code>window.performance.navigation</code></p>
-
-<pre><code data-trim class="javascript">
-interface PerformanceNavigation {
-    const unsigned short TYPE_NAVIGATE = 0;
-    const unsigned short TYPE_RELOAD = 1;
-    const unsigned short TYPE_BACK_FORWARD = 2;
-    const unsigned short TYPE_RESERVED = 255;
-    readonly attribute unsigned short type;
-    readonly attribute unsigned short redirectCount;
-};
-</code></pre>
                     </section>
 
                     <section>
@@ -435,12 +435,20 @@ function onLoad() {
                         <h2>Commercial</h2>
 
                         <ul>
+                            <li>SOASTA mPulse: <a href="http://soasta.com">soasta.com</a></li>
                             <li>Google Analytics Site Speed: <a href="http://www.google.com/analytics/">google.com/analytics</a></li>
                             <li>New Relic Browser: <a href="http://newrelic.com/browser-monitoring">newrelic.com/browser-monitoring</a></li>
                             <li>NeuStar WPM: <a href="http://www.neustar.biz/">neustar.biz</a></li>
-                            <li>SOASTA mPulse: <a href="http://soasta.com">soasta.com</a></li>
                             <li>SpeedCurve: <a href="http://speedcurve.com/">speedcurve.com</a></li>
                         </ul>
+                    </section>
+
+                    <section>
+                        <h2>SOASTA mPulse</h2>
+
+                        <p><a href="http://soasta.com">soasta.com</a></p>
+
+                        <img src="images/soasta-mpulse.png">
                     </section>
 
                     <section>
@@ -465,14 +473,6 @@ function onLoad() {
                         <p><a href="http://www.neustar.biz/">neustar.biz</a></p>
 
                         <img src="images/neustar-wpm.jpg">
-                    </section>
-
-                    <section>
-                        <h2>SOASTA mPulse</h2>
-
-                        <p><a href="http://soasta.com">soasta.com</a></p>
-
-                        <img src="images/soasta-mpulse.png">
                     </section>
 
                     <section>
@@ -1168,6 +1168,12 @@ performance.getEntriesByName("time from start to start2", "measure");
                             <li>Not the same as Google Analytic's "User Timings" API (<code>_trackTiming(...)</code>)</li>
                         </ul>
                     </section>
+                </section>
+
+                <section>
+                    <h2>Your Job</h2>
+
+                    <h3>Make it fast!</h3>
                 </section>
 
                 <section>
