@@ -62,7 +62,7 @@
                         <ul>
                             <li>A collection of properties</li>
                             <li>Each property has a value</li>
-                            <li>A value can be a <code>function</code> (known as a method)</li>
+                            <li>A value can be a <code>number</code>, <code>string</code>, <code>boolean</code>, <code>object</code> or <code>function</code></li>
                         <ul>
                     </section>
                     
@@ -149,8 +149,7 @@ keg.abv      = 100.0;
                             <li>A <b>pattern</b> is a common technique that can be re-used and applied to every-day software
                                 design problems</li>
                                 
-                            <li><b>JavaScript Module Patterns</b> help us cleanly separate and organize our JavaScript
-                                code in any project</li>
+                            <li><b>JavaScript Module Patterns</b> help us organize and limit code scope in any project</li>
                         </ul>
                     </section>
                     
@@ -161,6 +160,8 @@ keg.abv      = 100.0;
                             <li>The JavaScript language doesn't have <b>classes</b>, but we can emulate what classes can do with <b>modules</b></li>
                             
                             <li>A module helps <b>encapsulate</b> data and functions into a single component</li>
+                            
+                            <li>A module limits <b>scope</b> so the variables you create in the module only live within it</li>
                             
                             <li>A module gives <b>privacy</b> by only allowing access to data and functions that the module wants to expose</li>
                         </ul>
@@ -331,9 +332,9 @@ function Keg(_contains, _amount) {
                                 not taking advantage of <b>prototypes</b></li>
                                 
                             <li>A prototype is a value (<code>number</code>, <code>string</code>, <code>function</code>, 
-                                etc) that you can assign to <i>all</i> instances of a class using <code>ObjectName.prototype.</code></li>
+                                etc) that you can assign to <i>all</i> instances of a class using <code>ClassName.prototype.</code></li>
                             
-                            <li>Instead of each instance having a <i>copy</i> of the value, the single prototype value is shared</li>
+                            <li>Instead of each instance having a <i>copy</i> of the member, the single prototype member is shared</li>
                             
                             <li>This gives you substantial memory savings if you have many instances of the object</li> 
                     </section>
@@ -576,7 +577,7 @@ var keg = new Keg("Soda", 100);
                     <section>
                         <h2>AMD module definition: <code>define</code></h2>
                         
-                        <p>Defines a module, its dependencies, and the initialization function that fires once all dependencies are loaded:</p>
+                        <p>Defines a module, its dependencies, and the initialization function that runs once all dependencies are loaded:</p>
                     
 <pre><code data-trim class="javascript">
 define(
