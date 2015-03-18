@@ -18,3 +18,5 @@ All content is licensed under the MIT license.
 * [Sails.js Intro](sails-js/) ([GrNodeDev](http://www.meetup.com/GRNodeDev/) - 2014-08-07) ([PDF](https://github.com/nicjansma/talks/blob/master/sails-js/sails-js.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/sailsjs-intro))
 
 * [Make It Fast - CodeMash 2015](make-it-fast-codemash-2015/) ([CodeMash](http://codemash.org) - 2015-01-08) ([PDF](https://github.com/nicjansma/talks/blob/master/make-it-fast-codemash-2015/make-it-fast-codemash-2015.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/make-itfastcodemash2015))
+
+* [JavaScript Module Patterns](javascript-module-patterns/) ([Lansing Javascript Meetup](http://www.meetup.com/Lansing-Javascript-Meetup) - 2015-03-17) ([PDF](https://github.com/nicjansma/talks/blob/master/javascript-module-patterns/javascript-module-patterns.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/javascript-modulepatterns))
