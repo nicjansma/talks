@@ -46,37 +46,37 @@
                         <small><a href="http://twitter.com/nicj">@nicj</a></small>
                     </p>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>JavaScript Objects</h2>
-                        
+
                         <p>What is a JavaScript object?</p>
-                        
+
                         <p><code>{}</code></p>
                     </section>
-                    
+
                     <section>
                         <h2><code>{}</code>:</h2>
-                        
+
                         <ul>
                             <li>A collection of properties</li>
                             <li>Each property has a value</li>
                             <li>A value can be a <code>number</code>, <code>string</code>, <code>boolean</code>, <code>object</code> or <code>function</code></li>
                         <ul>
                     </section>
-                    
+
                     <section>
                         <h2>What isn't an object</h2>
-                        
+
                         <p>Only <code>null</code> and <code>undefined</code> are not objects</p>
                     </section>
-                    
+
                     <section>
                         <h2>How do you create objects? Version 1</h2>
-                        
+
                         <p>Using an object initializer <code>{}</code>:</p>
-                        
+
 <pre><code data-trim class="javascript">
 // create an empty object
 var emptyObject = {};
@@ -93,12 +93,12 @@ var obj = {
 };
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>How do you create objects? Version 2</h2>
-                        
+
                         <p>Using a constructor <code>function</code> (<code>new</code> keyword):</p>
-                        
+
 <pre><code data-trim class="javascript">
 // create an empty object
 var emptyObject = new Object();
@@ -113,12 +113,12 @@ function Keg(contains, amount) {
 var keg = new Keg("Soda", 100.0);
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>How do you create objects? Version 3</h2>
-                        
+
                         <p>Using <code>Object.create()</code>:</p>
-                        
+
 <pre><code data-trim class="javascript">
 // create an empty object
 var emptyObject = Object.create(Object.prototype);
@@ -138,31 +138,31 @@ keg.abv      = 100.0;
 </code></pre>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>JavaScript Module Patterns</h2>
-                        
+
                         <ul>
                             <li>A <b>module</b> helps keep units of code cleanly separated and organized</li>
-                            
+
                             <li>A <b>pattern</b> is a common technique that can be re-used and applied to every-day software
                                 design problems</li>
-                                
+
                             <li><b>JavaScript Module Patterns</b> help us organize and limit code scope in any project</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>JavaScript Modules</h2>
-                        
+
                         <ul>
                             <li>The JavaScript language doesn't have <b>classes</b>, but we can emulate what classes can do with <b>modules</b></li>
-                            
+
                             <li>A module helps <b>encapsulate</b> data and functions into a single component</li>
-                            
+
                             <li>A module limits <b>scope</b> so the variables you create in the module only live within it</li>
-                            
+
                             <li>A module gives <b>privacy</b> by only allowing access to data and functions that the module wants to expose</li>
                         </ul>
                     </section>
@@ -171,7 +171,7 @@ keg.abv      = 100.0;
                 <section>
                     <section>
                         <h2>Basic Object</h2>
-                        
+
                         <p>Let's build a module for a Keg that can be filled with soda.  It has two basic properties:</p>
 <pre><code data-trim class="javascript">
 function Keg(contains, amount) {
@@ -180,10 +180,10 @@ function Keg(contains, amount) {
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Object</h2>
-                        
+
                         <p>We can add a <code>fill()</code> function so others can fill it with something tasty:</p>
 <pre><code data-trim class="javascript">
 function Keg(contains, amount) {
@@ -196,10 +196,10 @@ function Keg(contains, amount) {
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Object</h2>
-                        
+
                         <p>Right now, all of the Keg's properties are public.  The world has full access to change our data:</p>
 <pre><code data-trim class="javascript">
 var keg = new Keg();
@@ -207,18 +207,17 @@ keg.fill("Soda", 100.0);
 keg.amount = 9999; // oh no! they accessed our internal data
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Module Pattern: Constructors</h2>
-                        
+
                         <p>Let's switch to the Module Pattern, which gives us the ability to have public and private members:</p>
 <pre><code data-trim class="javascript">
-// define the constructor
 function Keg(_contains, _amount) {
     // private members
     var contains = _contains;
     var amount   = _amount;
-    
+
     // public methods
     return {
         fill: function(beverage, amountAdded) {
@@ -231,15 +230,14 @@ function Keg(_contains, _amount) {
 // create an instance of a Keg
 var keg = new Keg("Soda", 100.0);
 
-// modify its properties
 keg.fill("Pop", 50.0); // this is the only public member
 var amt = keg.amount;  // undefined! hidden from us
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Module Pattern: Constructors</h2>
-                        
+
                         <p>We can add additional methods to give access to our private variables without changing them:</p>
 <pre><code data-trim class="javascript">
 function Keg(_contains, _amount) {
@@ -262,23 +260,23 @@ keg.fill("Pop", 50.0);
 amt = keg.getAmount(); // 50.0
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Module Pattern: Constructors</h2>
-                        
+
                         <p>You can have private functions as well:</p>
 <pre><code data-trim class="javascript">
 function Keg(_contains, _amount) {
     // private members
     var contains = _contains;
     var amount   = _amount;
-    
+
     // private function
     function updateAmount(newAmount) {
         if (newAmount < 0) { newAmount = 0; }
         amount = newAmount;
     }
-    
+
     // public methods
     return {
         fill: function(beverage, amountAdded) {
@@ -290,58 +288,54 @@ function Keg(_contains, _amount) {
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Module Pattern: Constructors</h2>
-                        
+
                         <p>Completed:</p>
 <pre><code data-trim class="javascript">
 function Keg(_contains, _amount) {
     // private members
     var contains = _contains;
     var amount   = _amount;
-    
+
     // private function
     function updateAmount(newAmount) {
         if (newAmount < 0) { newAmount = 0; }
         amount = newAmount;
     }
-    
+
     // public methods
     return {
         fill: function(beverage, amountAdded) {
             contains = beverage;
             updateAmount(amountAdded);
         },
-        getAmount: function() {
-            return amount;
-        },
-        getContents: function() {
-            return contains;
-        }
+        getAmount: function() { return amount; },
+        getContents: function() { return contains; }
     }
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Disadvantages</h2>
-                        
+
                         <ul>
                             <li>The Basic Module Pattern for constructing objects has one big disadvantage: you're
                                 not taking advantage of <b>prototypes</b></li>
-                                
-                            <li>A prototype is a value (<code>number</code>, <code>string</code>, <code>function</code>, 
+
+                            <li>A prototype is a value (<code>number</code>, <code>string</code>, <code>function</code>,
                                 etc) that you can assign to <i>all</i> instances of a class using <code>ClassName.prototype.</code></li>
-                            
+
                             <li>Instead of each instance having a <i>copy</i> of the member, the single prototype member is shared</li>
-                            
-                            <li>This gives you substantial memory savings if you have many instances of the object</li> 
+
+                            <li>This gives you substantial memory savings if you have many instances of the object</li>
                     </section>
-                    
+
                     <section>
                         <h2><code>Keg</code> using <code>prototype</code></h2>
-                        
+
                         <p>Instead of each instance having it's own version of the same <code>fill()</code> function,
                             there's one global <code>Keg.prototype.fill</code>:</p>
 <pre><code data-trim class="javascript">
@@ -364,43 +358,43 @@ Keg.prototype.getContents = function() {
 };
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2><code>Keg</code> using <code>prototype</code></h2>
-                        
-                        
+
+
                         <ul>
-                            <li>The Keg's internal properties (<code>contains</code> and <code>amount</code>) need to 
-                                change from being defined within the Keg function's closure (<code>var contains = ...</code>) 
+                            <li>The Keg's internal properties (<code>contains</code> and <code>amount</code>) need to
+                                change from being defined within the Keg function's closure (<code>var contains = ...</code>)
                                 to be public properties (<code>this.contains = ...</code>)</li>
-                            
+
                             <li>This is because the <code>Keg.prototype.fill</code> function wasn't defined within the Keg's
                                 function closure, so it would have no visibility to <code>var</code>s defined within it</li>
-                            
+
                             <li>Thus the properties can be modified by anyone, outside of the protection of your module</li>
                         </ul>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Basic Module Pattern: Non-Constructors</h2>
-                        
+
                         <ul>
                             <li>If your module is a "global object" instead of a constructor (i.e. <code>jQuery</code>), you can simplify the syntax a bit</li>
-                        
+
                             <li>Wrap it up in an immediately-invoked functional expression (IIFE) to get closure for your
                                 private variables</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Basic Module Pattern: Non-Constructors</h2>
-                        
+
 <pre><code data-trim class="javascript">
 var KegManager = (function() {
     var kegs = [];
-    
+
     // exports
     return {
         addKeg: function(keg) { kegs.push(keg); }
@@ -414,18 +408,18 @@ KegManager.addKeg(sodaKeg);
 var kegs = KegManager.getKegs(); // a list of Keg objects
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Imports</h2>
-                        
+
                         <p>If you want to "import" other global variables or other modules, they can be passed in as IIFE arguments:</p>
-                        
+
 <pre><code data-trim class="javascript">
 var KegManager = (function($) {
     var kegs = [];
-    
+
     // do something with $
-    
+
     // exports
     return {
         addKeg: function(keg) { kegs.push(keg); }
@@ -438,47 +432,44 @@ KegManager.addKeg(sodaKeg);
 
 var kegs = KegManager.getKegs(); // a list of Keg objects
 </code></pre>
-                        
+
                     </section>
-                
+
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Revealing Module Pattern</h2>
-                        
+
                         <ul>
                             <li>An update to the Module Pattern</li>
-                        
+
                             <li>Define everything first, then return
                                 an object that has properties for the items you want to export (make public)</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Revealing Module Pattern</h2>
-                        
+
 <pre><code data-trim class="javascript">
 function Keg(_contains, _amount) {
-    // private members
-    var contains = _contains;
+    var contains = _contains
     var amount   = _amount;
-    
-    // private functions
+
     function updateAmount(newAmount) {
         if (newAmount < 0) { newAmount = 0; }
         amount = newAmount;
     }
-    
-    // public functions
+
     function fill(beverage, amountAdded) {
         contains = beverage;
         updateAmount(amountAdded);
     }
-    
+
     function getAmount() { return amount; }
     function getContents() { return contains; }
-    
+
     // exports
     return {
         fill: fill,
@@ -488,45 +479,45 @@ function Keg(_contains, _amount) {
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Revealing Module Pattern</h2>
-                        
+
                         <p>Pros:</p>
-                        
+
                         <ul>
                             <li>All public and private members are defined in the same way</li>
-                            
+
                             <li>All exports are listed in an easy-to-read list at the end</li>
-                            
+
                             <li>If someone were to "patch" (overwrite) an export, your internal functions still refer to your own
                                 implementation</li>
                         </ul>
-                        
+
                     </section>
-                
+
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>CommonJS</h2>
-                        
+
                         <ul>
                             <li>A module standard</li>
-                            
+
                             <li>Commonly used on the server (NodeJS)</li>
-                            
+
                             <li>Each file is a (single) module, each module is a (separate) file</li>
-                        
+
                             <li>A global <code>exports</code> variable is available that you can assign your exports to</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>CommonJS module definition</h2>
-                        
+
                         <p>A file contains a single module:</p>
-                    
+
                         <p><code>keg.js</code></p>
 <pre><code data-trim class="javascript">
 // imports
@@ -547,10 +538,10 @@ var foo = false;
 exports.Keg = Keg;
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>CommonJS module usage</h2>
-                        
+
                         <p>Same as module definition:</p>
 <pre><code data-trim class="javascript">
 var Keg = require("./keg").Keg;
@@ -562,23 +553,23 @@ var keg = new Keg("Soda", 100);
                 <section>
                     <section>
                         <h2>AMD</h2>
-                        
+
                         <ul>
                             <li>Asynchronous Module Definition</li>
-                            
+
                             <li>Commonly used in the browser (Dojo, MooTools, jQuery)</li>
-                            
+
                             <li>Allows for modules and their dependencies to be loaded asynchronously</li>
-                            
+
                             <li>Need to use a "loader", such as <a href="http://requirejs.org/">RequireJS (http://requirejs.org/)</a></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>AMD module definition: <code>define</code></h2>
-                        
+
                         <p>Defines a module, its dependencies, and the initialization function that runs once all dependencies are loaded:</p>
-                    
+
 <pre><code data-trim class="javascript">
 define(
     "Keg",                  // module name, optional but suggested
@@ -587,14 +578,13 @@ define(
         // constructor we'll export
         function Keg(_contains, _amount) {
             // ... same as before
-            
             // tell the KegManager about this new keg
             KegManager.add(this);
         }
-        
+
         // some other private vars
         var foo = false;
-        
+
         // exports
         return {
             Keg: Keg
@@ -602,12 +592,12 @@ define(
 });
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>AMD module usage: <code>require</code></h2>
-                        
+
                         <p>Load the modules you need</p>
-                    
+
 <pre><code data-trim class="javascript">
 require(
     ["Keg"],
@@ -617,21 +607,21 @@ require(
 });
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>RequireJS</h2>
-                        
+
                         <ul>
                             <li>AMD specifies a <b>format</b> for how to define a module and its dependencies</li>
-                            
-                            <li>It's up to a <b>loader</b> to figure out how to fetch and run the modules in the 
+
+                            <li>It's up to a <b>loader</b> to figure out how to fetch and run the modules in the
                                 correct load order</li>
-                                
+
                             <li>RequireJS (and its little sister almond) are the best loader options today</li>
                         </ul>
-                    
+
                     </section>
-                    
+
                     <section>
                         <h2>RequireJS Usage</h2>
 <pre><code data-trim class="html">
@@ -654,12 +644,12 @@ require(
 require(['app/module1', 'app/module2']);
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>RequireJS Optimizer</h2>
-                        
+
                         <p><b>Builds</b> all of your modules into a single file (great for deployment)</p>
-                        
+
                         <p>Install requirejs:</p>
 <pre><code data-trim class="bash">
 &gt; npm install -g requirejs
@@ -670,41 +660,41 @@ require(['app/module1', 'app/module2']);
 &gt; node r.js -o baseUrl=. name=main out=main-built.js
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Almond</h2>
-                        
+
                         <p><a href="https://github.com/jrburke/almond">https://github.com/jrburke/almond</a></p>
-                        
+
                         <ul>
                             <li>A replacement AMD loader for RequireJS</li>
-                            
+
                             <li>Minimal AMD loader API footprint</li>
-                            
+
                             <li>Only used for bundled AMD modules (not dynamic loading)</li>
                         </ul>
-                        
+
                     </section>
-                
+
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>UMD</h2>
-                        
+
                         <ul>
                             <li>Universal Module Definition</li>
-                            
+
                             <li>Code templates for defining a module that works in multiple environments,
                                 such as AMD, CommonJS and the browser</li>
-                        
+
                             <li><a href="https://github.com/umdjs/umd">https://github.com/umdjs/umd</a></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>UMD</h2>
-                        
+
                         <p>Defines a module that works in Node, AMD and browser globals</p>
 <pre><code data-trim class="javascript">
 (function (root, factory) {
@@ -722,7 +712,6 @@ require(['app/module1', 'app/module2']);
     }
 }(this, function (b) {
     //use b in some fashion.
-
     // Just return a value to define the module export.
     // This example returns an object, but the module
     // can return a function as the exported value.
@@ -732,23 +721,23 @@ require(['app/module1', 'app/module2']);
                         <p><a href="https://github.com/umdjs/umd/blob/master/returnExports.js">https://github.com/umdjs/umd/blob/master/returnExports.js</a></p>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>The Future: ES6 modules</h2>
-                        
+
                         <p>Goals:</p>
-                        
+
                         <ul>
                             <li>Compact syntax (similar to CommonJS)</li>
-                           
+
                             <li>Support for asynchronous loading and configurable module loading (similar to AMD)</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>ES6 Modules</h2>
-                        
+
                         <p><code>keg.js</code></p>
 <pre><code data-trim class="javascript">
 module Keg {
@@ -769,19 +758,19 @@ module Keg {
 
                 <section>
                     <h2>Further Reading</h2>
-                    
+
                     <ul>
                         <li><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript">JavaScript Design Patterns - Addy Osmani: http://addyosmani.com/resources/essentialjsdesignpatterns/book/</a></li>
                         <li><a href="http://addyosmani.com/writing-modular-js/">Writing Modular JavaScript With AMD, CommonJS & ES Harmony - Addy Osmani: http://addyosmani.com/writing-modular-js/</a></li>
                         <li><a href="http://www.2ality.com/2014/09/es6-modules-final.html">ECMAScript 6 modules: the final syntax - Axel Rauschmayer: http://www.2ality.com/2014/09/es6-modules-final.html</a></li>
                     </ul>
-                    
+
                 </section>
-                
+
                 <section>
                     <h2>thnx</h2>
                 </section>
-                
+
             </div>
 
         </div>
