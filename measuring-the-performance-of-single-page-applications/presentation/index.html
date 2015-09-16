@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Measuring the performance of Single Page Applications</title>
+
+        <meta name="description" content="Measuring the performance of Single Page Applications">
+        <meta name="author" content="Nic Jansma and Philip Tellis">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>Measuring the performance of Single Page Applications</h1>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://nicj.net">nic jansma</a> |</small>
+                        <small><a href="http://soasta.com">SOASTA</a> |</small>
+                        <small><a href="http://nicj.net">nicj.net</a> |</small>
+                        <small><a href="http://twitter.com/nicj">@nicj</a></small>
+                    </p>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://bluesmoon.info">philip tellis</a> |</small>
+                        <small><a href="http://soasta.com">SOASTA</a> |</small>
+                        <small><a href="http://bluesmoon.info">bluesmoon.info</a> |</small>
+                        <small><a href="http://twitter.com/bluesmoon">@bluesmoon</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    TODO
+                    <div style="float: right; text-align: center">
+                        <img src="images/nic.jpg" height="300" width="300" />
+                    </div>
+
+                    <h2>Who Am I?</h2>
+
+                    <p>Nic Jansma</p>
+                    <p><a href="mailto:nic@nicj.net">nic@nicj.net</a></p>
+                    <p><a href="https://twitter.com/nicj/">@nicj</a></p>
+                    <p><a href="http://nicj.net">http://nicj.net</a></p>
+                    <p><img src="images/soasta.png" /></p>
+
+                    <ul>
+                        <li>SOASTA (current)</li>
+                        <li>Microsoft (2005-2011)</li>
+                        <li>Founding member of W3C WebPerf Working Group</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>RUM</h2>
+                        
+                        <p>Real User Monitoring</p>
+                        
+                        <ul>
+                            <li>Gathering performance metrics from real user experiences</li>
+                            <li>Opposite of synthetic monitoring, which are emulated/virtual users in a controlled environment</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>RUM: How it's done</h2>
+                        
+                        <ul>
+                            <li>JavaScript measures the browser's events and performance interfaces
+                                <ul>
+                                    <li><code>readyState</code> changes and the <code>onload</code> event</li>
+                                    <li>DNS, TCP, SSL, Request and Response times from NavigationTiming (if available)</li>
+                                    <li>User-agent characteristics (User Agent, Screen Size, etc)</li>
+                                    <li>
+                                </ul>
+                            </li>
+                            <li>Beacon this data back to the cloud for analytics</li>
+                        </ul>
+                    
+                    </section>
+                    
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <img src="images/navigation-timing.png" />
+                    </section>
+
+                    <section>
+                        <h2>Boomerang</h2>
+                        
+                        <ul>
+                            <li>Created by Philip Tellis</li>
+                            <li>Open-source project with contributions from SOASTA</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>SPAs</h2>
+                        
+                        <p>Single Page Apps</p>
+                        
+                        <ul>
+                            <li>SPA websites on a single page, dynamically bringing in content as necessary</li>
+                            <li>Built with frameworks like AngularJS, Ember.js, Backbone.js and React</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>SPAs Hard vs. Soft Navigations</h2>
+                        
+                        <ul>
+                            <li><strong>Hard Navigation</strong>: The first page load, which will include all static HTML, 
+                                JavaScript, CSS, the SPA framework itself (e.g. <code>angular.js</code>), plus the initial route</li>
+                            <li><code>Soft Navigation</code>: Any subsequent route (address bar) change</li>
+                        </ul>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h1>The 3 Challenges of Measuring the Performance of SPAs</h1>
+                    </section>
+
+                    <section>
+                        <h1>Challenge #1: The onload event no longer matters</h1>
+                        
+                        <ul>
+                            <li>On first navigation, the browser begins downloading all of the JavaScript, CSS, images and other static resources</li>
+                            <li>If the site is built on a SPA framework, that frameworks' code will be fetched</li>
+                            <li>Once all static resources are fetched, the body's <code>onload</code> event will fire</li>
+                            <li>This is when traditionally built websites (non-SPAs) consider the page load complete</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h1>Challenge #1: The onload event no longer matters</h1>
+                        
+                        <ul>
+                            <li>Once the SPA framework's JavaScript is loaded, <b>then</b> it starts looking at routes, fetching views and data</li>
+                            <li>This probably all happens after the body's <code>onload</code> event fires</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p><code>onload</code> event fires at 1.2 seconds, but all of the visual content is loaded from 1.2 to 2.6 seconds:</p>
+                        
+                        <img src="images/webpagetest-waterfall-angular-sample-app.png" />
+                    </section>
+                    
+                    <section>
+                        <p><code>onload</code> event fires at 1.2 seconds, but all of the visual content is loaded from 1.2 to 2.6 seconds:</p>
+
+                        <img src="images/webpagetest-filmstrip-angular-sample-app.png" />
+                    </section>
+                    
+                </section>
+                
+                <section>
+                    <section>
+                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
+                        
+                        <ul>
+                            <li>SPAs do not trigger a new browser navigation</li>
+                            <li>Each route change, user interaction, visual update is fetched from the server</li>
+                            <li>New content is dynamically swapped in over the old content</li>
+                            <li>The browser is no longer doing a traditional navigation, where it's tearing down the old page</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
+                        
+                        <ul>
+                            <li>This is great for performance</li>
+                            <li>The browser is no longer re-rendering the same header and footer</li>
+                            <li>The browser is no longer re-parsing the same HTML, JavaScript and CSS</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
+                        
+                        <ul>
+                            <li>This is bad for traditional RUM analytics tools, which are now left in the dark</li>
+                            <li>The events (<code>readyState</code>, <code>onload</code>), metrics (NavigationTiming) are all geared toward a single load event</li>
+                        </ul>
+                    </section>
+
+                </section>
+                
+                <section>
+                    <section>
+                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
+                        
+                        <ul>
+                            <li>The browser no longer fires an <code>onload</code> event after the first navigation</li>
+                            <li>The <code>onload</code> event helps us know when all static content was downloaded</li>
+                            <li>In a soft navigation scenario, the browser does not fire the onload event again</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
+                        
+                        <p>SPA frameworks often fire events around navigations:</p>
+                        
+                        <ul>
+                            <li><code>$routeChangeStart</code>: When a new route is being navigated to</li>
+                            <li><code>$viewContentLoaded</code>: Emitted every time the ngView content is reloaded</li>
+                        </ul>
+                        
+                        <p><strong>But neither of these events have any knowledge of the work they trigger, fetching new IMGs, CSS, JavaScript, etc!</strong></p>
+                    </section>
+                    
+                    <section>
+                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
+                        
+                        <p>Example AngularJS Route Change Timeline:</p>
+                        
+                        <ol>
+                            <li>User clicks on something</li>
+                            <li>Angular figures out what the new page will be</li>
+                            <li>Angular fires <code>$routeChangeStart</code></li>
+                            <li>Angular find it needs a few HTML templates, and fetches them via XHR</li>
+                            <li>Angular uses its template engine to create some HTML from those templates, and injects them into the DOM</li>
+                            <li>Angular fires <code>$viewContentLoaded</code></li>
+                            <li>The browser now parses the new DOM elements, and notices it needs to fetch new <code>&lt:img&gt;</code>, <code>&lt:javascript&gt;</code>, etc elements</li>
+                            <li>The browser fetches all of the external resources<li>
+                            <li>The browser shows the final state of the view to the user</li>
+                        </ol>
+                        
+                        <p><strong>We can't rely on <code>$viewContentLoaded</code> since there are a lot things that can happen after, notably external resource fetches</strong></p>
+                    </section>
+                <section>
+                
+                <!-- 
+                MO
+                How to instrument XHR first then MO
+                Waterfall using just MO
+                SCRIPT tag bug
+                what is a hard nav, soft nav
+                Front-end vs Back-end time for SPAs (XHR overlapping time)
+                What user-initiated events are intereresting (auto_xhr comment)
+                SPA transitions with no resources (cached templates, etc)
+                Not as accurate when browser has a lot of CPU time
+                -->
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
