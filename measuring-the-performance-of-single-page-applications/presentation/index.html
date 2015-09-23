@@ -29,6 +29,12 @@
             }
         </script>
 
+        <style>
+            .reveal h1 {
+                font-size: 3em;
+            }
+        </style>
+
         <!--[if lt IE 9]>
         <script src="lib/js/html5shiv.js"></script>
         <![endif]-->
@@ -47,7 +53,7 @@
                         <small><a href="http://twitter.com/nicj">@nicj</a></small>
                     </p>
 
-                    <p style="margin-top: 40px">
+                    <p style="margin-top: 10px">
                         <small><a href="http://bluesmoon.info">philip tellis</a> |</small>
                         <small><a href="http://soasta.com">SOASTA</a> |</small>
                         <small><a href="http://bluesmoon.info">bluesmoon.info</a> |</small>
@@ -56,219 +62,864 @@
                 </section>
 
                 <section>
-                    TODO
-                    <div style="float: right; text-align: center">
+                    <h2>Who Are We?</h2>
+                    <div style="float: left; text-align: center; width: 450px">
+
                         <img src="images/nic.jpg" height="300" width="300" />
+
+                        <p>Nic Jansma</p>
+                        <p>SOASTA</p>
                     </div>
 
-                    <h2>Who Am I?</h2>
+                    <div style="float: left; text-align: center; width: 450px">
+                        <img src="images/philip.jpg" height="300" width="300" />
 
-                    <p>Nic Jansma</p>
-                    <p><a href="mailto:nic@nicj.net">nic@nicj.net</a></p>
-                    <p><a href="https://twitter.com/nicj/">@nicj</a></p>
-                    <p><a href="http://nicj.net">http://nicj.net</a></p>
-                    <p><img src="images/soasta.png" /></p>
-
+                        <p>Philip Tellis</p>
+                        <p>SOASTA</p>
                     <ul>
-                        <li>SOASTA (current)</li>
-                        <li>Microsoft (2005-2011)</li>
-                        <li>Founding member of W3C WebPerf Working Group</li>
                     </ul>
                 </section>
 
                 <section>
                     <section>
+                        <h2>Terms</h2>
+                    </section>
+
+                    <section>
                         <h2>RUM</h2>
-                        
+
                         <p>Real User Monitoring</p>
-                        
+
                         <ul>
                             <li>Gathering performance metrics from real user experiences</li>
-                            <li>Opposite of synthetic monitoring, which are emulated/virtual users in a controlled environment</li>
+                            <li>Versus Synthetic Monitoring, with emulated users in a controlled environment</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>RUM: How it's done</h2>
-                        
+
                         <ul>
                             <li>JavaScript measures the browser's events and performance interfaces
                                 <ul>
-                                    <li><code>readyState</code> changes and the <code>onload</code> event</li>
-                                    <li>DNS, TCP, SSL, Request and Response times from NavigationTiming (if available)</li>
-                                    <li>User-agent characteristics (User Agent, Screen Size, etc)</li>
-                                    <li>
+                                    <li>Listen for <code>readyState</code> changes and the <code>onload</code> event</li>
+                                    <li>Measure DNS, TCP, SSL, Request and Response times from NavigationTiming (if available)</li>
+                                    <li>Gather User Agent characteristics (Version, Screen Size, etc)</li>
                                 </ul>
                             </li>
                             <li>Beacon this data back to the cloud for analytics</li>
                         </ul>
-                    
+
                     </section>
-                    
+
                     <section>
                         <h2>NavigationTiming</h2>
 
                         <img src="images/navigation-timing.png" />
                     </section>
+                    
+                    <section>
+                        <h2>NavigationTiming</h2>
+
+                        <img src="images/navigation-timing-caniuse.png" />
+                    </section>
+
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <img src="images/resource-timing.png" />
+                    </section>
+
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <img src="images/resource-timing-inspiration.png" />
+                    </section>
+                    
+                    <section>
+                        <h2>ResourceTiming</h2>
+
+                        <img src="images/resource-timing-caniuse.png" />
+                    </section>
+
 
                     <section>
                         <h2>Boomerang</h2>
-                        
+
                         <ul>
-                            <li>Created by Philip Tellis</li>
-                            <li>Open-source project with contributions from SOASTA</li>
+                            <li>Created by Philip Tellis @ Yahoo</li>
+                            <li>Gathers performance metrics and characteristics of page load and beacons data to your server (aka RUM)</li>
+                            <li>Open-source project (with contributions from SOASTA)</li>
+                            <li><a href="https://github.com/lognormal/boomerang/">https://github.com/lognormal/boomerang/</a></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>SPAs</h2>
-                        
-                        <p>Single Page Apps</p>
-                        
+
+                        <h3>Single Page Apps</h3>
+
                         <ul>
-                            <li>SPA websites on a single page, dynamically bringing in content as necessary</li>
+                            <li>Run on a single page, dynamically bringing in content as necessary</li>
                             <li>Built with frameworks like AngularJS, Ember.js, Backbone.js and React</li>
                         </ul>
                     </section>
-                    
+
                     <section>
-                        <h2>SPAs Hard vs. Soft Navigations</h2>
-                        
+                        <h2>SPAs</h2>
+
+                        <h3>Hard vs. Soft Navigations</h3>
+
                         <ul>
-                            <li><strong>Hard Navigation</strong>: The first page load, which will include all static HTML, 
-                                JavaScript, CSS, the SPA framework itself (e.g. <code>angular.js</code>), plus the initial route</li>
-                            <li><code>Soft Navigation</code>: Any subsequent route (address bar) change</li>
+                            <li><strong>Hard Navigation</strong>: The first page load, which will include all static HTML,
+                                JavaScript, CSS, the SPA framework itself (e.g. <code>angular.js</code>), plus showing
+                                the initial route</li>
+                            <li><strong>Soft Navigation</strong>: Any subsequent route (address bar) change</li>
+                            <li>Any URL might be loaded via <i>either</i> hard or soft navigation</li>
                         </ul>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
-                        <h1>The 3 Challenges of Measuring the Performance of SPAs</h1>
+                        <h2>3 Challenges</h2>
+                        <h2>of Measuring the Performance of SPAs</h2>
                     </section>
 
                     <section>
-                        <h1>Challenge #1: The onload event no longer matters</h1>
-                        
+                        <h2>Challenge #1</h2>
+
+                        <h3>The onload event no longer matters</h3>
+
+                        <p style="float: left"><strong>Traditional websites:</strong></p>
                         <ul>
-                            <li>On first navigation, the browser begins downloading all of the JavaScript, CSS, images and other static resources</li>
-                            <li>If the site is built on a SPA framework, that frameworks' code will be fetched</li>
+                            <li>On navigation, the browser begins downloading all of the JavaScript, CSS, images and other static resources</li>
                             <li>Once all static resources are fetched, the body's <code>onload</code> event will fire</li>
-                            <li>This is when traditionally built websites (non-SPAs) consider the page load complete</li>
+                            <li>This is traditionally what websites consider as page load complete</li>
+                            <li>This is traditionally what RUM measures</li>
                         </ul>
                     </section>
-                    
+
                     <section>
-                        <h1>Challenge #1: The onload event no longer matters</h1>
-                        
+                        <h2>Traditional website Waterfall</h2>
+
+                        <img src="images/webpagetest-waterfall-traditional.png" />
+                    </section>
+
+                    <section>
+                        <h2>Challenge #1</h2>
+
+                        <h3>The onload event no longer matters</h3>
+
+                        <p style="float: left"><strong>Single Page Apps:</strong></p>
                         <ul>
-                            <li>Once the SPA framework's JavaScript is loaded, <b>then</b> it starts looking at routes, fetching views and data</li>
-                            <li>This probably all happens after the body's <code>onload</code> event fires</li>
+                            <li>Load all static content like a traditional website</li>
+                            <li>The frameworks' code will also be fetched (e.g. <code>angular.js</code>)</li>
+                            <li><i>(the onload event fires here)</i></li>
+                            <li>Once the SPA framework is loaded, it starts looking at routes, fetching views and data</li>
+                            <li>All of this content is fetched <i>after</i> the <code>onload</code> event</li>
                         </ul>
                     </section>
 
                     <section>
-                        <p><code>onload</code> event fires at 1.2 seconds, but all of the visual content is loaded from 1.2 to 2.6 seconds:</p>
-                        
-                        <img src="images/webpagetest-waterfall-angular-sample-app.png" />
-                    </section>
-                    
-                    <section>
-                        <p><code>onload</code> event fires at 1.2 seconds, but all of the visual content is loaded from 1.2 to 2.6 seconds:</p>
+                        <h2>SPA Waterfall</h2>
 
-                        <img src="images/webpagetest-filmstrip-angular-sample-app.png" />
+                        <img src="images/webpagetest-waterfall-angular-sample-app.png" width="80%" height="80%" />
                     </section>
-                    
+
+                    <section>
+                        <h2>SPA Waterfall</h2>
+
+                        <div style="float: left; width: 450px">
+                            <img src="images/webpagetest-waterfall-angular-sample-app.png" />
+                        </div>
+
+                        <div style="float: left; width: 450px">
+                            <ul>
+                                <li>Browser fires <code>onload</code> at 1.225 seconds</li>
+                                <li>All visual resources (.jpgs) aren't complete until after 1.7 seconds</li>
+                                <li>Filmstrip confirms nothing is shown until around 1.7 seconds</li>
+                                <li><code>onload</code> fired 0.5 seconds too early!</li>
+                            </ul>
+                        </div>
+
+                        <img style="clear: both" src="images/webpagetest-waterfall-angular-sample-app-filmstrip.png" />
+                    </section>
+
+                    <section>
+                        <h2>Challenge #1</h2>
+
+                        <h3>The onload event no longer matters</h3>
+
+                        <p style="float: left"><strong>Single Page Apps:</strong></p>
+                        <ul>
+                            <li>Core problem is that most of the interesting stuff (e.g. fetching images, JavaScript, CSS
+                                and XHRs for the route) happens after the onload</li>
+                            <li>The browser doesn't fire any "fully loaded"-style events after <code>onload</code></li>
+                        </ul>
+                    </section>
+
                 </section>
-                
+
                 <section>
                     <section>
-                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
-                        
+                        <h2>Challenge #2</h2>
+
+                        <h3>Soft navigations are not real navigations</h3>
+
                         <ul>
-                            <li>SPAs do not trigger a new browser navigation</li>
-                            <li>Each route change, user interaction, visual update is fetched from the server</li>
+                            <li>Each route change, user interaction, or visual update is dynamically fetched from the server</li>
+                            <li>There are APIs to change the URL in the address bar without actually navigating</li>
                             <li>New content is dynamically swapped in over the old content</li>
                             <li>The browser is no longer doing a traditional navigation, where it's tearing down the old page</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
-                        
+                        <h2>Challenge #2</h2>
+
+                        <h3>Soft navigations are not real navigations</h3>
+
                         <ul>
                             <li>This is great for performance</li>
-                            <li>The browser is no longer re-rendering the same header and footer</li>
+                            <li>The browser is no longer re-rendering the same header, footer or common components</li>
                             <li>The browser is no longer re-parsing the same HTML, JavaScript and CSS</li>
                         </ul>
                     </section>
-                    
+
                     <section>
-                        <h1>Challenge #2: Soft navigations are not real navigations</h1>
-                        
+                        <h2>Challenge #2</h2>
+
+                        <h3>Soft navigations are not real navigations</h3>
+
+                        <p style="float: left"><strong>Bad for traditional RUM tools:</strong></p>
                         <ul>
-                            <li>This is bad for traditional RUM analytics tools, which are now left in the dark</li>
-                            <li>The events (<code>readyState</code>, <code>onload</code>), metrics (NavigationTiming) are all geared toward a single load event</li>
+                            <li>Stop caring after the measuring the "one" navigation</li>
+                            <li>Won't run again until the next time it loads on a full navigation</li>
+                            <li>Browser events (<code>readyState</code>, <code>onload</code>) and metrics (NavigationTiming) are all geared toward a single load event</li>
                         </ul>
                     </section>
 
                 </section>
-                
+
                 <section>
                     <section>
-                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
-                        
+                        <h2>Challenge #3</h2>
+
+                        <h3>The browser won’t tell you when all resources have been downloaded</h3>
+
                         <ul>
-                            <li>The browser no longer fires an <code>onload</code> event after the first navigation</li>
-                            <li>The <code>onload</code> event helps us know when all static content was downloaded</li>
-                            <li>In a soft navigation scenario, the browser does not fire the onload event again</li>
+                            <li>The browser fires <code>onload</code> only once</li>
+                            <li>The <code>onload</code> event helps us know when all static content was fetched</li>
+                            <li>In a soft navigation scenario, the browser does not fire the <code>onload</code> event again,
+                                so we don't know when its content was fetched</li>
                         </ul>
                     </section>
-                    
+
                     <section>
-                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
-                        
-                        <p>SPA frameworks often fire events around navigations:</p>
-                        
+                        <h2>Challenge #3</h2>
+
+                        <h3>The browser won’t tell you when all resources have been downloaded</h3>
+
+                        <p style="float: left">SPA soft navigations may fetch:</p>
+
+                        <ul style="clear: both; float: left;">
+                            <li>Templates</li>
+                            <li>Images</li>
+                            <li>CSS</li>
+                            <li>JavaScript</li>
+                            <li>XHRs</li>
+                            <li>Videos</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Challenge #3</h2>
+
+                        <h3>The browser won’t tell you when all resources have been downloaded</h3>
+
+                        <p style="float: left; text-align: left">SPA frameworks often fire events around navigations.  AngularJS events:</p>
+
                         <ul>
                             <li><code>$routeChangeStart</code>: When a new route is being navigated to</li>
                             <li><code>$viewContentLoaded</code>: Emitted every time the ngView content is reloaded</li>
                         </ul>
-                        
-                        <p><strong>But neither of these events have any knowledge of the work they trigger, fetching new IMGs, CSS, JavaScript, etc!</strong></p>
+
+                        <p style="float: left; margin-top: 20px; text-align: left">But neither of these events have any knowledge of the work they trigger, fetching new IMGs, CSS, JavaScript, etc!</p>
                     </section>
-                    
+
                     <section>
-                        <h1>Challenge #3: The browser won’t tell you when all resources have been downloaded</h1>
-                        
+                        <h2>Challenge #3</h2>
+
                         <p>Example AngularJS Route Change Timeline:</p>
-                        
+
                         <ol>
                             <li>User clicks on something</li>
                             <li>Angular figures out what the new page will be</li>
                             <li>Angular fires <code>$routeChangeStart</code></li>
-                            <li>Angular find it needs a few HTML templates, and fetches them via XHR</li>
-                            <li>Angular uses its template engine to create some HTML from those templates, and injects them into the DOM</li>
+                            <li>Angular fetches HTML templates via XHR</li>
+                            <li>Angular renders template and injects it into the DOM</li>
                             <li>Angular fires <code>$viewContentLoaded</code></li>
-                            <li>The browser now parses the new DOM elements, and notices it needs to fetch new <code>&lt:img&gt;</code>, <code>&lt:javascript&gt;</code>, etc elements</li>
-                            <li>The browser fetches all of the external resources<li>
-                            <li>The browser shows the final state of the view to the user</li>
+                            <li>Browser parses the new DOM, notices it needs <code>&lt;img&gt;</code>, <code>&lt;javascript&gt;</code>, etc</li>
+                            <li>Browser fetches all of the external resources</li>
+                            <li>Browser shows the final state of the view to the user</li>
                         </ol>
-                        
-                        <p><strong>We can't rely on <code>$viewContentLoaded</code> since there are a lot things that can happen after, notably external resource fetches</strong></p>
                     </section>
+
+                    <section>
+                        <h3>AngularJS Event Waterfall</h3>
+
+                        <img src="images/webpagetest-waterfall-angular-sample-app-angular-events.png" />
+                    </section>
+                </section>
+
                 <section>
+                    <section>
+                        <h2>How can we measure SPA navigations?</h2>
+
+                        <p>We need to figure out at what point the navigation started (the <strong>start event</strong>),
+                            through when we consider the navigation complete (the <strong>end event</strong>).</p>
+                    </section>
+
+                    <section>
+                        <h2>The Start Event</h2>
+
+                        <p style="float: left; text-align: left">For <strong>hard navigations</strong>:</p>
+
+                        <ul>
+                            <li>The start event is when the browser starts the process of loading the next page</li>
+                            <li>This is the same time as with traditional web app navigations</li>
+                            <li>We can use NavigationTiming's <code>navigationStart</code> if available,
+                                to know when the browser navigation began</li>
+                            <li>If NavigationTiming isn't available, and the user is navigating between pages on the same site, you can use cookies
+                                to measure when the navigation began (see Boomerang for an implementation)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The Start Event</h2>
+
+                        <p style="float: left; text-align: left"><strong>Challenge #2</strong>: Soft navigations are not real navigations</strong></p>
+                        
+                        <ul>
+                            <li>We need to figure out when the user's view is going to significantly change</li>
+                            <li>The browser <strong>history</strong> is changing</li>
+                            <li>SPA framework <strong>routing events</strong> can give us an indicator that the view
+                                will be changing</li>
+                            <li>Other important events that might indicate a view change are a user <strong>click</strong>,
+                                or an <strong>XHR</strong> that triggers DOM changes</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The Start Event: History State</h2>
+
+                        <p style="float: left; text-align: left">The <strong><code>window.history</code></strong> object can tell 
+                            us when the URL is changing:</p>
+
+                        <ul>
+                            <li>When <code>pushState</code> or <code>replaceState</code> are being called, the app is possibly
+                                updating its view</li>
+                            <li>When the user hits Back or Forward, the <code>window.popstate</code> event is fired, and the app
+                                will possibly update the view</li>
+                            <li><i>(future events will give us more info)</i></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The Start Event: Routing</h2>
+
+                        <p style="float: left; text-align: left">SPA frameworks fire <strong>routing</strong> events when 
+                            the view is changing:</p>
+
+                        <ul>
+                            <li><strong>AngularJS</strong>: <code>$rootScope.$on("$routeChangeStart")</code></li>
+                            <li><strong>Ember.js</strong>: <code>beforeModel</code> or <code>willTransition</code></li>
+                            <li><strong>Backbone.js</strong>: <code>router.on("route")</code></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The Start Event: Clicks</h2>
+
+                        <ul>
+                            <li>When the user has <strong>clicks</strong> something, they might be doing simple interactions 
+                                (e.g. a drop-down menu)
+                            </li>
+                            <li>Or, they might be triggering a UI update</li>
+                            <li><i>(future events will give us more info)</i></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The Start Event: XHRs</h2>
+
+                        <ul>
+                            <li>An <strong><code>XMLHttpRequest</code></strong> (network activity) might indicate that the page's view
+                                is being updated</li>
+                            <li>Or, it could be a periodic poller (e.g. a scoreboard update)</li>
+                            <li>Or, it could be in reaction to a user interaction (e.g. autocomplete)</li>
+                            <li><i>(future events will give us more info)</i></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The Start Event</h2>
+
+                        <ul>
+                            <li>To determine if a <strong>History</strong> state change, user <strong>click</strong> or 
+                                <strong>XHR</strong> is really triggering a navigation, we can listen to what happens next</li>
+                            <li>If there was a lot of subsequent network activity, we can keep on listening for more events</li>
+                            <li>If the DOM was updated significantly, we can consider the event the start of a navigation</li>
+                            <li>If nothing else happened, it was probably just an insignificant interaction</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>SPA Navigations</h2>
+
+                        <img src="images/nav-start-to-end.png" />
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>The End Event</h2>
+
+                        <p>When do we consider the SPA navigation complete?</p>
+                        <p>There are many definitions of complete:</p>
+                        
+                        <ul>
+                            <li>When all networking activity has completed</li>
+                            <li>When the UI is visually complete (above-the-fold)</li>
+                            <li>When the user can interact with the page</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The End Event</h2>
+
+                        <p>Traditional RUM measures up to the <code>onload</code> event:</p>
+                        
+                        <ul>
+                            <li>This is when all resources have been fetched</li>
+                            <li>The page isn't fully loaded until <i>at least</i> then</li>
+                            <li>The UI might have been above-the-fold visually complete already</li>
+                            <li>It's traditionally when the user can fully interact with the page</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Single Points of Failure (SPOFs)</h2>
+
+                        <p>Which resources could affect visual completion of the page?</p>
+                        
+                        <ul>
+                            <li>External JavaScript files</li>
+                            <li>External CSS files</li>
+                            <li>Media (images, video)</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The End Event</h2>
+
+                        <p>For <strong>hard navigations</strong>, the <code>onload</code> event no longer matters (Challenge #1)</p>
+
+                        <ul>
+                            <li>The <code>onload</code> event only measures up to when all static resources were fetched</li>
+                            <li>The SPA framework will be dynamically loading its UI only after the static JavaScript has been loaded</li>
+                            <li>We want to mark the end of the hard navigation only after all of the resources were fetched
+                                and the UI is complete</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The End Event</h2>
+
+                        <p>For <strong>soft navigations</strong>, the browser won’t tell you when all resources have been downloaded (Challenge #3)</p>
+                        
+                        <ul>
+                            <li>The <code>onload</code> only fires once on a page</li>
+                            <li>APIs like ResourceTiming can give you details about network resources after they've been fetched
+                            <li>But to know when to stop, we need to know if there are any <strong>outstanding</strong> resources</li>
+                            <li>So let's monitor all network activity!</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>The End Event</h2>
+                        
+                        <p>Let's <strong>make our own</strong> SPA <code>onload</code> event:</p>
+                        
+                        <ul>
+                            <li>Similar to the body <code>onload</code> event, let's wait for all network activity to complete</li>
+                            <li>This means we will have to <strong>intercept</strong> both implicit (e.g. from DOM changes)
+                                as well as programmatic (e.g. XHR) resource fetches</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Monitoring XHRs</h2>
+                        
+                        <p><code>XMLHttpRequest</code>s play an important role in SPA frameworks</p>
+                        
+                        <ul>
+                            <li>XHRs are used to fetch HTML, templates, JSON, XML, data and other assets</li>
+                            <li>We should monitor to see if any XHRs are occuring</li>
+                            <li>The <code>XMLHttpRequest</code> object can be <strong>proxied</strong></li>
+                            <li>Intercept the <code>.open()</code> and </code>.send()</code> methods to know when
+                                an XHR is starting</li>
+                        </ul>
+                    </section>
+                                        
+                    <section>
+                        <h2>Monitoring XHRs</h2>
+                        
+                        <p><i>Simplified code ahead!</i></p>
+                        
+                        <p>Full code at 
+                            <a href="https://github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js">github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js</a>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Monitoring XHRs</h2>
+                        
+                        <pre><code>
+var orig_XHR = window.XMLHttpRequest;
+window.XMLHttpRequest = function() {
+    var req = new orig_XHR();
+    orig_open = req.open;
+    orig_send = req.send;
+
+    req.open = function(method, url, async) { 
+        // save URL details, listen for state changes
+        req.addEventListener("load", function() { ... });
+        req.addEventListener("timeout", function() { ... });
+        req.addEventListener("error", function() { ... });
+        req.addEventListener("abort", function() { ... });
+        orig_open.apply(req, arguments);
+    };
+
+    req.send = function() {
+        // save start time
+        orig_send.apply(req, arguments);
+    }
+}
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>Monitoring XHRs</h2>
+                        
+                        <p>By proxying the XHR code, you can:</p>
+                        
+                        <ul>
+                            <li>Know which URLs are being fetched</li>
+                            <li>Know when a XHR has started</li>
+                            <li>Know when a XHR has completed, timed out, error or aborted</li>
+                            <li>Most importantly, know if there are any <strong>outstanding</strong> XHRs</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Monitoring XHRs</h2>
+                        
+                        <p>Downsides:</p>
+                        
+                        <ul>
+                            <li>Need additional code to support XDomainRequest</li>
+                            <li>Timing not as accurate when browser is busy (rendering, etc) as callbacks will be delayed</li>
+                            <li>You can fix-up timing via ResourceTiming (if available)</li>
+                        </ul>
+                    </section>
+                </section>
                 
-                <!-- 
-                MO
-                How to instrument XHR first then MO
-                Waterfall using just MO
-                SCRIPT tag bug
-                what is a hard nav, soft nav
-                Front-end vs Back-end time for SPAs (XHR overlapping time)
-                What user-initiated events are intereresting (auto_xhr comment)
-                SPA transitions with no resources (cached templates, etc)
-                Not as accurate when browser has a lot of CPU time
+                <section>
+                    <section>
+                        <h2>Other Resources</h2>
+                        
+                        <p>XHR is the main way to fetch resources via JavaScript</p>
+                        
+                        <ul>
+                            <li>What about Images, JavaScript, CSS and other HTML elements that trigger resource fetches?</li>
+                            <li>We can't proxy the <code>Image</code> object as that only works if you create a <code>new Image()</code>
+                                in JavaScript</li>                                
+                            <li>If only we could listen for DOM changes...</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Mutation Observer</h2>
+                        
+                        <p style="text-align: left"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver">http://developer.mozilla.org/en-US/docs/Web/API/MutationObserver</a>:</p>
+                        
+                        <p style="text-align: left"><quote><i>MutationObserver provides developers a way to react to changes in a DOM</i></quote></p>
+
+                        <p style="float: left; text-align: left">Usage:</p>
+                        
+                        <ul>
+                            <li><code>observe()</code> for specific events</li>
+                            <li>Get a callback when mutations for those events occur</li>
+                        </ul>
+                    </section>
+                                        
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p><i>Simplified code ahead!</i></p>
+                        
+                        <p>Full code at 
+                            <a href="https://github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js">github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js</a>
+                        </p>
+                    </section>
+
+                    <section>
+<pre><code>
+var observer = new MutationObserver(observeCallback);
+observer.observe(document, {
+    childList: true,
+    attributes: true,
+    subtree: true,
+    attributeFilter: ["src", "href"]
+});
+</code></pre>
+                    </section>
+                    <section>
+<pre><code>
+function observeCallback(mutations) {
+    var interesting = false;
+    if (mutations && mutations.length) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === "attributes") {
+                interesting |= isInteresting(mutation.target);
+            } else if (mutation.type === "childList") {
+                for (var i = 0; i < mutation.addedNodes.length; i++) {
+                    interesting |= isInteresting(mutation.addedNodes[i]);
+                }
+            }
+        });
+    }
+    if (!interesting) {
+        // complete the event after N milliseconds if nothing else happens
+    }
+});
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>Simplified workflow:</p>
+                        
+                        <ul>
+                            <li>Start listening when an XHR, click, route change or other interesting navigation-like event starts</li>
+                            <li>Use <code>MutationObserver</code> to listen for DOM mutations</li>
+                            <li>Attach <code>load</code> and <code>error</code> event handlers and set timeouts
+                                on any <code>IMG</code>, <code>SCRIPT</code>, <code>LINK</code> or <code>FRAME</code></li>
+                            <li>If an interesting element starts fetching keep the navigation "open" until it completes</li>
+                            <li>After the last element's resource has been fetched, wait a few milliseconds to see if it kicked off anything else</li>
+                            <li>If not, the navigation completed when the last element's resource was fetched</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>What's interesting to observe?</p>
+                        
+                        <ul>
+                            <li>Internal and cached resources may not fetch anything, so you have to inspect elements first</li>
+                            <li><code>IMG</code> elements that haven't already been fetched (<code>naturalWidth==0</code>),
+                                have external URLs (e.g. not <code>data-url:</code>) and that we haven't seen before.</li>
+                            <li><code>SCRIPT</code> elements that have a <code>src</code> set</li>
+                            <li><code>IFRAMEs</code> elements that don't have <code>javascript:</code> or <code>about:</code> protocols</li>
+                            <li><code>LINK</code> elements that have a <code>href</code> set</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>Downsides:</p>
+                        
+                        <ul>
+                            <li>Not 100% supported in today's market</li>
+                            <li>Can't be used to monitor <i>all</i> resources (e.g. fonts from CSS)</li>
+                        </ul>
+                        
+                        <img src="images/mutationobserver-caniuse.png" />
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>Polyfills (with performance implications):</p>
+                        
+                        <ul>
+                            <li><a href="https://github.com/webcomponents/webcomponentsjs">github.com/webcomponents/webcomponentsjs</a></li>
+                            <li><a href="https://github.com/megawac/MutationObserver.js/tree/master">github.com/megawac/MutationObserver.js</a></li>
+                        </ul>
+                    </section>
+                                        
+                    <section>
+                        <h2>Why not ResourceTiming?</h2>
+                        
+                        <p>Doesn't <code>ResourceTiming</code> have all of the data we need?</p>
+                        
+                        <ul>
+                            <li>ResourceTiming events are only added to the buffer <i>strong</i> after they complete</li>
+                            <li>In order to extend the SPA navigation end time, we have to know if any resource fetches
+                                are <i>outstanding</i></li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>Polyfill ResourceTiming via MutationObserver</p>
+                        
+                        <p>For extra credit, you could use the data you gathered with Mutation Observer to create a Waterfall for browsers that
+                            don't support ResourceTiming but do support MutationObserver (e.g. iOS).</p>
+                    </section>
+                    
+                    <section>
+                        <h2>MutationObserver</h2>
+                        
+                        <p>Polyfill ResourceTiming via MutationObserver</p>
+                        
+                        <img width="50%" src="images/mutationobserver-caniuse-polyfill.png" />
+                        <img width="50%" src="images/resource-timing-caniuse-polyfill.png" />
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Front-End vs. Back-End</h2>
+                        
+                        <p>In a traditional page load:</p>
+                        
+                        <img src="images/navigation-timing-fe-be.png" />
+                    </section>
+
+                    <section>
+                        <h2>Front-End vs. Back-End</h2>
+                        
+                        <p>What does <strong>Front-End</strong> or <strong>Back-End</strong> mean in a Single Page App?</p>
+                        
+                        <ul>
+                            <li>Depends on your application's patterns, but...</li>
+                            <li><strong>Back-End</strong>: Any timeslice with an XHR outstanding</li>
+                            <li><strong>Front-End</strong>: <code>Total Time - Back-End</code></li>
+                        </ul>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Monitoring Page Components</h2>
+                        
+                        <p>It's not just about <strong>navigations</strong></p>
+                        
+                        <p>What about components, widgets and ads?</p>
+                        
+                        <ul>
+                            <li>You can apply the previous techniques to page components</li>
+                            <li>For measuring performance, you need a <strong>start time</strong> and an <strong>end time</strong></li>
+                            <li>The <strong>start time</strong> is probably driven by your code (e.g. a XHR fetch) or a user interaction (e.g. a click)</li>
+                            <li>The <strong>end time</strong> can be measured via XHR interception, MutationObservers, or callbacks from your resource fetches</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Monitoring Page Components</h2>
+                        
+                        <p>How do you measure <strong>visual completion</strong>?</p>
+                        
+                        <p style="float: left; text-align: left">Challenges:</p>
+                        
+                        <ul>
+                            <li>When an <code>IMG</code> fires it's <code>load</code> event, that's not when it's displayed to the visitor</li>
+                            <li>When you put HTML into the DOM, it's not <i>immediately</i> on the screen</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2>Monitoring Page Components</h2>
+                        
+                        <p>Use <code>setTimeout(..., 0)</code> or <code>setImmediate</code> to get a callback after the browser has finished
+                            parsing <i>some</i> DOM updates</p>
+                        
+<pre><code>
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "/fetchstuff");
+xhr.addEventListener("load", function() {
+    $(document.body).html(xhr.responseText);
+    setTimeout(function() {
+        var endTime = Date.now();
+        var duration = endTime - startTime;
+    }, 0);
+});
+var startTime = Date.now();
+xhr.send();
+</code></pre>
+                    </section>
+                    
+                    <section>
+                        <h2>Monitoring Page Components</h2>
+                        
+                        <p style="float: left; text-align: left">This isn't perfect:</p>
+                        
+                        <ul>
+                            <li>The browser <i>may</i> be doing layout, rendering or drawing async or on another thread</li>
+                            <li>But it's better than ignoring all the work the browser has to do to render DOM changes</li>
+                        </ul>
+                    </section>
+                    
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>The future!</h2>
+                        
+                        <p>OK, that sounded like a lot of work-arounds to measure Single Page Apps.</p>
+                        
+                        <p>Yep.</p>
+
+                        <p>Why can't the browser just tell give us performance data for SPAs in a better, more performant way?</p>
+                    </section>
+                    
+                    <section>
+                        <h2>Listening for Resource Fetches</h2>
+                        
+                        <p>Instead of instrumenting <code>XMLHttpRequest</code> and using <code>MutationObserver</code> to find new
+                            elements that will fetch:</p>
+                            
+                        <ul>
+                            <li>W3C <strong>Fetch</strong> standard</li>
+                            <li><a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a></li>
+                            <li>A Fetch Observer (<a href="https://github.com/whatwg/fetch/issues/65">https://github.com/whatwg/fetch/issues/65</a>)
+                                that notifies us when a resource fetch starts/stops</li>
+                            <li>Less overhead than MutationObserver</li>
+                            <li>Tracks all resources rather than just DOM elements from MutationObserver</li>
+                        </ul>
+                    </section>
+                    
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Thanks!</h2>
+                    </section>
+                    
+                </section>
+
+                <!--
+                Performance overhead of MO
+                SCRIPT tags
                 -->
             </div>
         </div>
