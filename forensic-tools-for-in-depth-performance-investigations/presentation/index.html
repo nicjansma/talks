@@ -1,0 +1,1452 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Forensic Tools for in-depth Performance Investigations</title>
+
+        <meta name="description" content="Forensic Tools for in-depth Performance Investigations">
+        <meta name="author" content="Nic Jansma and Philip Tellis">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/nicj.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
+
+        <style>
+            .reveal h1 {
+                font-size: 3em;
+            }
+        </style>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>Forensic Tools for in-depth Performance Investigations</h1>
+
+                    <p style="margin-top: 40px">
+                        <small><a href="http://nicj.net">nic jansma</a> |</small>
+                        <small><a href="http://soasta.com">SOASTA</a> |</small>
+                        <small><a href="http://nicj.net">nicj.net</a> |</small>
+                        <small><a href="http://twitter.com/nicj">@nicj</a></small>
+                    </p>
+
+                    <p style="margin-top: 10px">
+                        <small><a href="http://bluesmoon.info">philip tellis</a> |</small>
+                        <small><a href="http://soasta.com">SOASTA</a> |</small>
+                        <small><a href="http://bluesmoon.info">bluesmoon.info</a> |</small>
+                        <small><a href="http://twitter.com/bluesmoon">@bluesmoon</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Who Are We?</h2>
+                    <div style="float: left; text-align: center; width: 450px">
+
+                        <img src="images/nic.jpg" height="300" width="300" />
+
+                        <p>Nic Jansma</p>
+                        <p>SOASTA</p>
+                    </div>
+
+                    <div style="float: left; text-align: center; width: 450px">
+                        <img src="images/philip.jpg" height="300" width="300" />
+
+                        <p>Philip Tellis</p>
+                        <p>SOASTA</p>
+                    <ul>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>What We Do</h2>
+
+                        <p><a href="http://www.soasta.com/mpulse/">SOASTA mPulse</a> is a Real User Monitoring (RUM)
+                            tool for measuring page load performance</p>
+
+                        <img src="images/mpulse.jpg" width="80%" height="80%" />
+                    </section>
+
+                    <section>
+                        <h2>What We Do</h2>
+
+                        <ul>
+                            <li>We have a JavaScript library (Boomerang) that captures performance metrics,
+                                page load characteristics, XHRs, SPA navigations, and more</li>
+                            <li>We are a <strong>third-party</strong> script provider</li>
+                            <li>We serve <code>boomerang.js</code> from a CDN to our customers using
+                                a script loader snippet they include in their HTML</li>
+                            <li>We can update our customer's <code>boomerang.js</code> version (if they ask)</li>
+                            <li>Our script <strong>runs in their page</strong> so we have to be super-duper careful</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Boomerang</h2>
+
+                        <ul>
+                            <li>Created by Philip Tellis @ Yahoo</li>
+                            <li>Gathers performance metrics and characteristics of the page load and beacons that data to your server (aka RUM)</li>
+                            <li>Open-source project (with contributions from SOASTA)</li>
+                            <li><a href="https://github.com/lognormal/boomerang/">https://github.com/lognormal/boomerang/</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Non-Blocking Script Loader Pattern</h2>
+
+                        <ul>
+                            <li><a href="http://www.lognormal.com/blog/2012/12/12/the-script-loader-pattern/">lognormal.com/blog/2012/12/12/the-script-loader-pattern</a></li>
+                            <li>Better than <code>&lt;script&gt;</code> nodes or <code>async</code></li>
+                            <li>Uses an anonymous <code>IFRAME</code></li>
+                        </ul>
+                    </section>
+
+                    <section>
+<pre><code>
+(function(url){
+  // Section 1
+  var dom,doc,where,iframe = document.createElement('iframe');
+  iframe.src = "javascript:void(0)";
+  iframe.title = ""; iframe.role="presentation";  // a11y
+  (iframe.frameElement || iframe).style.cssText = "width: 0; height: 0; border: 0";
+  where = document.getElementsByTagName('script');
+  where = where[where.length - 1];
+  where.parentNode.insertBefore(iframe, where);
+
+  // Section 2
+  try {
+    doc = iframe.contentWindow.document;
+  } catch(e) {
+    dom = document.domain;
+    iframe.src="javascript:var d=document.open();d.domain='"+dom+"';void(0);";
+    doc = iframe.contentWindow.document;
+  }
+  doc.open()._l = function() {
+    var js = this.createElement("script");
+    if(dom) this.domain = dom;
+    js.id = "js-iframe-async";
+    js.src = url;
+    this.body.appendChild(js);
+  };
+  doc.write('&lt;body onload="document._l();"&gt;');
+  doc.close();
+})('http://some.site.com/script.js');
+</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Customer Concerns</h2>
+
+                        <p>What happens when our customers think our third-party script is causing an issue on their site?</p>
+                    </section>
+
+                    <section>
+                        <strong>We bust out our favorite tools!</strong>
+
+                        <img src="images/logos.png" width="70%" height="70%" />
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Scenario #1</h2>
+
+                        <p>Aren't you supposed to be non-blocking?</p>
+                    </section>
+
+                    <section>
+                        <p>Customer:</p>
+
+                        <blockquote>
+                            "Hi guys,
+
+                            So, I was running some WPT tests today and saw this…
+
+                            I thought that this was supposed to be non-blocking.  If anyone sees this, they'll hang me up by my heels."
+                        </blockquote>
+
+                        <img src="images/non-blocking-1.png">
+                    </section>
+
+                    <section>
+                        <p>Screenshot #2 from our customer:</p>
+
+                        <img src="images/non-blocking-2.png">
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+                        <h3>Reproduce the Issue</h3>
+                    </section>
+
+                    <section>
+                        <h2>Tool #1</h2>
+                        <h3>WebPageTest</h3>
+
+                        <img style="float: center" src="images/logo-wpt.png" />
+
+                        <ul>
+                            <li>For reproducing real-world page load scenarios</li>
+                            <li>For testing Single Points of Failure (SPOF)</li>
+                            <li>Can give you: waterfalls, TCP dumps, network and processing breakdowns, traces,
+                                net logs, screenshots, videos, Page Speed score, comparisons and more</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+                        <h3>Reproduce the Issue</h3>
+
+                        <p>The customer shared their WebPageTest results URL, and we looked closer at the test pass<p>
+
+                        <p>Out of the 9 runs, 2 showed what appeared to be boomerang.js blocking other downloads<p>
+
+                        <p>Repro #1:</p>
+
+                        <img src="images/non-blocking-3.png">
+                    </section>
+
+                    <section>
+                        <p>Repro #1 Larger view</p>
+
+                        <img src="images/non-blocking-3-large.png" height="600px">
+                    </section>
+
+                    <section>
+                        <p>Repro #2:</p>
+
+                        <img src="images/non-blocking-4.png">
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>We looked at the 9 test runs, and found 3 more that had some sort of period where nothing happens</p>
+
+                        <p style="margin-top: 40px;">The tests show periods of time where the CPU is 100%, and bandwidth (bytes transferred) drops to 0 for 1-4 seconds.</p>
+                    </section>
+
+                    <section>
+                        <p>Repro #1 and #2 show 100% CPU and no bandwidth for over a second:</p>
+
+                        <img src="images/non-blocking-3-zoom.png">
+                        <img src="images/non-blocking-4-zoom.png">
+                    </section>
+
+                    <section>
+                        <p>Non-repros: boomerang.js loaded quickly, but two images appeared to "hang"</p>
+
+                        <img src="images/non-blocking-5.png">
+                    </section>
+
+                    <section>
+                        <p>Non-repros: boomerang.js loaded much earlier, but other content appears to "hang"</p>
+                        <img src="images/non-blocking-6.png">
+                    </section>
+
+                    <section>
+                        <p>Non-repros: Other content "hanging"</p>
+
+                        <img src="images/non-blocking-7.png">
+                    </section>
+
+                    <section>
+                        <p>WebPageTest has many options for diving deeper</p>
+
+                        <img src="images/webpagetest-options.png">
+                    </section>
+
+
+                    <section>
+                        <h2>WebPageTest</h2>
+                        <h3>Processing Breakdown</h3>
+
+                        <p>Gives a breakdown of main thread processing and timeline</p>
+                    </section>
+
+                    <section>
+                        <h2>Processing Breakdown</h2>
+
+                        <img src="images/webpagetest-processing-breakdown-1.png" style="height: 500px">
+                    </section>
+
+                    <section>
+                        <h2>Processing Breakdown</h2>
+
+                        <img src="images/webpagetest-processing-breakdown-2.png" style="height: 500px">
+                    </section>
+
+                    <section>
+                        <h2>Tool #2</h2>
+                        <h3>tcpdump</h3>
+
+                        <img style="float: center" src="images/logo-tcpdump.png" />
+
+                        <ul>
+                            <li>Packet capturing, viewing and analysis</li>
+                            <li><code>libpcap</code> is a portable library for capturing</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>tcpdump</h2>
+
+                        <p><a href="http://www.tcpdump.org/manpages/tcpdump.1.html">tcpdump.org/manpages/tcpdump.1.html</a></p>
+
+                        <code>tcpdump -nS</code>
+
+                        <img style="float: center; height: 400px" src="images/tcpdump.png" />
+                    </section>
+
+                    <section>
+                        <h2>Tool #3</h2>
+                        <h3>Wireshark</h3>
+
+                        <img src="images/logo-wireshark.png" />
+
+                        <p>Higher-level analysis of tcpdump</p>
+                    </section>
+
+                    <section>
+                        <h2>Wireshark</h2>
+
+                        <img src="images/wireshark.png" style="height: 600px" />
+                    </section>
+
+                    <section>
+                        <h2>Tool #4</h2>
+                        <h3>CloudShark</h3>
+
+                        <img src="images/logo-cloudshark.png" width="30%" height="30%" />
+
+                        <p>Analyze PCAP (tcpdump) files in your browser</p>
+                    </section>
+
+                    <section>
+                        <h2>CloudShark</h2>
+
+                        <img src="images/cloudshark.png" />
+                    </section>
+
+                    <section>
+                        <p>At this point, we downloaded the WebPageTest tcpdump files to dive deeper into the data</p>
+
+                        <img src="images/webpagetest-options-tcpdump.png">
+                    </section>
+
+                    <section>
+                        <p>In all of the runs that showed a period of "no progress", we found <i>zero</i> network activity</p>
+
+                        <img src="images/non-blocking-3-tcpdump.png" />
+                        <p><i>(Repro #1)</i></p>
+
+                        <p>We expect the OS network stack to continue TCP communications even if the
+                            browser was "blocked" on a script</p>
+                    </section>
+
+                    <section>
+                        <h2>CloudShark</h2>
+
+                        <img src="images/cloudshark-zoom.png" />
+
+                        <p><i>(Repro #2)</i></p>
+                    </section>
+
+                    <section>
+                        <h2>Tool #5</h2>
+                        <h3>Browser Dev Tools</h2>
+
+                        <div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/chrome-tracing.png" />
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/ie-f12.png" />
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h2>Tool #5</h2>
+                        <h3>Browser Dev Tools</h2>
+
+                        <div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/firefox-f12.png" />
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/safari-f12.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p>The usefulness of Browser Dev Tools could be a talk on its own, but we'll give
+                            some highlights during our investigations</p>
+                    </section>
+
+                    <section>
+                        <h2>Tool #6</h2>
+                        <h3>Chrome Tracing</h2>
+
+                        <p><code>chrome://tracing</code></p>
+
+                        <img src="images/chrome-tracing.png" style="height: 500px" />
+                    </section>
+
+                    <section>
+                        <p>WebPageTest provides Chrome Traces</p>
+
+                        <img src="images/webpagetest-options-chrome-trace.png">
+                    </section>
+
+                    <section>
+                        <h2>Chrome Trace</h2>
+
+                        <p>Repro #2: </p>
+                        <img src="images/non-blocking-3-chrometrace.png" />
+                    </section>
+
+                    <section>
+                        <h2>Chrome Trace</h2>
+
+                        <p>Repro #2: </p>
+                        <img src="images/non-blocking-3-chrometrace-2.png" />
+                    </section>
+
+                    <section>
+                        <h2>Netlog</h2>
+
+                        <p>NetLog: Chrome’s network logging system</p>
+
+                        <a href="https://www.chromium.org/developers/design-documents/network-stack/netlog">
+                            https://www.chromium.org/developers/design-documents/network-stack/netlog</a>
+                    </section>
+
+                    <section>
+                        <h2>Repro #2: Netlog</h2>
+<pre><code>
+{"params":{"load_flags":2163712,"method":"GET","priority":"LOWEST",
+    "url":"http://c.go-mpulse.net/boomerang/KQTS5-4NBTD-EYGLE-64UYR-S5892"},
+    "phase":1,"source":{"id":588,"type":1},"time":"5454412310","type":91},
+{"phase":1,"source":{"id":588,"type":1},"time":"5454412310","type":93},
+{"phase":2,"source":{"id":588,"type":1},"time":"5454412310","type":93},
+{"phase":1,"source":{"id":588,"type":1},"time":"5454412310","type":101},
+{"phase":2,"source":{"id":588,"type":1},"time":"5454412310","type":101},
+{"phase":1,"source":{"id":588,"type":1},"time":"5454412310","type":102},
+{"params":{"byte_count":1460},"phase":0,"source":{"id":275,"type":4},
+    "time":"5454412311","type":62},
+{"phase":2,"source":{"id":529,"type":1},"time":"5454412311","type":143},
+{"phase":1,"source":{"id":529,"type":1},"time":"5454412311","type":143},
+{"params":{"byte_count":443},"phase":0,"source":{"id":275,"type":4},
+    "time":"5454412313","type":62},
+{"phase":2,"source":{"id":529,"type":1},"time":"5454412313","type":143},
+{"phase":1,"source":{"id":529,"type":1},"time":"5454412313","type":143},
+{"phase":2,"source":{"id":275,"type":4},"time":"5454412313","type":37},
+{"phase":2,"source":{"id":529,"type":1},"time":"5454412313","type":143},
+    </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>It will be great to (re)prove that our script loader works even if our CDN is down, or
+                            if there are delays in the network</p>
+
+                        <p style="margin-top: 40px">How can we do this?  There are a couple tools that can help with
+                            <strong>Single Point of Failure</strong> (SPOF) testing</p>
+                    </section>
+
+                    <section>
+                        <h2>WebPageTest SPOF</h2>
+
+                        <p><code>blackhole.webpagetest.org</code> drops all traffic</p>
+
+<pre><code>
+setDnsName c.go-mpulse.net blackhole.webpagetest.org
+navigate our-customer.com
+
+</code></pre>
+                        <img src="images/webpagetest-spof.png" style="height: 400px" />
+                    </section>
+
+                    <section>
+                        <h2>WebPageTest SPOF</h2>
+
+                        <p>No issues with blocking our CDN <code>c.go-mpulse.net</code></p>
+
+                        <img src="images/webpagetest-spof-results.png" style="height: 500px" />
+                    </section>
+
+                    <section>
+                        <p>Let's try to do SPOF on our local machine as well</p>
+                    </section>
+
+                    <section>
+                        <h2>Browser Dev Tools</h2>
+                        <h3>Waterfall</h3>
+
+                        <img src="images/devtools-waterfall.png" />
+                    </section>
+
+                    <section>
+                        <h2>Tool #7</h2>
+                        <p><strong><code>/etc/hosts</code></strong></p>
+
+                        <ul>
+                            <li>Great for quickly redirecting traffic to your local machine</li>
+                            <li>Or for sending traffic to a blackhole</li>
+                        </ul>
+
+                        <p style="margin-top: 40px">On Windows: <code>C:\windows\system32\drivers\etc\hosts</code></p>
+                    </section>
+
+                    <section>
+                        <h2>/etc/hosts</h2>
+
+                        <p><code>blackhole.webpagetest.org == 72.66.115.13</code></p>
+
+<pre><code>
+72.66.115.13 apis.google.com
+72.66.115.13 www.google-analytics.com
+72.66.115.13 c.go-mpulse.net
+
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Tool #8</h2>
+                        <h2>Fiddler</h2>
+
+                        <img style="float: center; height: 150px" src="images/logo-fiddler.png" />
+
+                        <ul style="clear: both; float: left">
+                            <li>For monitoring all traffic from desktop or mobile devices</li>
+                            <li>For injecting different content into live sites</li>
+                            <li>For artifically delaying traffic</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Fiddler</h2>
+
+                        <img src="images/fiddler.png" />
+                    </section>
+
+                    <section>
+                        <h2>Fiddler SPOF</h2>
+
+                        <img src="images/fiddler-autoresponder.png" />
+                    </section>
+
+                    <section>
+                        <h2>Fiddler SPOF</h2>
+
+                        <img src="images/non-blocking-8.png">
+                    </section>
+
+                    <section>
+                        <h2>Scenario #1</h2>
+
+                        <p style="float: left;"><strong>Conclusion:</strong></p>
+
+                        <ul>
+                            <li>Able to reproduce the issue on WebPageTest that day, but <strong>not later</strong></li>
+                            <li>Saw periods of <strong>no CPU activity</strong></li>
+                            <li>Saw periods of <strong>no TCP activity</strong></li>
+                            <li>Boomerang had already reached the network interface, so something else was blocking it on the box</li>
+                            <li>Customer had multiple tag managers</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #1</h2>
+
+                        <p style="float: left;"><strong>Conclusion:</strong></p>
+
+                        <ul>
+                            <li>We ran SPOF checks with WebPageTest, <code>/etc/hosts</code>, and Fiddler</li>
+                            <li>Via WPT and Fiddler SPOF, we show our script is non-blocking</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Scenario #2</h2>
+
+                        <h3>Pre-render shenanigans</h3>
+                    </section>
+
+                    <section>
+                        <p>Customer:</p>
+                        <blockquote>"I'm seeing pages that should match showing up in No Page Group again"</blockquote>
+
+                        <ul>
+                            <li>You can define <strong>rules</strong> in mPulse for <strong>URLs</strong> to be matched to a <strong>Page Group</strong> dimension</li>
+                            <li>Customer was seeing a high number of hits to a <code>(No Page Group)</code> category that should have
+                                matched a URL</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Page Groups</h2>
+
+                        <img src="images/mpulse-pagegroups.png" />
+                    </section>
+
+                    <section>
+                        <h2>Tool #9</h2>
+
+                        <h3>RUM</h3>
+
+                        <ul>
+                            <li>Real User Monitoring (RUM) tools</li>
+                            <li><strong>Real world</strong> data</li>
+                            <li>Look at data in aggregate</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Disclaimer</h2>
+
+                        <p><i>We obviously work for SOASTA, and mPulse is our RUM product</i></p>
+                    </section>
+
+                    <section>
+                        <h2>RUM</h2>
+
+                        <h3>Aggregate Data</h3>
+
+                        <p>RUM lets you view your real-world customer data from an aggregate level</p>
+
+                        <img src="images/mpulse-pagegroup-report.png" style="height: 400px" />
+                    </section>
+
+                    <section>
+                        <h2>RUM</h2>
+
+                        <p>What are the most common causes of <code>(No Page Group)</code>?</p>
+
+                        <p>iOS Mobile Safari sticks out:</p>
+
+                        <img src="images/mpulse-pagegroup-causes.png" />
+                    </section>
+
+                    <section>
+                        <h2>RUM Waterfalls</h2>
+
+                        <p>RUM Waterfalls let you look at real-world <strong>individual page loads</strong></p>
+
+                        <img src="images/mpulse-waterfall.png" style="height: 500px" />
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+                        <h3>Reproduce the Issue</h3>
+
+                        <ul>
+                            <li>From RUM data, the issue was most common on the <strong>home page</strong> from <strong>iOS</strong>
+                                devices.</li>
+                            <li>Time to reproduce the issue on an iPad!</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Fiddler</h2>
+
+                        <p>One great use of Fiddler is to monitor external browser traffic without having Browser Dev Tools open
+                            (including mobile traffic!)</p>
+
+                        <img src="images/fiddler-filters.png" />
+                    </section>
+
+                    <section>
+                        <p>At this point, we sat with an iPad, reloading the home page hundreds of times to try to get a repro...</p>
+                    </section>
+
+                    <section>
+                        <p>And tried...</p>
+                    </section>
+
+                    <section>
+                        <p>And tried...</p>
+                    </section>
+
+                    <section>
+                        <p>... an hour later, after trying many ways of loading the home page, we finally got a hit!</p>
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <ul>
+                            <li>It just so happens I was typing <code>www.customer.com</code> in the address bar, but got a phone
+                            call, so didn't hit <code>Go</code> yet</li>
+
+                            <li>Saw a beacon go through <i>without</i> a Page Group attached, but clearly for the customer's home page</li>
+
+                            <li>Ran the same scenario again, same result.  Repro!</li>
+
+                            <li>Mobile Safari was <strong>pre-rendering</strong> the page I was typing into the address bar</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>Now that we had a repro, we were able to narrow down the issue to a bug in Boomerang that didn't
+                            deal with <strong>pre-render</strong> state transitions properly.</p>
+
+                        <p style="margin-top: 40px">The fix was pretty straightforward, but we needed to test it.</p>
+                    </section>
+
+                    <section>
+                        <h2>Fix Validation</h2>
+
+                        <p>Fiddler allows you to inject your own content in place other <strong>live</strong> content
+                            on any host</p>
+
+                        <p>We injected our fixed version into the customer' site, and validated that it worked</p>
+
+                        <img src="images/fiddler-autoresponder-2.png" />
+                    </section>
+
+                    <section>
+                        <h2>Scenario #2</h2>
+
+                        <p style="float: left;"><strong>Conclusion:</strong></p>
+
+                        <ul>
+                            <li>We used RUM to narrow down the problem</li>
+                            <li>We used RUM waterfalls to validate the problem happens in real-world data</li>
+                            <li>We used tools like Fiddler help reproduce the issue</li>
+                            <li>We used tools like Fiddler to help validate the fix</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Scenario #3</h2>
+
+                        <p>Stop messing with my <code>readyState</code></p>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #3</h2>
+
+                        <ul>
+                            <li>We were loading <code>www.customer.com</code> and found that Boomerang wasn't reliably sending a Page Load beacon</li>
+                            <li>Boomerang should run on <code>window.onload</code> and fire a beacon, but this wasn't happening</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+
+                        <h3>Reproduce the Issue</h3>
+
+                        <ul>
+                            <li>After injecting a debug version of Boomerang (via Fiddler) onto the customer's site, we found some interesting logging
+                                statements</li>
+                            <li>For example, <code>document.readyState == "loading"</code> even though <code>window.onload</code> had fired</li>
+                            <li><code>window.pageshow</code> was firing before <code>window.onload</code> -- <code>window.onload</code> should be first</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>Our guess was that there was a script running on our customer's site that was messing with some
+                            of the document loading states, but had to prove it</p>
+
+                        <p style="margin-top: 40px">One way is to fetch, unminify and analyze all of the site's JavaScript, but there are a couple easier
+                            ways if you want to use the Browser Dev Tools to work for you</p>
+                    </section>
+
+                    <section>
+                        <h2>Tool #9</h2>
+
+                        <h3>TamperMonkey</h3>
+
+                        <img src="images/logo-tampermonkey.png" />
+
+                        <ul>
+                            <li>"Userscript" manager for Chrome, Opera and Android</li>
+                            <li>Allows you to inject your own code in other sites without a proxy</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p>We started out with a guess that something was changing <code>window.onload</code> or
+                            <code>document.readyState</code></p>
+                    </section>
+
+                    <section>
+                        <h2>Easy way to see</h2>
+
+                        <p>One way of modifying pre-existing DOM properties is via <code>Object.defineProperty</code></o>
+
+                        <p style="margin-top: 40px">Inject this in the page to find anyone using it:</p>
+<pre><code>
+Object.defineProperty = function(obj, prop, descriptor) {
+  debugger;
+};
+
+</code></pre>
+                    </section>
+
+                    <section>
+                        <img src="images/tampermonkey-break-on-object-defineproperty.png" />
+                    </section>
+
+                    <section>
+                        <h2>Hit!</h2>
+
+                        <img src="images/scenario-3-breakpoint.png">
+                    </section>
+
+                    <section>
+                        <p>Chrome/IE/FF pretty-print (unminify) is <strong>the greatest thing</strong></p>
+
+                        <img src="images/chrome-dev-pretty-print.png">
+                    </section>
+
+                    <section>
+                        <p>Chrome/IE/FF pretty-print (unminify) is <strong>the greatest thing</strong></p>
+
+                        <img src="images/chrome-dev-pretty-print-2.png">
+                    </section>
+
+                    <section>
+                        <p>We also a similar change of <code>document.readyState</code></p>
+
+<pre><code>
+Object.defineProperty(
+  document,
+  "readyState",
+  {
+    get:
+      function()
+      {
+        return document.someOtherReadyState;
+      }
+  });
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #3</h2>
+
+                        <p style="float: left;"><strong>Conclusion:</strong></p>
+
+                        <ul>
+                            <li>Changes to <code>window.onload</code> and <code>document.readyState</code> were intentional
+                                by another third-party script for FEO optimization</li>
+                            <li>We worked with that third-party to ensure our performance instrumentation wouldn't be affected</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Scenario #4</h2>
+
+                        <p>Premature optimization is the root of all good intentions</p>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #4</h2>
+
+                        <ul>
+                            <li>Our mPulse beacons are protected against CSRF by a token and timestamp that
+                                gets sent with each beacon</li>
+                            <li>The CSRF token times out after 5 minutes</li>
+                            <li>A new token/timestamp is fetched from our servers every 5 minutes to ensure
+                                long-running apps can continue to send beacons</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #4</h2>
+
+                        <ul>
+                            <li>We were finding that there was an increasing occurence of the timestamp being
+                                "too old" -- that the CSRF timestamp on beacons were over 5 minutes old</li>
+                            <li>These beacons get <strong>dropped</strong>, but we needed to figure out <strong>why</strong></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+                        <h3>Reproduce the Issue</h3>
+
+                        <ul>
+                            <li>Every beacon that gets sent to mPulse is permanently persisted (stripped of PII),
+                                so we can easily go back and investigate the raw data</li>
+                            <li>Every <strong>dropped</strong> beacon is logged along with <i>why</i> it was dropped</li>
+                            <li>These dropped beacons don't hit our reporting infrastructure, but we still want to be able
+                                to look for trends among the dropped beacons</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Tool #10: NodeJS</h2>
+
+                        <img src="images/logo-nodejs.png" style="height: 200px" />
+
+                        <ul>
+                            <li>Great for writing throw-away analysis scripts</li>
+                            <li>JavaScript lets you quickly iterate</li>
+                            <li>Tons of NPM modules for command-line use</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NodeJS</h2>
+
+                        <p>We use NodeJS for many things at SOASTA:</p>
+
+                        <ul>
+                            <li>boomerang.js build, deployment and testing (Grunt/Jenkins)</li>
+                            <li>Infrastructure tools</li>
+                            <li>Raw data analysis</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>NodeJS</h2>
+
+                        <p>Useful NodeJS NPM modules for command-line scripts:</p>
+
+                        <ul>
+                            <li><code>jetty</code>: ANSI control sequences</li>
+                            <li><code>fast-stats</code>: Statistical analysis of numeric datasets</li>
+                            <li><code>cli-table</code>: Tables for the command-line</li>
+                            <li><code>commander</code>: Command-line argument parsing</li>
+                            <li><code>line-by-line</code>: Reads large files without buffering into memory</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>We fetched gigabytes of dropped-beacon log files, and started doing some statistical
+                            analysis on the causes</p>
+                    </section>
+
+                    <section>
+                        <h2>Dropped-beacon Breakdown</h2>
+
+                        <p>We can break down the dropped-beacons data by dimensions to help guide us towards
+                            finding a repro:</p>
+                        <ul>
+                            <li>By browser</li>
+                            <li>By OS</li>
+                            <li>By beacon type</li>
+                            <li>By URL</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Dropped-beacon Breakdown</h2>
+
+                        <p>NodeJS <code>cli-table</code> output.  By browser:</p>
+<pre>
+┌──────────────────────────────┬──────────┬──────────┐
+│ URL                          │ Count    │ %        │
+├──────────────────────────────┼──────────┼──────────┤
+│ IE/7.0                       │ 1559     │ 66.65    │
+├──────────────────────────────┼──────────┼──────────┤
+│ IE/9.0                       │ 293      │ 12.53    │
+├──────────────────────────────┼──────────┼──────────┤
+│ Safari/5.1.9                 │ 283      │ 12.10    │
+├──────────────────────────────┼──────────┼──────────┤
+</pre>
+                    </section>
+
+                    <section>
+                        <h2>Dropped-beacon Breakdown</h2>
+
+                        <p>NodeJS <code>cli-table</code> output. By beacon type:</p>
+<pre>
+┌──────────────────────────────┬──────────┬──────────┐
+│ URL                          │ Count    │ %        │
+├──────────────────────────────┼──────────┼──────────┤
+│ xhr                          │ 2222     │ 95.00    │
+├──────────────────────────────┼──────────┼──────────┤
+│ navigation                   │ 37       │ 1.58     │
+├──────────────────────────────┼──────────┼──────────┤
+│ ...                          │ 7        │ 0.30     │
+├──────────────────────────────┼──────────┼──────────┤
+│ Total                        │ 2339     │ 100      │
+└──────────────────────────────┴──────────┴──────────┘
+</pre>
+                    </section>
+
+                    <section>
+                        <h2>Dropped-beacon Breakdown</h2>
+
+                        <p>NodeJS <code>cli-table</code> output. By URL:</p>
+<pre>
+┌───────────────────────────────────────┬──────────┬──────────┐
+│ URL                                   │ Count    │ %        │
+├───────────────────────────────────────┼──────────┼──────────┤
+│ http://www.customer.com/api/foo       │ 2187     │ 93.50    │
+├───────────────────────────────────────┼──────────┼──────────┤
+│ http://www.customer.com/anotherurl    │ 9        │ 0.38     │
+├───────────────────────────────────────┼──────────┼──────────┤
+</pre>
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <ul>
+                            <li>From our raw data, the "too old" beacons were mostly caused by <strong>IE 7 and IE 9</strong>,
+                                from <strong>XHRs</strong> to the customer's <code>/api/foo</code> endpoint</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Tool #11</h2>
+
+                        <h3>Virtualization</h3>
+
+                        <ul>
+                            <li>VirtualBox, VMWare, Parallels, etc</li>
+                            <li>All great ways to test older browsers</li>
+                            <li><a href="http://modern.ie">modern.ie</a> has VMs for IE 6, 7, 8, 9, 10, 11 and Edge</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <p>We sat our VirtualBox IE 9 browser on <code>www.customer.com</code> for a while, watching XHRs
+                            and beacons flow past</p>
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <p>Both IE 9 Developer Tools and Fiddler showed something interesting:</p>
+
+                        <img src="images/scenario-4-fiddler.png" style="height: 500px" />
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <p>IE 9 Developer Tools showing aborted requests to our injected <code>&lt;javascript&gt;</code>
+                            that updates the token and timestamp:</p>
+
+                        <img src="images/scenario-4-ie.png" />
+                    </section>
+
+                    <section>
+                        <h2>Scenario #4</h2>
+
+                        <p style="float: left;"><strong>Conclusion:</strong></p>
+
+                        <ul>
+                            <li>We had recently made a change in boomerang.js to quickly remove the <code>&lt;javascript&gt;</code>
+                                node that was fetching the updated CSRF token and timestamp</li>
+                            <li>In some older browsers, this causes the network request to abort</li>
+                            <li>We were able to validate the fix (keeping the <code>&lt;javascript&gt;</code> node around
+                                for a bit) via the same tools</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Scenario #5</h2>
+
+                        <p>The many ways to send a beacon</p>
+
+                        <p>... and the many ways to <strong>not</strong> send a beacon</p>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #5</h2>
+
+                        <p>We send the boomerang.js beacon to mPulse via several methods:</p>
+                        <ul>
+                            <li>If the payload is small, we create a hidden <code>IMG</code> element with
+                                a <code>img.src</code> containing the payload in the query string</li>
+                            <li>If the payload is large (greater than 2083 bytes), we create a hidden <code>FORM</code>
+                                element and call <code>form.submit()</code> on it</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Scenario #5</h2>
+
+                        <p>Windows 10 and Edge had just been released, and a customer reported that their site was
+                            hanging in Edge on some pages, and that it no longer did when boomerang.js
+                            was removed from their site</p>
+
+                        <p style="margin-top: 40px">We had tested Windows 10 Techincal Preview (the previous Edge build)
+                            thoroughly, but something in the final release was causing problems</p>
+                    </section>
+
+                    <section>
+                        <h2>Step #1</h2>
+                        <h3>Reproduce the Issue</h3>
+
+                        <p>Sure enough, loading <code>customer.com</code> would hang Edge for up to
+                            30 seconds.</p>
+
+                        <p style="margin-top: 40px">Since the browser was hung, it was hard to use the Edge debugger</p>
+                    </section>
+
+                    <section>
+                        <h2>Step #2</h2>
+                        <h3>Dive Deeper</h3>
+
+                        <p>Time to dive into system-level tracing!</p>
+                    </section>
+
+                    <section>
+                        <h2>Tool #12</h2>
+                        <h3>Event Tracing for Windows</h3>
+
+                        <img src="images/logo-etw.png" />
+
+                        <ul>
+                            <li>Event Tracing for Windows (<strong>ETW</strong>) is built into all versions of Windows from XP onward</li>
+                            <li>Enables the OS and applications to efficiently generate runtime tracing events</li>
+                            <li><strong>xperf</strong> and the newer <strong>Windows Performance Analyzer (WPA)</strong> are tools used to
+                                generate ETW traces and then analyze them</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>ETW</h2>
+
+                        <p>Available tracing:</p>
+
+                        <div>
+                            <div style="width: 50%; float: left">
+                                <ul>
+                                    <li>CPU usage</li>
+                                    <li>Disk usage</li>
+                                    <li>Hard faults</li>
+                                    <li>DPCs/ISRs</li>
+                                    <li>TCP</li>
+                                    <li>Sampled Profiling</li>
+                                    <li>Custom app events (IE7+, Chrome)</li>
+                                    <li>With stacks!</li>
+                                </ul>
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img style="float: right" src="images/etw-1.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>ETW - Downloading</h2>
+
+                        <ul>
+                            <li>Part of the <strong>Windows Performance Toolkit</strong></li>
+                            <li>Included in the <a href="https://www.microsoft.com/en-US/download/details.aspx?id=39982">Windows
+                                Assessment and Deployment Kit</a></li>
+                            <li>Friendly interface via UIforETW: <a href="https://github.com/google/UIforETW">github.com/google/UIforETW</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>ETW - Usage</h2>
+
+                        <p>Simple trace of system evenst:</p>
+<pre><code>
+xperf.exe -on latency -stackwalk profile
+// [run scenario]
+xperf.exe -stop -d myscenario.etl
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h2>ETW - xperfview</h2>
+
+                        <div>
+                            <div style="width: 50%; float: left">
+                                <ol>
+                                    <li>Timeline of events</li>
+                                    <li>Filter processes</li>
+                                    <li>Graph selection</li>
+                                </ol>
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/etw-2.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>xperf - Summary Tables</h2>
+
+                        <div>
+                            <div style="width: 50%; float: left">
+                                <ul>
+                                    <li>All of the graphs can be interacted with - zoom, popups, right-clicks</li>
+                                    <li>Summary Tables show data in tabular form</li>
+                                </ul>
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/etw-3.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>ETW - Browser Events</h2>
+
+                        <p>Internet Explorer and Chrome both fire ETW events that you can overlay in the charts and
+                            see in the tables</p>
+
+                        <img src="images/etw-4.png" />
+                    </section>
+
+                    <section>
+                        <h2>ETW - IE Events</h2>
+
+                        <div>
+                            <div style="width: 45%; float: left">
+                                <p style="text-align: left">Microsoft-IE events:</p>
+                                <ul style="font-size: 80%">
+                                    <li>CMarkup_OnLoadStatusDone: Page load is complete</li>
+                                    <li>CDoc_OnPaint: Paints</li>
+                                    <li>CDwnBindData_Bind: Downloads</li>
+                                    <li>+ 100s more</li>
+                                </ul>
+
+                                <p style="text-align: left; margin-top: 20px">Microsoft-IEFRAME:</p>
+                                <ul style="font-size: 80%">
+                                    <li>Frame events for tabs, navigations, history, extensions</li>
+                                </ul>
+
+                            </div>
+                            <div style="width: 45%; float: left">
+                                <img src="images/etw-5.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                                        <section>
+                                            <h2>UserTiming in ETW</h2>
+
+<pre><code>
+performance.mark("startTime1");
+performance.mark("endTime1");
+performance.mark("startTime2");
+performance.mark("endTime2");
+performance.measure("durationTime1", "startTime1", "endTime1");
+performance.measure("durationTime2", "startTime2", "endTime2");
+
+</code></pre>
+
+                                            <img src="images/etw-9.png" />
+                                        </section>
+                    <section>
+                        <h2>ETW - Stacks</h2>
+
+                        <div>
+                            <div style="width: 50%; float: left; word-break: break-word; text-align: left">
+                                <p>By using <code>-stackwalk</code> on the command line, you can enable stacks on many events</p>
+
+                                <p style="margin-top: 20px">Public symbol servers:</p>
+                                <p><a href="https://msdl.microsoft.com/download/symbols">https://msdl.microsoft.com/download/symbols</a></p>
+                                <p><a href="http://symbols.mozilla.org/firefox">http://symbols.mozilla.org/firefox</a></p>
+                                <p><a href="https://chromium-browser-symsrv.commondatastorage.googleapis.com/">https://chromium-browser-symsrv.commondatastorage.googleapis.com/</a></p>
+                            </div>
+                            <div style="width: 50%; float: left">
+                                <img src="images/etw-6.png" />
+                                <img src="images/etw-8.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>ETW - More Help</h2>
+
+                        <p>More great tutorials on ETW, UIForETW, and xperf are available at:
+                            <a href="https://randomascii.wordpress.com">randomascii.wordpress.com</a></p>
+
+                        <p>via Bruce Dawson <a href="http://twitter.com/BruceDawson0xB">@BruceDawson0xB</a></p>
+                    </section>
+
+                    <section>
+                        <h2>ETW - Uses</h2>
+
+                        <ul>
+                            <li>Slow page load performance?  Take a trace!</li>
+                            <li>See page load from a system-wide perspective</li>
+                            <li>Isolate page load from interference due to other CPU/disk/network activity</li>
+                            <li>Compare browser page load times and resource usage</li>
+                            <li>Examine browser CPU usage hot-spots from sampled profile stacks</li>
+                            <li>Automated page load regression testing of browsers via command-line tools</li>
+                            <li>Integrate page load time / cpu usage metrics into your build system</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>The Repro</h2>
+
+                        <ol>
+                            <li>Using Windows 10 (in a VirtualBox VM?)</li>
+                            <li>Open Edge</li>
+                            <li><code>xperf -on latency -stackwalk profile</code></li>
+                            <li>Head to www.customer.com</li>
+                            <li>We immediately see the browser go to <i>(Not Responding)</i></li>
+                            <li><code>xperf -d repro.etl</code></li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2>WPA - CPU sampling</h2>
+
+                        <p>The trace shows Edge spending nearly 100% CPU for over 70 seconds:</p>
+
+                        <img src="images/scenario-5-graph.png" />
+                    </section>
+
+                    <section>
+                        <h2>CPU sampling stacks</h2>
+
+                        <img src="images/scenario-5-stacks.png" style="height: 600px" />
+                    </section>
+
+                    <section>
+                        <h2>Dive Depeer</h2>
+
+                        <ul>
+                            <li>With the repro, after a lot of digging around, we found that the way we were sending large beacons,
+                                via a hidden <code>FORM</code> submission, was triggering this Edge hang</li>
+                            <li>But <i>only</i> if our server was returning either a:
+                                <ul>
+                                    <li><code>200 OK</code> response, </i>or</i></li>
+                                    <li><code>204 No Content</code> response that was <i>missing</i> a <code>Content-Length: 0</code> header.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Validation</h2>
+
+                        <p>We were able to test different fixes across our test matrix (IE 6 - Edge, Chrome, Firefox,
+                            Safari, Mobile Safari, Android, Lynx, etc) using Fiddler</p>
+                    </section>
+
+                    <section>
+                        <h2>Conclusion</h2>
+
+                        <ul>
+                            <li>When you really need to look at a problem wholistically, system-level tracing is the only
+                                way to go</li>
+                            <li>ETW (or things like DTrace on Mac/Linux) can give you a different perspective, and show you
+                                CPU, disk, network, and other system activity occuring during your scenario</li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Links</h2>
+
+                        <ul>
+                            <li>mPulse: <a href="http://mpulse.soasta.com">mpulse.soasta.com</a></li>
+                            <li>WebPageTest: <a href="http://www.webpagetest.org/">webpagetest.org</a></li>
+                            <li>tcpdump: <a href="http://tcpdump.org">tcpdump.org</a></li>
+                            <li>Wireshark: <a href="https://www.wireshark.org/">wireshark.org</a></li>
+                            <li>CloudShark: <a href="http://cloudshark.org">cloudshark.org</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Links</h2>
+
+                        <ul>
+                            <li>Chrome Trace: <a href="https://www.chromium.org/developers/how-tos/trace-event-profiling-tool">chromium.org/developers/how-tos/trace-event-profiling-tool</a></li>
+                            <li>Fiddler: <a href="http://www.telerik.com/fiddler">telerik.com/fiddler</a></li>
+                            <li>Windows Performance Analyzer: <a href="https://msdn.microsoft.com/en-us/library/windows/hardware/hh448170.aspx">go.microsoft.com/fwlink/p/?LinkID=293840</a></li>
+                            <li>VirtualBox: <a href="https://www.virtualbox.org/wiki/Downloads">virtualbox.org</a></li>
+                            <li>TamperMonkey: <a href="http://tampermonkey.net">tampermonkey.net</a></li>
+                            <li>NodeJS: <a href="http://nodejs.org">nodejs.org</a></li>
+                            <li>UIForETW: <a href="https://github.com/google/UIforETW">github.com/google/UIforETW</a></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Thanks!</h2>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
