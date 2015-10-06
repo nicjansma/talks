@@ -117,7 +117,7 @@
 
                         <img src="images/navigation-timing.png" />
                     </section>
-                    
+
                     <section>
                         <h2>NavigationTiming</h2>
 
@@ -135,7 +135,7 @@
 
                         <img src="images/resource-timing-inspiration.png" />
                     </section>
-                    
+
                     <section>
                         <h2>ResourceTiming</h2>
 
@@ -400,7 +400,7 @@
                         <h2>The Start Event</h2>
 
                         <p style="float: left; text-align: left"><strong>Challenge #2</strong>: Soft navigations are not real navigations</strong></p>
-                        
+
                         <ul>
                             <li>We need to figure out when the user's view is going to significantly change</li>
                             <li>The browser <strong>history</strong> is changing</li>
@@ -410,11 +410,11 @@
                                 or an <strong>XHR</strong> that triggers DOM changes</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The Start Event: History State</h2>
 
-                        <p style="float: left; text-align: left">The <strong><code>window.history</code></strong> object can tell 
+                        <p style="float: left; text-align: left">The <strong><code>window.history</code></strong> object can tell
                             us when the URL is changing:</p>
 
                         <ul>
@@ -425,11 +425,11 @@
                             <li><i>(future events will give us more info)</i></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The Start Event: Routing</h2>
 
-                        <p style="float: left; text-align: left">SPA frameworks fire <strong>routing</strong> events when 
+                        <p style="float: left; text-align: left">SPA frameworks fire <strong>routing</strong> events when
                             the view is changing:</p>
 
                         <ul>
@@ -438,19 +438,19 @@
                             <li><strong>Backbone.js</strong>: <code>router.on("route")</code></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The Start Event: Clicks</h2>
 
                         <ul>
-                            <li>When the user has <strong>clicks</strong> something, they might be doing simple interactions 
+                            <li>When the user has <strong>clicks</strong> something, they might be doing simple interactions
                                 (e.g. a drop-down menu)
                             </li>
                             <li>Or, they might be triggering a UI update</li>
                             <li><i>(future events will give us more info)</i></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The Start Event: XHRs</h2>
 
@@ -462,12 +462,12 @@
                             <li><i>(future events will give us more info)</i></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The Start Event</h2>
 
                         <ul>
-                            <li>To determine if a <strong>History</strong> state change, user <strong>click</strong> or 
+                            <li>To determine if a <strong>History</strong> state change, user <strong>click</strong> or
                                 <strong>XHR</strong> is really triggering a navigation, we can listen to what happens next</li>
                             <li>If there was a lot of subsequent network activity, we can keep on listening for more events</li>
                             <li>If the DOM was updated significantly, we can consider the event the start of a navigation</li>
@@ -488,19 +488,19 @@
 
                         <p>When do we consider the SPA navigation complete?</p>
                         <p>There are many definitions of complete:</p>
-                        
+
                         <ul>
                             <li>When all networking activity has completed</li>
                             <li>When the UI is visually complete (above-the-fold)</li>
                             <li>When the user can interact with the page</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The End Event</h2>
 
                         <p>Traditional RUM measures up to the <code>onload</code> event:</p>
-                        
+
                         <ul>
                             <li>This is when all resources have been fetched</li>
                             <li>The page isn't fully loaded until <i>at least</i> then</li>
@@ -508,19 +508,19 @@
                             <li>It's traditionally when the user can fully interact with the page</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Single Points of Failure (SPOFs)</h2>
 
                         <p>Which resources could affect visual completion of the page?</p>
-                        
+
                         <ul>
                             <li>External JavaScript files</li>
                             <li>External CSS files</li>
                             <li>Media (images, video)</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The End Event</h2>
 
@@ -533,12 +533,12 @@
                                 and the UI is complete</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The End Event</h2>
 
                         <p>For <strong>soft navigations</strong>, the browser won’t tell you when all resources have been downloaded (Challenge #3)</p>
-                        
+
                         <ul>
                             <li>The <code>onload</code> only fires once on a page</li>
                             <li>APIs like ResourceTiming can give you details about network resources after they've been fetched
@@ -546,12 +546,12 @@
                             <li>So let's monitor all network activity!</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>The End Event</h2>
-                        
+
                         <p>Let's <strong>make our own</strong> SPA <code>onload</code> event:</p>
-                        
+
                         <ul>
                             <li>Similar to the body <code>onload</code> event, let's wait for all network activity to complete</li>
                             <li>This means we will have to <strong>intercept</strong> both implicit (e.g. from DOM changes)
@@ -563,9 +563,9 @@
                 <section>
                     <section>
                         <h2>Monitoring XHRs</h2>
-                        
+
                         <p><code>XMLHttpRequest</code>s play an important role in SPA frameworks</p>
-                        
+
                         <ul>
                             <li>XHRs are used to fetch HTML, templates, JSON, XML, data and other assets</li>
                             <li>We should monitor to see if any XHRs are occuring</li>
@@ -574,20 +574,20 @@
                                 an XHR is starting</li>
                         </ul>
                     </section>
-                                        
+
                     <section>
                         <h2>Monitoring XHRs</h2>
-                        
+
                         <p><i>Simplified code ahead!</i></p>
-                        
-                        <p>Full code at 
+
+                        <p>Full code at
                             <a href="https://github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js">github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js</a>
                         </p>
                     </section>
 
                     <section>
                         <h2>Monitoring XHRs</h2>
-                        
+
                         <pre><code>
 var orig_XHR = window.XMLHttpRequest;
 window.XMLHttpRequest = function() {
@@ -595,7 +595,7 @@ window.XMLHttpRequest = function() {
     orig_open = req.open;
     orig_send = req.send;
 
-    req.open = function(method, url, async) { 
+    req.open = function(method, url, async) {
         // save URL details, listen for state changes
         req.addEventListener("load", function() { ... });
         req.addEventListener("timeout", function() { ... });
@@ -611,12 +611,12 @@ window.XMLHttpRequest = function() {
 }
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Monitoring XHRs</h2>
-                        
+
                         <p>By proxying the XHR code, you can:</p>
-                        
+
                         <ul>
                             <li>Know which URLs are being fetched</li>
                             <li>Know when a XHR has started</li>
@@ -624,12 +624,12 @@ window.XMLHttpRequest = function() {
                             <li>Most importantly, know if there are any <strong>outstanding</strong> XHRs</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Monitoring XHRs</h2>
-                        
+
                         <p>Downsides:</p>
-                        
+
                         <ul>
                             <li>Need additional code to support XDomainRequest</li>
                             <li>Timing not as accurate when browser is busy (rendering, etc) as callbacks will be delayed</li>
@@ -637,42 +637,42 @@ window.XMLHttpRequest = function() {
                         </ul>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Other Resources</h2>
-                        
+
                         <p>XHR is the main way to fetch resources via JavaScript</p>
-                        
+
                         <ul>
                             <li>What about Images, JavaScript, CSS and other HTML elements that trigger resource fetches?</li>
                             <li>We can't proxy the <code>Image</code> object as that only works if you create a <code>new Image()</code>
-                                in JavaScript</li>                                
+                                in JavaScript</li>
                             <li>If only we could listen for DOM changes...</li>
                         </ul>
                     </section>
 
                     <section>
                         <h2>Mutation Observer</h2>
-                        
+
                         <p style="text-align: left"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver">http://developer.mozilla.org/en-US/docs/Web/API/MutationObserver</a>:</p>
-                        
+
                         <p style="text-align: left"><quote><i>MutationObserver provides developers a way to react to changes in a DOM</i></quote></p>
 
                         <p style="float: left; text-align: left">Usage:</p>
-                        
+
                         <ul>
                             <li><code>observe()</code> for specific events</li>
                             <li>Get a callback when mutations for those events occur</li>
                         </ul>
                     </section>
-                                        
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p><i>Simplified code ahead!</i></p>
-                        
-                        <p>Full code at 
+
+                        <p>Full code at
                             <a href="https://github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js">github.com/lognormal/boomerang/blob/master/plugins/auto_xhr.js</a>
                         </p>
                     </section>
@@ -709,12 +709,12 @@ function observeCallback(mutations) {
 });
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>Simplified workflow:</p>
-                        
+
                         <ul>
                             <li>Start listening when an XHR, click, route change or other interesting navigation-like event starts</li>
                             <li>Use <code>MutationObserver</code> to listen for DOM mutations</li>
@@ -725,12 +725,12 @@ function observeCallback(mutations) {
                             <li>If not, the navigation completed when the last element's resource was fetched</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>What's interesting to observe?</p>
-                        
+
                         <ul>
                             <li>Internal and cached resources may not fetch anything, so you have to inspect elements first</li>
                             <li><code>IMG</code> elements that haven't already been fetched (<code>naturalWidth==0</code>),
@@ -740,76 +740,76 @@ function observeCallback(mutations) {
                             <li><code>LINK</code> elements that have a <code>href</code> set</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>Downsides:</p>
-                        
+
                         <ul>
                             <li>Not 100% supported in today's market</li>
                             <li>Can't be used to monitor <i>all</i> resources (e.g. fonts from CSS)</li>
                         </ul>
-                        
+
                         <img src="images/mutationobserver-caniuse.png" />
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>Polyfills (with performance implications):</p>
-                        
+
                         <ul>
                             <li><a href="https://github.com/webcomponents/webcomponentsjs">github.com/webcomponents/webcomponentsjs</a></li>
                             <li><a href="https://github.com/megawac/MutationObserver.js/tree/master">github.com/megawac/MutationObserver.js</a></li>
                         </ul>
                     </section>
-                                        
+
                     <section>
                         <h2>Why not ResourceTiming?</h2>
-                        
+
                         <p>Doesn't <code>ResourceTiming</code> have all of the data we need?</p>
-                        
+
                         <ul>
                             <li>ResourceTiming events are only added to the buffer <i>strong</i> after they complete</li>
                             <li>In order to extend the SPA navigation end time, we have to know if any resource fetches
                                 are <i>outstanding</i></li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>Polyfill ResourceTiming via MutationObserver</p>
-                        
+
                         <p>For extra credit, you could use the data you gathered with Mutation Observer to create a Waterfall for browsers that
                             don't support ResourceTiming but do support MutationObserver (e.g. iOS).</p>
                     </section>
-                    
+
                     <section>
                         <h2>MutationObserver</h2>
-                        
+
                         <p>Polyfill ResourceTiming via MutationObserver</p>
-                        
+
                         <img width="50%" src="images/mutationobserver-caniuse-polyfill.png" />
                         <img width="50%" src="images/resource-timing-caniuse-polyfill.png" />
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Front-End vs. Back-End</h2>
-                        
+
                         <p>In a traditional page load:</p>
-                        
+
                         <img src="images/navigation-timing-fe-be.png" />
                     </section>
 
                     <section>
                         <h2>Front-End vs. Back-End</h2>
-                        
+
                         <p>What does <strong>Front-End</strong> or <strong>Back-End</strong> mean in a Single Page App?</p>
-                        
+
                         <ul>
                             <li>Depends on your application's patterns, but...</li>
                             <li><strong>Back-End</strong>: Any timeslice with an XHR outstanding</li>
@@ -817,15 +817,15 @@ function observeCallback(mutations) {
                         </ul>
                     </section>
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Monitoring Page Components</h2>
-                        
+
                         <p>It's not just about <strong>navigations</strong></p>
-                        
+
                         <p>What about components, widgets and ads?</p>
-                        
+
                         <ul>
                             <li>You can apply the previous techniques to page components</li>
                             <li>For measuring performance, you need a <strong>start time</strong> and an <strong>end time</strong></li>
@@ -833,26 +833,26 @@ function observeCallback(mutations) {
                             <li>The <strong>end time</strong> can be measured via XHR interception, MutationObservers, or callbacks from your resource fetches</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Monitoring Page Components</h2>
-                        
+
                         <p>How do you measure <strong>visual completion</strong>?</p>
-                        
+
                         <p style="float: left; text-align: left">Challenges:</p>
-                        
+
                         <ul>
                             <li>When an <code>IMG</code> fires it's <code>load</code> event, that's not when it's displayed to the visitor</li>
                             <li>When you put HTML into the DOM, it's not <i>immediately</i> on the screen</li>
                         </ul>
                     </section>
-                    
+
                     <section>
                         <h2>Monitoring Page Components</h2>
-                        
+
                         <p>Use <code>setTimeout(..., 0)</code> or <code>setImmediate</code> to get a callback after the browser has finished
                             parsing <i>some</i> DOM updates</p>
-                        
+
 <pre><code>
 var xhr = new XMLHttpRequest();
 xhr.open("GET", "/fetchstuff");
@@ -867,37 +867,71 @@ var startTime = Date.now();
 xhr.send();
 </code></pre>
                     </section>
-                    
+
                     <section>
                         <h2>Monitoring Page Components</h2>
-                        
+
                         <p style="float: left; text-align: left">This isn't perfect:</p>
-                        
+
                         <ul>
                             <li>The browser <i>may</i> be doing layout, rendering or drawing async or on another thread</li>
                             <li>But it's better than ignoring all the work the browser has to do to render DOM changes</li>
                         </ul>
                     </section>
-                    
+
                 </section>
-                
+
+                <section>
+                    <section>
+                        <h2>Lifecycle</h2>
+
+                        <p>What happens <strong>over time</strong>?</p>
+
+                        <p>How well does your app behave?</p>
+                    </section>
+
+                    <section>
+                        <h2>Lifecycle</h2>
+
+                        <p>It's not just about measuring interactions or how long components take to load</p>
+
+                        <p style="margin-top: 40px">Tracking metrics <strong>over time</strong> can highlight performance, reliability and
+                            resource issues</p>
+                    </section>
+
+                    <section>
+                        <h2>Lifecycle</h2>
+
+                        <p>You could measure:</p>
+
+                        <ul>
+                            <li>Memory usage: <code>window.performance.memory</code> (Chrome)</li>
+                            <li>DOM Size: <code>document.documentElement.innerHTML.length</code></li>
+                            <li>DOM Size: <code>document.getElementsByTagName("*").length</code></li>
+                            <li>JavaScript errors: <code>window.onerror</code></li>
+                            <li>Bytes fetched: <code>ResourceTiming2</code></li>
+                            <li>Frame rate: <code>requestAnimationFrame</code></li>
+                        </ul>
+                    </section>
+                </section>
+
                 <section>
                     <section>
                         <h2>The future!</h2>
-                        
+
                         <p>OK, that sounded like a lot of work-arounds to measure Single Page Apps.</p>
-                        
+
                         <p>Yep.</p>
 
                         <p>Why can't the browser just tell give us performance data for SPAs in a better, more performant way?</p>
                     </section>
-                    
+
                     <section>
                         <h2>Listening for Resource Fetches</h2>
-                        
+
                         <p>Instead of instrumenting <code>XMLHttpRequest</code> and using <code>MutationObserver</code> to find new
                             elements that will fetch:</p>
-                            
+
                         <ul>
                             <li>W3C <strong>Fetch</strong> standard</li>
                             <li><a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a></li>
@@ -907,14 +941,14 @@ xhr.send();
                             <li>Tracks all resources rather than just DOM elements from MutationObserver</li>
                         </ul>
                     </section>
-                    
+
                 </section>
-                
+
                 <section>
                     <section>
                         <h2>Thanks!</h2>
                     </section>
-                    
+
                 </section>
 
                 <!--
