@@ -2,7 +2,6 @@
 
 All content is licensed under the MIT license.
 
-
 * [Appcelerator Titanium Intro](appcelerator-titanium-intro/) (GrMobileDev - 2012-07-11) ([PDF](https://github.com/nicjansma/talks/blob/master/appcelerator-titanium-intro/appcelerator-titanium-intro.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/appcelerator-titanium-intro))
 
 * [Debugging IE performance issues with xperf ETW and NavigationTiming](debugging-ie-performance-issues-with-xperf-etw-and-navigationtiming/) (GrWebDev - 2012-10-24) ([PDF](https://github.com/nicjansma/talks/blob/master/debugging-ie-performance-issues-with-xperf-etw-and-navigationtiming/debugging-ie-performance-issues-with-xperf-etw-and-navigationtiming.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/debugging-ie-performance-issues-with-xperf-etw-and-navigationtiming))
@@ -20,3 +19,7 @@ All content is licensed under the MIT license.
 * [Make It Fast - CodeMash 2015](make-it-fast-codemash-2015/) ([CodeMash](http://codemash.org) - 2015-01-08) ([PDF](https://github.com/nicjansma/talks/blob/master/make-it-fast-codemash-2015/make-it-fast-codemash-2015.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/make-itfastcodemash2015))
 
 * [JavaScript Module Patterns](javascript-module-patterns/) ([Lansing Javascript Meetup](http://www.meetup.com/Lansing-Javascript-Meetup) - 2015-03-17) ([PDF](https://github.com/nicjansma/talks/blob/master/javascript-module-patterns/javascript-module-patterns.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/javascript-modulepatterns))
+
+* [Measuring the Performance of Single Page Applications](measuring-the-performance-of-single-page-applications/) ([Velocity 2015](http://velocityconf.com/devops-web-performance-ny-2015) - 2015-10-12) ([PDF](https://github.com/nicjansma/talks/blob/master/measuring-the-performance-of-single-page-applications/measuring-the-performance-of-single-page-applications.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/measuring-the-performance-of-single-page-applications))
+
+* [Forensic Tools for In-Depth Performance Investigations](forensic-tools-for-in-depth-performance-investigations/) ([Velocity 2015](http://velocityconf.com/devops-web-performance-ny-2015) - 2015-10-12) ([PDF](https://github.com/nicjansma/talks/blob/master/forensic-tools-for-in-depth-performance-investigations/forensic-tools-for-in-depth-performance-investigations.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/forensic-tools-for-indepth-performance-investigations))
