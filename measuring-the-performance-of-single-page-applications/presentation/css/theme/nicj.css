@@ -12,7 +12,9 @@ html * {
  * GLOBAL STYLES
  *********************************************/
 body {
-  background-color: #ffead3; }
+  background-color: #ffead3;
+}
+
 html.dark body {
   background-color: #030813;
 }

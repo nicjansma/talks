@@ -173,7 +173,7 @@
 
                         <ul>
                             <li>Run on a single page, dynamically bringing in content as necessary</li>
-                            <li>Built with frameworks like AngularJS, Ember.js, Backbone.js, React, MassageEnvy, etc.</li>
+                            <li>Built with frameworks like AngularJS, Ember.js, Backbone.js, React, etc.</li>
                         </ul>
                     </section>
 
@@ -363,7 +363,7 @@
                     <section>
                         <h3>Angular Timeline</h3>
 
-			<img src="images/Angular-route-change-flow-gray.svg" style="margin-top: -2%;"> 
+			<img src="images/angular-route-change-flow-gray.svg" style="margin-top: -2%;">
                         <ol style="font-size: 80%;display:none;">
                             <li>User clicks on something</li>
                             <li>Angular figures out what the new page will be</li>
@@ -447,7 +447,6 @@
                             <li><strong>AngularJS</strong>: <code>$rootScope.$on("$routeChangeStart")</code></li>
                             <li><strong>Ember.js</strong>: <code>beforeModel</code> or <code>willTransition</code></li>
                             <li><strong>Backbone.js</strong>: <code>router.on("route")</code></li>
-                            <li><strong>Massage Envy.js</strong>: <code>spine.on("deep tissue")</code></li>
                         </ul>
                     </section>
 
@@ -479,9 +478,10 @@
                         <h2>The Start Event</h2>
 
                         <ul>
-                            <li>To determine if a <strong>History</strong> state change, user <strong>click</strong> or
+                            <li>To determine if a user <strong>click</strong> or
                                 <strong>XHR</strong> is really triggering a navigation, we can listen to what happens next</li>
                             <li>If there was a lot of subsequent network activity, we can keep on listening for more events</li>
+                            <li>If history (address bar) changed, we can consider the event the start of a navigation</li>
                             <li>If the DOM was updated significantly, we can consider the event the start of a navigation</li>
                             <li>If nothing else happened, it was probably just an insignificant interaction</li>
                         </ul>
@@ -566,7 +566,7 @@
 
                         <ul>
                             <li>Similar to the body <code>onload</code> event, let's wait for all network activity to complete</li>
-                            <li>This means we will have to <strong>intercept</strong> both implicit (e.g. from DOM changes)
+                            <li>This means we will have to <strong>intercept</strong> both implicit resource fetches (e.g. from new DOM elements)
                                 as well as programmatic (e.g. XHR) resource fetches</li>
                         </ul>
                     </section>
@@ -821,7 +821,18 @@ function observeCallback(mutations) {
                     <section>
                         <h2>Front-End vs. Back-End</h2>
 
-                        <p>What does <strong>Front-End</strong> or <strong>Back-End</strong> mean in a Single Page App?</p>
+                        <p>Traditional websites:</p>
+
+                        <ul>
+                            <li><strong>Back-End</strong>: HTML fetch start to HTML response start</li>
+                            <li><strong>Front-End</strong>: <code>Total Time - Back-End</code></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Front-End vs. Back-End</h2>
+
+                        <p>Single Page Apps:</p>
 
                         <ul>
                             <li>Depends on your application's patterns, but...</li>
@@ -855,7 +866,7 @@ function observeCallback(mutations) {
                         <p style="float: left; text-align: left">Challenges:</p>
 
                         <ul>
-                            <li>When an <code>IMG</code> fires it's <code>load</code> event, that's not when it's displayed to the visitor</li>
+                            <li>When an <code>IMG</code> has been fetched, that's not when it's displayed to the visitor (it has to decode, etc.)</li>
                             <li>When you put HTML into the DOM, it's not <i>immediately</i> on the screen</li>
                         </ul>
                     </section>
@@ -920,10 +931,10 @@ xhr.send();
 
                         <ul>
                             <li>Memory usage: <code>window.performance.memory</code> (Chrome)</li>
-                            <li>DOM Size: <code>document.documentElement.innerHTML.length</code></li>
-                            <li>DOM Size: <code>document.getElementsByTagName("*").length</code></li>
+                            <li>DOM Length: <code>document.documentElement.innerHTML.length</code></li>
+                            <li>DOM Nodes: <code>document.getElementsByTagName("*").length</code></li>
                             <li>JavaScript errors: <code>window.onerror</code></li>
-                            <li>Bytes fetched: <code>ResourceTiming2</code></li>
+                            <li>Bytes fetched: <code>ResourceTiming2</code> or <code>XHRs</code></li>
                             <li>Frame rate: <code>requestAnimationFrame</code></li>
                         </ul>
                     </section>
