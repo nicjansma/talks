@@ -27,6 +27,10 @@
                 link.href = 'css/print/pdf.css';
                 document.getElementsByTagName( 'head' )[0].appendChild( link );
             }
+
+            if( window.location.search.match(/[?&;]dark\b/) ) {
+                document.getElementsByTagName("html")[0].className = "dark";
+            }
         </script>
 
         <style>
@@ -169,7 +173,7 @@
 
                         <ul>
                             <li>Run on a single page, dynamically bringing in content as necessary</li>
-                            <li>Built with frameworks like AngularJS, Ember.js, Backbone.js and React</li>
+                            <li>Built with frameworks like AngularJS, Ember.js, Backbone.js, React, MassageEnvy, etc.</li>
                         </ul>
                     </section>
 
@@ -357,11 +361,10 @@
                     </section>
 
                     <section>
-                        <h2>Challenge #3</h2>
+                        <h3>Angular Timeline</h3>
 
-                        <p>Example AngularJS Route Change Timeline:</p>
-
-                        <ol style="font-size: 80%">
+			<img src="images/Angular-route-change-flow-gray.svg" style="margin-top: -2%;"> 
+                        <ol style="font-size: 80%;display:none;">
                             <li>User clicks on something</li>
                             <li>Angular figures out what the new page will be</li>
                             <li>Angular fires <code>$routeChangeStart</code></li>
@@ -444,6 +447,7 @@
                             <li><strong>AngularJS</strong>: <code>$rootScope.$on("$routeChangeStart")</code></li>
                             <li><strong>Ember.js</strong>: <code>beforeModel</code> or <code>willTransition</code></li>
                             <li><strong>Backbone.js</strong>: <code>router.on("route")</code></li>
+                            <li><strong>Massage Envy.js</strong>: <code>spine.on("deep tissue")</code></li>
                         </ul>
                     </section>
 

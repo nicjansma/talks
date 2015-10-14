@@ -12,8 +12,10 @@ html * {
  * GLOBAL STYLES
  *********************************************/
 body {
-  background: white;
-  background-color: white; }
+  background-color: #ffead3; }
+html.dark body {
+  background-color: #030813;
+}
 
 .reveal {
   font-family: 'Open Sans', sans-serif;
@@ -21,6 +23,10 @@ body {
   font-weight: normal;
   letter-spacing: -0.02em;
   color: #657b83; }
+
+html.dark .reveal {
+  color: #a5bBc2;
+}
 
 ::selection {
   color: #fff;
