@@ -59,6 +59,10 @@ html.dark .callout3 {
   color: #FDa808;
 }
 
+html.dark .callout4 {
+  color: #238fdb;
+}
+
 .reveal h1 {
   text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2); }
 
