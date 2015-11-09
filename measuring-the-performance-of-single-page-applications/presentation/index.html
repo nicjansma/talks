@@ -48,20 +48,13 @@
         <div class="reveal">
             <div class="slides">
                 <section>
-                    <h1>Room Service and <span class="callout">SPA</span>s</h1>
+                    <h1>Measuring the Performance of SPAs</h1>
 
                     <p style="margin-top: 40px">
                         <small><a href="http://nicj.net">nic jansma</a> |</small>
                         <small><a href="http://soasta.com">SOASTA</a> |</small>
                         <small><a href="http://nicj.net">nicj.net</a> |</small>
                         <small><a href="http://twitter.com/nicj">@nicj</a></small>
-                    </p>
-
-                    <p style="margin-top: 10px">
-                        <small><a href="http://bluesmoon.info">philip tellis</a> |</small>
-                        <small><a href="http://soasta.com">SOASTA</a> |</small>
-                        <small><a href="http://bluesmoon.info">bluesmoon.info</a> |</small>
-                        <small><a href="http://twitter.com/bluesmoon">@bluesmoon</a></small>
                     </p>
                 </section>
 
@@ -76,22 +69,47 @@
                 </section>
 
                 <section>
-                    <h2>Who Are We?</h2>
-                    <div style="float: left; text-align: center; width: 450px">
-
+                    <h2>Who?</h2>
+                    <div>
                         <img src="images/nic.jpg" height="300" width="300" />
 
                         <p>Nic Jansma</p>
                         <p>SOASTA</p>
                     </div>
+                </section>
 
-                    <div style="float: left; text-align: center; width: 450px">
-                        <img src="images/philip.jpg" height="300" width="300" />
+                <section>
+                    <section>
+                        <h2>Why does Performance Matter?</h2>
 
-                        <p>Philip Tellis</p>
-                        <p>SOASTA</p>
-                    <ul>
-                    </ul>
+                        <ul>
+                            <li>Slow sites = angry vistors</li>
+                            <li>Angry visitors = lost customers</li>
+                            <li>For a site that earns $100k / day, a 1-second delay could cause a loss of $2.5m in yearly sales</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>What if you don't Measure?</h2>
+
+                        <img src="images/twitter-ryanair.png" />
+                    </section>
+
+                    <section>
+                        <h2>What if you don't Measure?</h2>
+
+                        <img src="images/ryanair-wpt.png" />
+                    </section>
+
+                    <section>
+                        <h2>Measuring</h2>
+
+                        <ul>
+                            <li><strong>Measuring</strong> your performance is step 1 to understanding it</li>
+                            <li>Until you start tracking performance metrics, you can't create a <strong>performance budget</strong></li>
+                            <li>If you're not measuring it, your performance will <strong>get worse</strong></li>
+                        </ul>
+                    </section>
                 </section>
 
                 <section>
@@ -102,11 +120,11 @@
                     <section>
                         <h2>RUM</h2>
 
-                        <p>Real User Monitoring</p>
+                        <p><strong>R</strong>eal <strong>U</strong>ser <strong>M</strong>onitoring</p>
 
                         <ul>
-                            <li>Gathering performance metrics from real user experiences</li>
-                            <li>Versus Synthetic Monitoring, with emulated users in a controlled environment</li>
+                            <li>Gathering performance metrics (e.g. page load time) from real user experiences</li>
+                            <li>Compare to: <strong>Synthetic Monitoring</strong>, which uses emulated users in a controlled environment</li>
                         </ul>
                     </section>
 
@@ -484,19 +502,6 @@
                     </section>
 
                     <section>
-                        <h2>The <span class="callout">Start</span> Event</h2>
-
-                        <ul>
-                            <li>To determine if a user <strong class="callout3">click</strong> or
-                                <strong class="callout3">XHR</strong> is really triggering a navigation, we can listen to what happens next</li>
-                            <li>If there was a lot of subsequent network activity, we can keep on listening for more events</li>
-                            <li>If history (address bar) changed, we can consider the event the start of a navigation</li>
-                            <li>If the DOM was updated significantly, we can consider the event the start of a navigation</li>
-                            <li>If nothing else happened, it was probably just an insignificant interaction</li>
-                        </ul>
-                    </section>
-
-                    <section>
                         <h2><span class="callout">SPA</span> Navigations</h2>
 
                         <img src="images/nav-start-to-end.png" />
@@ -653,7 +658,6 @@ window.XMLHttpRequest = function() {
                         <p>Downsides:</p>
 
                         <ul>
-                            <li>Need additional code to support XDomainRequest</li>
                             <li>Timing not as accurate when browser is busy (rendering, etc) as callbacks will be delayed</li>
                             <li>You can fix-up timing via ResourceTiming (if available)</li>
                         </ul>
@@ -770,7 +774,7 @@ function observeCallback(mutations) {
 
                         <ul>
                             <li>Not 100% supported in today's market</li>
-                            <li>Can't be used to monitor <i>all</i> resources (e.g. fonts from CSS)</li>
+                            <li>Can't be used to monitor <i>all</i> resources (e.g. backgrounds or fonts from CSS)</li>
                         </ul>
 
                         <img src="images/mutationobserver-caniuse.png" />
@@ -784,69 +788,6 @@ function observeCallback(mutations) {
                         <ul>
                             <li><a href="https://github.com/webcomponents/webcomponentsjs">github.com/webcomponents/webcomponentsjs</a></li>
                             <li><a href="https://github.com/megawac/MutationObserver.js/tree/master">github.com/megawac/MutationObserver.js</a></li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>Why not ResourceTiming?</h2>
-
-                        <p>Doesn't <code>ResourceTiming</code> have all of the data we need?</p>
-
-                        <ul>
-                            <li>ResourceTiming events are only added to the buffer <strong>after</strong> they complete</li>
-                            <li>In order to extend the SPA navigation end time, we have to know if any resource fetches
-                                are <i>outstanding</i></li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2><span class="callout">M</span>utation <span class="callout">O</span>bserver</h2>
-
-                        <p>Polyfill ResourceTiming via MutationObserver</p>
-
-                        <p>For extra credit, you could use the data you gathered with Mutation Observer to create a Waterfall for browsers that
-                            don't support ResourceTiming but do support MutationObserver (e.g. iOS).</p>
-                    </section>
-
-                    <section>
-                        <h2><span class="callout">M</span>utation <span class="callout">O</span>bserver</h2>
-
-                        <p>Polyfill ResourceTiming via MutationObserver</p>
-
-                        <img width="50%" src="images/mutationobserver-caniuse-polyfill.png" />
-                        <img width="50%" src="images/resource-timing-caniuse-polyfill.png" />
-                    </section>
-                </section>
-
-                <section>
-                    <section>
-                        <h2><span class="callout">F</span>rontEnd vs. <span class="callout4">B</span>ackEnd</h2>
-
-                        <p>In a traditional page load:</p>
-
-                        <img src="images/navigation-timing-fe-be.png" style="height: 500px" />
-                    </section>
-
-                    <section>
-                        <h2><span class="callout">F</span>rontEnd vs. <span class="callout4">B</span>ackEnd</h2>
-
-                        <p>Traditional websites:</p>
-
-                        <ul>
-                            <li><strong>Back-End</strong>: HTML fetch start to HTML response start</li>
-                            <li><strong>Front-End</strong>: <code class="callout2">Total Time - Back-End</code></li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2><span class="callout">F</span>rontEnd vs. <span class="callout4">B</span>ackEnd</h2>
-
-                        <p>Single Page Apps:</p>
-
-                        <ul>
-                            <li>Depends on your application's patterns, but...</li>
-                            <li><strong>Back-End</strong>: Any timeslice with an XHR outstanding</li>
-                            <li><strong>Front-End</strong>: <code class="callout2">Total Time - Back-End</code></li>
                         </ul>
                     </section>
                 </section>
@@ -878,14 +819,6 @@ function observeCallback(mutations) {
                             <li>When an <code>IMG</code> has been fetched, that's not when it's displayed to the visitor (it has to decode, etc.)</li>
                             <li>When you put HTML into the DOM, it's not <i>immediately</i> on the screen</li>
                         </ul>
-                    </section>
-
-                    <section>
-                        <h2>Monitoring Page Components</h2>
-
-                        <p>Use <code>setTimeout(..., 0)</code>!</p>
-
-                        <img src="images/page-components.png" />
                     </section>
 
                     <section>
@@ -992,12 +925,11 @@ xhr.send();
 
                         <p>
                             <a href="https://www.slideshare.net/nicjansma/measuring-the-performance-of-single-page-applications">slideshare.net/nicjansma/</a>
-                            - <a href="http://twitter.com/nicj">@nicj</a>
-                            - <a href="http://twitter.com/bluesmoon">@bluesmoon</a>
                         </p>
 
-                        <a href="http://soasta.io/SPAperfbook">soasta.io/SPAperfbook</a>
-                        <img src="images/spa-ebook.png" />
+                        <p>
+                            <a href="http://twitter.com/nicj">@nicj</a>
+                        </p>
                     </section>
 
                 </section>
