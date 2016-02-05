@@ -23,3 +23,5 @@ All content is licensed under the MIT license.
 * [Measuring the Performance of Single Page Applications](measuring-the-performance-of-single-page-applications/) ([Velocity 2015](http://velocityconf.com/devops-web-performance-ny-2015) - 2015-10-12) ([PDF](https://github.com/nicjansma/talks/blob/master/measuring-the-performance-of-single-page-applications/measuring-the-performance-of-single-page-applications.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/measuring-the-performance-of-single-page-applications))
 
 * [Forensic Tools for In-Depth Performance Investigations](forensic-tools-for-in-depth-performance-investigations/) ([Velocity 2015](http://velocityconf.com/devops-web-performance-ny-2015) - 2015-10-12) ([PDF](https://github.com/nicjansma/talks/blob/master/forensic-tools-for-in-depth-performance-investigations/forensic-tools-for-in-depth-performance-investigations.pdf?raw=true)) ([Slideshare](http://www.slideshare.net/nicjansma/forensic-tools-for-indepth-performance-investigations))
+
+* [NodeJS for Other Things](node-js-for-other-things/) ([GrNodeDev](http://www.meetup.com/GRNodeDev/) - 2016-02-04)
