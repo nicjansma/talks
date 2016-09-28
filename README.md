@@ -27,3 +27,7 @@ All content is licensed under the MIT license.
 * [NodeJS for Other Things](node-js-for-other-things/) ([GrNodeDev](http://www.meetup.com/GRNodeDev/) - 2016-02-04)
 
 * [Measuring Continuity](measuring-continuity/) with Philip Tellis ([Velocity 2016](http://conferences.oreilly.com/velocity/devops-web-performance-ca) - 2016-06-23) ([PDF](https://github.com/nicjansma/talks/blob/master/measuring-continuity/measuring-continuity.pdf?raw=true)) ([Slideshare](https://slideshare.net/nicjansma/measuring-continuity/))
+
+* [Measuring Real User Performance in the Browser](measuring-real-user-performance-in-the-browser/) with Philip Tellis ([Velocity NY+AMS 2016](http://conferences.oreilly.com/velocity/devops-web-performance-ny) - 2016-09-20) ([PDF](https://github.com/nicjansma/talks/blob/master/measuring-real-user-performance-in-the-browser/measuring-real-user-performance-in-the-browser.pdf?raw=true)) ([Slideshare](https://slideshare.net/nicjansma/measuring-real-user-performance-in-the-browser/))
+
+* [AMP: Does it Really Make Your Site Faster?](amp-does-it-really-make-your-site-faster/) with Nigel Heron ([Velocity NY+AMS 2016](http://conferences.oreilly.com/velocity/devops-web-performance-ny) - 2016-09-22) ([PDF](https://github.com/nicjansma/talks/blob/master/amp-does-it-really-make-your-site-faster/amp-does-it-really-make-your-site-faster.pdf?raw=true)) ([Slideshare](https://slideshare.net/nicjansma/amp-does-it-really-make-your-site-faster/))
