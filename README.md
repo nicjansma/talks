@@ -39,4 +39,8 @@ All content is licensed under the MIT license.
 * [Check Yourself Before You Wreck Yourself: Auditing and Improving the Performance of Boomerang](check-yourself-before-you-wreck-yourself-auditing-and-improving-the-performance-of-boomerang/) ([FOSDEM 2020](https://fosdem.org/2020/schedule/event/webperf_boomerang_optimisation/) - 2020-02-01)
 ([PDF](https://github.com/nicjansma/talks/blob/master/check-yourself-before-you-wreck-yourself-auditing-and-improving-the-performance-of-boomerang/check-yourself-before-you-wreck-yourself-auditing-and-improving-the-performance-of-boomerang.pdf?raw=true)) ([Slideshare](https://www.slideshare.net/nicjansma/check-yourself-before-you-wreck-yourself-auditing-and-improving-the-performance-of-boomerang)) ([Google Slides](https://docs.google.com/presentation/d/1oB-AHPEB1lmQkV23ABu7rTAvR2egD3JqPZtsT5IFJwU/edit?usp=sharing)) ([YouTube](https://youtu.be/p0hCBB9N2qI))
 
+* [Modern Metrics](modern-metrics-2022/) ([performance.now() 2022](https://perfnow.nl/speakers) - 2022-10-27)
+([PDF](https://github.com/nicjansma/talks/blob/master/modern-metrics-2022/modern-metrics-2022.pdf?raw=true)) ([Slideshare](https://www.slideshare.net/nicjansma/modern-metrics-2022)) ([Google Slides](https://docs.google.com/presentation/d/1EMv1BRC8DYtu2LBDJ0b9-mOsixBG8WmE9gKNS5fjzQk/edit?usp=sharing)) ([YouTube](https://youtu.be/IDM32xJmFjo))
+
+
 
